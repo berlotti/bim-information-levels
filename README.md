@@ -1,4 +1,9 @@
-BimNormGenerator
+BIM Wordpress plugins
 ================
 
-BIM Norm generator
+Private wordpress plugins for BIM projects.
+Currently:
+- BIM Quickscan
+- BIM protocol generator
+- BIM Quality Blocks
+More to follow....
