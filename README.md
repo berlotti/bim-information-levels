@@ -5,5 +5,5 @@ Private wordpress plugins for BIM projects.
 Currently:
 - BIM Quickscan
 - BIM protocol generator
-- BIM Quality Blocks
+- BIM informatieniveaus
 More to follow....
