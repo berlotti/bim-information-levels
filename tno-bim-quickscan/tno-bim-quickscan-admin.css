@@ -1,0 +1,124 @@
+#quickscan_rapports form .textarea-wrap textarea {
+    -moz-box-sizing: border-box;
+    border: 0 none;
+    outline: 0 none;
+    padding: 0;
+    width: 99%;
+}
+#quickscan_rapports .postbox form .submit {
+    border: 0 none;
+    float: none;
+    margin: 0.5em 0 0;
+    padding: 0;
+}
+#quickscan_rapports-wrap #quickscan_rapports .postbox form .submit input {
+    margin: 0;
+}
+#quickscan_rapports-wrap #quickscan_rapports .postbox form .submit #publish {
+    min-width: 0;
+}
+#quickscan_rapports a {
+    text-decoration: none;
+}
+#quickscan_rapports h3 a {
+    text-decoration: underline;
+}
+#quickscan_rapports h3 .postbox-title-action {
+    padding: 0;
+    position: absolute;
+    right: 30px;
+    top: 5px;
+}
+#quickscan_rapports h4 {
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0 0 0.2em;
+    padding: 0;
+}
+#quickscan_rapports p.sub, #quickscan_rapports .table, #quickscan_rapports .versions {
+    margin: -12px;
+}
+#quickscan_rapports .inside {
+    font-size: 12px;
+    padding-top: 20px;
+}
+#quickscan_rapports p.sub {
+    color: #8F8F8F;
+    font-size: 14px;
+    left: 15px;
+    padding: 5px 0 15px;
+    position: absolute;
+    top: -17px;
+}
+#quickscan_rapports .table {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+#quickscan_rapports .table_content {
+    border-top: 1px solid #ECECEC;
+    float: none;
+    width: 100%;
+    margin-bottom: 28px;
+}
+#quickscan_rapports .table_discussion {
+    border-top: 1px solid #ECECEC;
+    float: none;
+    width: 100%;
+}
+#quickscan_rapports table td {
+    padding: 3px 0;
+    white-space: nowrap;
+}
+
+#quickscan_rapports .table_discussion .last, #quickscan_rapports .table_discussion .b-comments {
+	text-align: right;
+}
+
+#quickscan_rapports table tr.first td {
+    border-top: 0 none;
+}
+#quickscan_rapports td.b {
+    font-size: 14px;
+    padding-right: 6px;
+    text-align: right;
+    width: 1%;
+}
+#quickscan_rapports td.b a {
+    font-size: 18px;
+}
+#quickscan_rapports td.b a:hover {
+    color: #D54E21;
+}
+#quickscan_rapports .t {
+    color: #777777;
+    font-size: 12px;
+    padding-right: 12px;
+    padding-top: 6px;
+}
+#quickscan_rapports .t a {
+    white-space: nowrap;
+}
+
+#quickscan_rapports .t span {
+    font-size: 14px;
+}
+#quickscan_rapports .spam {
+    color: red;
+}
+#quickscan_rapports .waiting {
+    color: #E66F00;
+}
+#quickscan_rapports .approved {
+    color: green;
+}
+#quickscan_rapports .versions {
+    clear: both;
+    padding: 6px 10px 12px;
+}
+#quickscan_rapports a.button {
+    clear: right;
+    float: right;
+    position: relative;
+    top: -5px;
+}

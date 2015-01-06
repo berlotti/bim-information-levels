@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+#content .entry-content {
+	max-width: 900px;
+}
+
+.bim-information-level-table {
+	width: 100%;
+	border: 1px solid #eeeeee;
+}
+
+.bim-information-level-table .odd {
+	background-color: #ffffff;
+}
+
+.bim-information-level-table .even {
+	background-color: #eeeeee;
+}
+
+.bim-information-level-table .checked {
+	font-weight: bold;
+}
+
+.bim-information-level-table .numeric {
+	text-align: right;
+}
+
+.bim-information-level-table th {
+	font-weight: bold;
+}
+
+.bim-information-level-table th, .bim-information-level-table td {
+	padding: 0px 3px;
+	border-left: 1px solid #ffffff;
+}
+
+.hidden, .sub-topic-hidden {
+	display: none;
+}
+
+.control-option {
+	margin-bottom: 5px;
+	padding: 2px 5px;
+	border: 1px solid #dedede;
+	border-radius: 3px;
+	position: relative;
+}
+
+.remove-option-button, #main .remove-option-button {
+	display: block;
+	position: absolute;
+	width: 80px;
+	height: 20px;
+	line-height: 20px;
+	right: 5px;
+	top: 5px;
+	text-align: right;
+	color: #a00;
+	text-decoration: none;
+	font-size: 80%;
+}
+
+.remove-option-button:hover, #main .remove-option-button:hover {
+	text-decoration: none;
+	color: #f00;
+}
+
+.toggle-link, #main .toggle-link {
+	text-decoration: none;
+	padding: 0px 5px;
+}

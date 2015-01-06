@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+
+.answer {
+	position: relative;
+	margin-bottom: 5px;
+	border-bottom: 1px dotted #ddd;
+	padding-bottom: 5px;
+}
+
+.answer .control-links {
+	position: absolute;
+	width: 30px;
+	height: 20px;
+	line-height: 20px;
+	right: 2px;
+	top: 2px;
+}
+
+.answer .control-links a {
+	font-weight: bold;
+	text-decoration: none;
+	padding: 2px 5px;
+}
+
+.answer input {
+	width: 80%;
+	margin-left: 10px;
+}
+
+#type-question-container {
+	margin-bottom: 8px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 8px;
+}
+
+#question-settings-container {
+	margin-bottom: 8px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 8px;
+}
+
+#report-text {
+	width: 80%;
+}

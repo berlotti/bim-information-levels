@@ -1,0 +1,32 @@
+@CHARSET "UTF-8";
+
+h1, h2, h3, h4, p {
+	margin: 7px 0px;
+}
+
+a {
+	color: #2A33FF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #000584;
+}
+
+#content {
+	max-width: 1200px;
+	margin: 0px auto;
+	background-color: #F5F5F5;
+	border: 1px solid #989898;
+	border-radius: 3px;
+	padding: 5px 20px;
+}
+
+.method-container {
+	background-color: #D3D5FF;
+	border: 1px solid #868CFF;
+	border-radius: 3px;
+	padding: 5px 20px;
+	margin-bottom: 10px;
+}

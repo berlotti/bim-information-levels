@@ -1,0 +1,677 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TNO BIM Quickscan\n"
+"POT-Creation-Date: 2014-06-26 14:20+0100\n"
+"PO-Revision-Date: 2014-06-26 14:22+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;_x\n"
+"X-Poedit-Basepath: /home/bastiaan/workspace/projecten/wordpress-alternative/"
+"wp-content/plugins/tno-bim-quickscan\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: tno-bim-quickscan-options.php:93
+msgid "Language meta inserted"
+msgstr "Taal meta toegevoegd"
+
+#: tno-bim-quickscan-options.php:129
+msgid "Company role"
+msgstr "Bedrijfsrol"
+
+#: tno-bim-quickscan-options.php:148
+msgid "The role users get for whom a BIM Quickscan has been submitted"
+msgstr "De rol die gebruikers hebben die een BIM Quickscan kunnen doen"
+
+#: tno-bim-quickscan-options.php:152
+msgid "Adviser role"
+msgstr "Adviseur rol"
+
+#: tno-bim-quickscan-options.php:171
+msgid "The role users get who submit BIM Quickscans for other companies"
+msgstr ""
+"De rol die adviseurs hebben die Quickscans voor bedrijven kunnen uitvoeren"
+
+#: tno-bim-quickscan-options.php:175
+msgid "Report post type"
+msgstr "Rapport post type"
+
+#: tno-bim-quickscan-options.php:194
+msgid "The post type used to store scan reports in"
+msgstr "Het post type waarin Quickscan rapporten worden opgeslagen"
+
+#: tno-bim-quickscan-options.php:198
+msgid "The taxonomy for topics"
+msgstr "De taxonomie voor hoofdstukken"
+
+#: tno-bim-quickscan-options.php:217
+msgid "The taxonomy topics are stored in"
+msgstr ""
+"De taxonomie waarin hoofdstukken worden opgeslagen welke gebruikt worden in "
+"de Quickscan"
+
+#: tno-bim-quickscan-options.php:221
+msgid "Exclude topic from chart"
+msgstr "Hoofdstuk niet tonen in grafiek"
+
+#: tno-bim-quickscan-options.php:227
+msgid "None"
+msgstr "Geen"
+
+#: tno-bim-quickscan-options.php:241
+msgid "A topic to exclude from the report bar chart"
+msgstr "Je kunt 1 hoofdstuk niet tonen in de grafiek"
+
+#: tno-bim-quickscan-options.php:245
+msgid "The taxonomy for aspects"
+msgstr "Taxonomie met aspecten"
+
+#: tno-bim-quickscan-options.php:264
+msgid "The taxonomy aspects are stored in"
+msgstr ""
+"De taxonomie waarin aspecten worden opgeslagen welke in de Quickscan "
+"gebruikt worden"
+
+#: tno-bim-quickscan-options.php:268
+msgid "Reports per page"
+msgstr "Aantal rapporten per pagina"
+
+#: tno-bim-quickscan-options.php:271
+msgid "The number of reports per page in the frontend."
+msgstr ""
+"Het aantal rapporten dat in rapporten lijsten getoond wordt per pagina in de "
+"frontend"
+
+#: tno-bim-quickscan-options.php:278
+msgid "Not logged in page"
+msgstr "Niet ingelogd pagina"
+
+#: tno-bim-quickscan-options.php:291
+msgid ""
+"The page to which visitors who are redirected when they are not logged in "
+"and trying to access a protected page"
+msgstr "De pagina waar bezoekers naar verwezen worden als e niet ingelogd zijn"
+
+#: tno-bim-quickscan-options.php:295
+msgid "Report page"
+msgstr "Rapport pagina"
+
+#: tno-bim-quickscan-options.php:308
+msgid ""
+"This page should contain the shortcode [showSingleReport], it is used to "
+"display a single report"
+msgstr ""
+"Deze pagina moet de volgende shortcode bevatten: [showSingleReport] Het "
+"wordt gebruikt om een los rapport te tonen"
+
+#: tno-bim-quickscan-options.php:312
+msgid "Company page"
+msgstr "Bedrijfspagina"
+
+#: tno-bim-quickscan-options.php:325
+msgid ""
+"This page should contain the shortcode [showSingleCompany], it is used to "
+"display a single company and their public reports"
+msgstr ""
+"Deze pagina moet de volgende shortcode bevatten: [showSingleCompany], de "
+"pagina wordt gebruikt om informatie over een bedrijf te tonen"
+
+#: tno-bim-quickscan-options.php:329
+msgid "Register page"
+msgstr "Registratie pagina"
+
+#: tno-bim-quickscan-options.php:342
+msgid "Select the page that contains the registration form"
+msgstr "De pagina waarop gebruikers zich kunnen registeren"
+
+#: tno-bim-quickscan-options.php:352
+msgid "Topic cap"
+msgstr "Hoofdstuk maximale punten"
+
+#: tno-bim-quickscan-options.php:355
+msgid "The topic cap for the topic"
+msgstr "De maximale punten die te halen zijn voor het hoofdstuk"
+
+#: tno-bim-quickscan-options.php:355
+msgid "results will be scored down to this value"
+msgstr "resultaten worden geschaald naar deze waarde"
+
+#: tno-bim-quickscan-options.php:369 tno-bim-quickscan-options.php:385
+msgid "The short name used in the radar graph for the aspect"
+msgstr "De ingekorte naam voor aspecten die gebruikt wordt in de radar grafiek"
+
+#: tno-bim-quickscan-options.php:403
+msgid "The Quickscan form"
+msgstr "Het Quickscan formulier"
+
+#: tno-bim-quickscan-options.php:416
+msgid "The GravityForms form which contains the Quickscan questions"
+msgstr ""
+"Het GravityForms formulier van de Quickscan, dit wordt gebruikt voor het "
+"importeren van Quickscans"
+
+#: tno-bim-quickscan-options.php:423
+msgid "Import selfscan CSV"
+msgstr "Importeer zelfscan CSV"
+
+#: tno-bim-quickscan-options.php:426
+msgid "Upload a CSV file to be imported as selfscans."
+msgstr "Upload een CSV om deze te importeren als zelfscans "
+
+#: tno-bim-quickscan-options.php:430
+msgid "Import quickscan CSV"
+msgstr "Importeer Quickscan CSV"
+
+#: tno-bim-quickscan-options.php:433
+msgid "Upload a CSV file to be imported as Quickscans with advisor."
+msgstr ""
+"Upload een CSV om deze te importeren als Quickscans die uitgevoerd zijn door "
+"een adviseur"
+
+#: tno-bim-quickscan-options.php:437
+msgid "Import advisors CSV"
+msgstr "Importeer CSV met adviseurs"
+
+#: tno-bim-quickscan-options.php:440
+msgid ""
+"Upload a CSV file containing the advisors and their id used to match them "
+"with Quickscans."
+msgstr ""
+"Upload een CSV met adviseurs waarin hun id vermeld is waarmee ze gekoppeld "
+"kunnen worden aan de te importeren Quickscans"
+
+#: tno-bim-quickscan-options.php:446
+msgid "Force add the roles required for Quickscans"
+msgstr "Forceer het toevoegen van rollen die nodig zijn voor de Quickscan"
+
+#: tno-bim-quickscan-options.php:447
+msgid ""
+"In case the advisor and company roles are not created on activating the "
+"plugin check this to force them to be added."
+msgstr ""
+"In het geval dat de adviseur en bedrijfsrollen niet automatisch aangemaakt "
+"worden kunnen deze hiermee alsnog aangemaakt worden."
+
+#: tno-bim-quickscan-options.php:453
+msgid "Insert language meta"
+msgstr "Voeg taal metadata toe"
+
+#: tno-bim-quickscan-options.php:454
+msgid ""
+"For Quickscan reports made before WPML was enabled checking this option will "
+"insert nl language values for each report missing language meta data."
+msgstr ""
+"Voor Quickscan rapporten die geimporteerd of aangemaakt zijn voordat WPML "
+"gebruikt werd kun je met deze optie taal meta informatie toevoegen aan de "
+"rapporten. Rapporten zonder taal meta krijgen automatisch de taal nl"
+
+#: tno-bim-quickscan.php:91
+msgid "Reports"
+msgstr "Rapporten"
+
+#: tno-bim-quickscan.php:92
+msgid "Report"
+msgstr "Rapport"
+
+#: tno-bim-quickscan.php:93
+msgid "Add New"
+msgstr "Voeg toe"
+
+#: tno-bim-quickscan.php:94
+msgid "Add New Report"
+msgstr "Voeg nieuw rapport toe"
+
+#: tno-bim-quickscan.php:95
+msgid "Edit Report"
+msgstr "Wijzig rapport"
+
+#: tno-bim-quickscan.php:96
+msgid "New Report"
+msgstr "Nieuw rapport"
+
+#: tno-bim-quickscan.php:97
+msgid "All Reports"
+msgstr "Alle rapporten"
+
+#: tno-bim-quickscan.php:98
+msgid "View Report"
+msgstr "Bekijk rapport"
+
+#: tno-bim-quickscan.php:99
+msgid "Search Reports"
+msgstr "Doorzoek rapporten"
+
+#: tno-bim-quickscan.php:100
+msgid "No report found"
+msgstr "Geen rapport gevonden"
+
+#: tno-bim-quickscan.php:101
+msgid "No reports found in Trash"
+msgstr "Geen rapport gevonden in prullenbak"
+
+#: tno-bim-quickscan.php:133
+msgid "Topics"
+msgstr "Hoofdstukken"
+
+#: tno-bim-quickscan.php:134 tno-bim-quickscan.php:143
+msgid "Topic"
+msgstr "Hoofdstuk"
+
+#: tno-bim-quickscan.php:135
+msgid "Search Topics"
+msgstr "Doorzoek hoofdstukken"
+
+#: tno-bim-quickscan.php:136
+msgid "All Topics"
+msgstr "Alle hoofdstukken"
+
+#: tno-bim-quickscan.php:137
+msgid "Parent Topic"
+msgstr "Bovenliggend hoofdstuk"
+
+#: tno-bim-quickscan.php:138
+msgid "Parent Topic:"
+msgstr "Bovenliggend hoofdstuk:"
+
+#: tno-bim-quickscan.php:139
+msgid "Edit Topic"
+msgstr "Wijzig hoofdstuk"
+
+#: tno-bim-quickscan.php:140
+msgid "Update Topic"
+msgstr "Sla hoofdstuk op"
+
+#: tno-bim-quickscan.php:141
+msgid "Add New Topic"
+msgstr "Voeg nieuw hoofdstuk toe"
+
+#: tno-bim-quickscan.php:142
+msgid "New Topic Name"
+msgstr "Nieuwe hoofdstuk titel"
+
+#: tno-bim-quickscan.php:155
+msgid "BIM Quickscan categories"
+msgstr "BIM Quickscan aspecten"
+
+#: tno-bim-quickscan.php:156
+msgid "BIM Quickscan category"
+msgstr "BIM Quickscan aspect"
+
+#: tno-bim-quickscan.php:157
+msgid "Search categories"
+msgstr "Doorzoek aspecten"
+
+#: tno-bim-quickscan.php:158
+msgid "All categories"
+msgstr "Alle aspecten"
+
+#: tno-bim-quickscan.php:159
+msgid "Parent category"
+msgstr "Bovenliggend aspect"
+
+#: tno-bim-quickscan.php:160
+msgid "Parent category:"
+msgstr "Bovenliggend aspect:"
+
+#: tno-bim-quickscan.php:161
+msgid "Edit category"
+msgstr "Wijzig aspect"
+
+#: tno-bim-quickscan.php:162
+msgid "Update category"
+msgstr "Sla aspect op"
+
+#: tno-bim-quickscan.php:163
+msgid "Add new category"
+msgstr "Voeg nieuw aspect toe"
+
+#: tno-bim-quickscan.php:164
+msgid "New category Name"
+msgstr "Nieuwe aspect titel"
+
+#: tno-bim-quickscan.php:165
+msgid "Category"
+msgstr "Aspect"
+
+#: tno-bim-quickscan.php:349
+msgid "Select company"
+msgstr "Selecteer bedrijf"
+
+#: tno-bim-quickscan.php:377
+msgid "click to delete this field"
+msgstr "klik om dit veld te verwijderen"
+
+#: tno-bim-quickscan.php:377
+msgid "Delete"
+msgstr "Verwijder"
+
+#: tno-bim-quickscan.php:384
+msgid "click to edit this field"
+msgstr "klik om dit veld te wijzigen"
+
+#: tno-bim-quickscan.php:384
+msgid "Edit"
+msgstr "Wijzig"
+
+#: tno-bim-quickscan.php:421
+msgid "Selected company"
+msgstr "Geselecteerd bedrijf"
+
+#: tno-bim-quickscan.php:422
+msgid "Add new company"
+msgstr "Voeg nieuw bedrijf toe"
+
+#: tno-bim-quickscan.php:423
+msgid "none, fill in company information or select one"
+msgstr "geen, vul bedrijfsgegevens in of selecteer een bedrijf"
+
+#: tno-bim-quickscan.php:424
+msgid "Search company"
+msgstr "Zoek bedrijf"
+
+#: tno-bim-quickscan.php:426 tno-bim-quickscan.php:444
+msgid "Name"
+msgstr "Naam"
+
+#: tno-bim-quickscan.php:427
+msgid "Email contactpersoon"
+msgstr "Email contactpersoon"
+
+#: tno-bim-quickscan.php:428 tno-bim-quickscan.php:446
+msgid "Street"
+msgstr "Straat"
+
+#: tno-bim-quickscan.php:429 tno-bim-quickscan.php:447
+msgid "Zipcode"
+msgstr "Postcode"
+
+#: tno-bim-quickscan.php:430 tno-bim-quickscan.php:448
+msgid "City"
+msgstr "Stad"
+
+#: tno-bim-quickscan.php:445
+msgid "Email"
+msgstr "Email"
+
+#: tno-bim-quickscan.php:452
+msgid ""
+"To fill in the Quickscan you need to have an advisor or company account."
+msgstr ""
+"Om de Quickscan te doen heb je een bedrijfs- of adviseursaccount nodig."
+
+#: tno-bim-quickscan.php:453
+msgid ""
+"You can change your account: <a href=\"/company-account\"><strong>here</"
+"strong></a>"
+msgstr ""
+"Om je account te wijzigen naar een bedrijfsaccount klik <a href=\"/nl/"
+"bedrijfsaccount/\">hier</a>"
+
+#: tno-bim-quickscan.php:456
+msgid "You must be logged in to access the Quickscan."
+msgstr "You moet inloggen om de Quickscan uit te voeren."
+
+#: tno-bim-quickscan.php:514
+msgid "Set BIM Quickscan weight for each answer"
+msgstr "Stel het gewicht in voor de BIM Quickscan voor elk antwoord"
+
+#: tno-bim-quickscan.php:521
+msgid "Select BIM Quickscan aspects for this question"
+msgstr "Selecteer de aspecten voor deze vraag"
+
+#: tno-bim-quickscan.php:537
+msgid "Select the BIM Quickscan topic"
+msgstr "Selecteer het BIM Quickscan hoofdstuk voor deze vraag"
+
+#: tno-bim-quickscan.php:553
+msgid "BIM Quickscan weight for this question"
+msgstr "Stel het gewicht in voor deze BIM Quickscan vraag"
+
+#: tno-bim-quickscan.php:560
+msgid "BIM Quickscan maximum weight for this question"
+msgstr "Stel het maximale gewicht in voor deze BIM Quickscan vraag"
+
+#: tno-bim-quickscan.php:567
+msgid "BIM Quickscan maximum number of answers"
+msgstr "Stel het maximale aantal antwoorden in voor de BIM Quickscan vraag"
+
+#: tno-bim-quickscan.php:574
+msgid "Store value in post meta for BIM Quickscan report"
+msgstr ""
+"Sla het antwoord van deze vraag op in de post meta van het BIM Quickscan "
+"rapport"
+
+#: tno-bim-quickscan.php:584
+msgid ""
+"Set the weight of each answer to this question for the BIM Quickscan, this "
+"must be a numerical value"
+msgstr ""
+"Stel het gewicht in voor de BIM Quickscan voor elk antwoord, dit moet een "
+"getal zijn"
+
+#: tno-bim-quickscan.php:585
+msgid "Select the aspects for this question"
+msgstr "Selecteer de aspecten die horen bij deze vraag voor de BIM Quickscan"
+
+#: tno-bim-quickscan.php:586
+msgid "Select the BIM Quickscan topic for this question"
+msgstr "Selecteer het BIM Quickscan hoofdstuk voor deze vraag"
+
+#: tno-bim-quickscan.php:587
+msgid ""
+"Set the weight of this question for the BIM Quickscan, this must be a "
+"numerical value"
+msgstr ""
+"Stel het gewicht in voor deze vraag in de BIM Quickscan, het moet een getal "
+"zijn"
+
+#: tno-bim-quickscan.php:588
+msgid "Store the value of this field in the post meta of the report"
+msgstr ""
+"Sla het antwoord van dit veld op in de post meta van het BIM Quickscan "
+"rapport"
+
+#: tno-bim-quickscan.php:589
+msgid "The maximum value that can be awarded for this question"
+msgstr ""
+"De maximale waarde die toegekend kan worden voor deze vraag in de BIM "
+"Quickscan"
+
+#: tno-bim-quickscan.php:590
+msgid "The maximum number of answers which score points for this question"
+msgstr ""
+"Het maximale aantal antwoorden dat punten geeft als het geselecteerd wordt "
+"bij deze vraag voor de BIM Quickscan"
+
+#: tno-bim-quickscan.php:611
+msgid "add new company"
+msgstr "Voeg een bedrijf toe"
+
+#: tno-bim-quickscan.php:612
+msgid "none, enter company details or select a company"
+msgstr "geen, voer bedrijfsgegevens in of selecteer een bedrijf"
+
+#: tno-bim-quickscan.php:692
+msgid "Filled in questions"
+msgstr "Ingevulde vragen"
+
+#: tno-bim-quickscan.php:860
+msgid "Result per aspect"
+msgstr "Resultaten per aspect"
+
+#: tno-bim-quickscan.php:877
+msgid "Result per topic"
+msgstr "Resultaten per hoofdstuk"
+
+#: tno-bim-quickscan.php:896 tno-bim-quickscan.php:898
+#: tno-bim-quickscan.php:1724 tno-bim-quickscan.php:1789
+#: tno-bim-quickscan.php:2029
+msgid "Result"
+msgstr "Resultaat"
+
+#: tno-bim-quickscan.php:942
+msgid "other"
+msgstr "anders"
+
+#: tno-bim-quickscan.php:1018
+msgid ""
+"This email address is already used for a company, choose another email "
+"address or select the company."
+msgstr ""
+"Dit email adres is reeds in gebruik, kies een ander email adres of selecteer "
+"het bedrijf met dit email adres"
+
+#: tno-bim-quickscan.php:1020
+msgid "Choose a company or enter the details of a new one"
+msgstr "Kies een bedrijf of voer de gegevens in van een bedrijf"
+
+#: tno-bim-quickscan.php:1099
+msgid "This month"
+msgstr "Deze maand"
+
+#: tno-bim-quickscan.php:1104
+msgid "Quickscans done"
+msgstr "Quickscans uitgevoerd"
+
+#: tno-bim-quickscan.php:1110
+msgid "By core-business"
+msgstr "Op core-business"
+
+#: tno-bim-quickscan.php:1145
+msgid "result"
+msgstr "resultaat"
+
+#: tno-bim-quickscan.php:1338
+msgid "company"
+msgstr "bedrijf"
+
+#: tno-bim-quickscan.php:1339
+msgid "unknown"
+msgstr "onbekend"
+
+#: tno-bim-quickscan.php:1545
+msgid "You have to be logged in to view this page."
+msgstr "Je moet inloggen om deze pagina te bekijken."
+
+#: tno-bim-quickscan.php:1546
+msgid "To log in now, click"
+msgstr "Om nu in te loggen, klik"
+
+#: tno-bim-quickscan.php:1546
+msgid "here"
+msgstr "hier"
+
+#: tno-bim-quickscan.php:1547
+msgid "No user account yet?"
+msgstr "Nog geen gebruikers account?"
+
+#: tno-bim-quickscan.php:1547
+msgid "Register here"
+msgstr "Registreer hier"
+
+#: tno-bim-quickscan.php:1582
+msgid "Show data between"
+msgstr "Toon scans tussen"
+
+#: tno-bim-quickscan.php:1584
+msgid "Quickscan types"
+msgstr "Quickscan types"
+
+#: tno-bim-quickscan.php:1585 tno-bim-quickscan.php:1589
+msgid "All"
+msgstr "Allemaal"
+
+#: tno-bim-quickscan.php:1586
+msgid "Quickscans with adviser"
+msgstr "Quickscans met adviseur"
+
+#: tno-bim-quickscan.php:1587
+msgid "Quickscans without adviser"
+msgstr "Quickscans zonder adviseur"
+
+#: tno-bim-quickscan.php:1588
+msgid "Quickscan languages"
+msgstr "Quickscan talen"
+
+#: tno-bim-quickscan.php:1599
+msgid "Show Quickscans"
+msgstr "Toon Quickscans"
+
+#: tno-bim-quickscan.php:1600
+msgid "Maximum"
+msgstr "Maximaal"
+
+#: tno-bim-quickscan.php:1601
+msgid "All Quickscans"
+msgstr "Alle Quickscans"
+
+#: tno-bim-quickscan.php:1602
+msgid "My Quickscans"
+msgstr "Mijn Quickscans"
+
+#: tno-bim-quickscan.php:1603
+msgid "Quickscans with specific core-businesses"
+msgstr "Quickscans met een specifieke core-business"
+
+#: tno-bim-quickscan.php:1675
+msgid "There are no companies with public reports"
+msgstr "Er zijn nog geen bedrijven met een publiek rapport"
+
+#: tno-bim-quickscan.php:1681 tno-bim-quickscan.php:1722
+#: tno-bim-quickscan.php:1784
+msgid "Company"
+msgstr "Bedrijf"
+
+#: tno-bim-quickscan.php:1682
+msgid "Published reports"
+msgstr "Gepubliceerde rapporten"
+
+#: tno-bim-quickscan.php:1715
+msgid "There are no public reports available"
+msgstr "Er zijn nog een publieke rapporten"
+
+#: tno-bim-quickscan.php:1721 tno-bim-quickscan.php:1780
+#: tno-bim-quickscan.php:2027
+msgid "Date"
+msgstr "Datum"
+
+#: tno-bim-quickscan.php:1723 tno-bim-quickscan.php:2028
+msgid "Core-business"
+msgstr "Core-business"
+
+#: tno-bim-quickscan.php:1725 tno-bim-quickscan.php:1853
+msgid "Language"
+msgstr "Taal"
+
+#: tno-bim-quickscan.php:1774
+msgid ""
+"You do not have any reports, do the <a href=\"/quickscan-2\">BIM Quickscan</"
+"a> now"
+msgstr ""
+"Je hebt nog geen rapporten, doe nu de <a href=\"/nl/quickscan/\">BIM "
+"Quickscan</a>"
+
+#: tno-bim-quickscan.php:1788
+msgid "Status"
+msgstr "Status"
+
+#: tno-bim-quickscan.php:1809
+msgid "public"
+msgstr "publiek"
+
+#: tno-bim-quickscan.php:1809
+msgid "private"
+msgstr "privé"
+
+#: tno-bim-quickscan.php:1839
+msgid "Quickscan adviser"
+msgstr "Quickscan adviseur"
+
+#: tno-bim-quickscan.php:2021
+msgid "This company does not have any public BIM Quickscan reports"
+msgstr "Dit bedrijf heeft nog geen publieke BIM Quickscan rapporten"
