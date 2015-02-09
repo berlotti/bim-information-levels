@@ -238,9 +238,14 @@ class TNOBIMQuickscan {
 			}
 			if( $isAdvisor || current_user_can( 'activate_plugins' ) ) {
 				$start = strpos( $where, 'post_status = \'private\'' );
+				$alsoPublished = strpos( $where, 'post_status = \'publish\'' );
 				if( $start !== false ) {
 					$start += 23;
-					$where = substr( $where, 0, $start ) . " ) AND post_author = {$currentUserObject->ID} ) OR ( ( ( post_status = 'private' OR post_status = 'publish' ) AND advisor_meta.meta_value = {$currentUserObject->ID} " . substr( $where, $start );
+					$where = substr( $where, 0, $start ) . 
+						( current_user_can( 'activate_plugins' ) ? '' : " AND post_author = {$currentUserObject->ID}" ) . 
+						" ) OR ( ( post_status = 'private' " . 
+						( $alsoPublished !== false ? " OR post_status = 'publish' " : '' ) . 
+						") AND advisor_meta.meta_value = {$currentUserObject->ID} " . substr( $where, $start );
 				}
 			}
 		}
@@ -271,8 +276,6 @@ class TNOBIMQuickscan {
 
 	public function mapMetaCap( $caps, $cap, $userId, $args ) {
 		if( 'edit_rapport' == $cap || 'delete_rapport' == $cap || 'read_rapport' == $cap || 'edit_advised_rapport' == $cap || 'read_private_rapport' == $cap ) {
-			//print( "mapMetaCap( $caps, $cap, $userId, $args )<br />" );
-			//var_dump( $caps, $cap, $userId, $args );
 			if( is_array( $args ) && count( $args ) > 0 ) {
 				$post = get_post( $args[0] );
 				$postType = get_post_type_object( $post->post_type );
@@ -1861,7 +1864,7 @@ class TNOBIMQuickscan {
 			}
 			if( !$selfscan && $advisorId != '' ) {
 				$advisor = get_user_by( 'id', $advisorId );
-				if( isset( $advisor ) ) {
+				if( isset( $advisor ) && $advisor !== false ) {
 ?>
 				<span class="advisor-info"><?php _e( 'Quickscan adviser', 'tno-bim-quickscan' ); ?> <?php print( $advisor->display_name ); ?></span><br />
 <?php
