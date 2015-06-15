@@ -6,4 +6,6 @@ Currently:
 - BIM Quickscan
 - BIM protocol generator
 - BIM informatieniveaus
+- BIM Quality Blocks
+
 More to follow....
