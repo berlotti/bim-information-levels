@@ -1,0 +1,157 @@
+@CHARSET "UTF-8";
+
+.hidden {
+   display: none;
+}
+
+#bim-quality-block-layers {
+   padding: 5px;
+}
+
+#building-select-container {
+   margin-bottom: 20px;
+}
+
+.layer {
+   float: left;
+   width: 150px;
+   position: relative;
+   padding: 5px 10px;
+   margin: 0 10px 10px 0;
+   border-radius: 3px;
+   box-sizing: content-box;
+}
+
+#layer_building_type, #layer_bim_usage {
+   float: none;
+   width: 390px;
+}
+
+.layer.active {
+   box-shadow: 0 0 2px 1px #6f98e4;
+}
+
+.layer h3 {
+   margin: 0 0 10px 0;
+   font-size: 16px;
+}
+
+.layer .navigation-container {
+   margin-bottom: 10px;
+}
+
+.layer .navigation-container .previous, .layer .navigation-container .next {
+   display: block;
+   width: 74px;
+   height: 22px;
+   line-height: 22px;
+   background-color: #6f98e4;
+   float: left;
+   color: #ffffff;
+   text-decoration: none;
+   text-align: center;
+   font-weight: bold;
+}
+
+.layer .navigation-container .previous {
+   border-radius: 5px 0 0 5px;
+   margin-right: 2px;
+}
+
+.layer .navigation-container .next {
+   border-radius: 0 5px 5px 0;
+}
+
+.layer .overlay {
+   width :100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+   position: absolute;
+   z-index: 3;
+   background-color: #dedede;
+   opacity: 0.5;
+}
+
+.quality-block {
+   float: left;
+   width: 120px;
+   height: 120px;
+   border-radius: 4px;
+   margin: 5px;
+   background-color: #D0D6E2;
+   box-shadow: 0 0 3px 1px #555555;
+   cursor: pointer;
+   position: relative;
+   overflow: hidden;
+}
+
+.quality-block.selected {
+   background-color: #6F98E4;
+}
+
+.quality-block.disabled {
+   background-color: #D2D2D2;
+}
+
+.quality-block.disabled {
+   opacity: 0.5;
+   box-shadow: 0 0 1px 0 #555555;
+}
+
+.quality-block.mouseover {
+   box-shadow: 0 0 3px 1px #000000;
+}
+
+.quality-block.disabled.mouseover {
+   box-shadow: 0 0 1px 0 #555555;
+}
+
+.quality-block h3 {
+   font-size: 14px;
+   margin: 0 0 5px 0;
+   display: block;
+   width: 110px;
+   top: 5px;
+   left: 5px;
+   height: 20px;
+   line-height: 20px;
+   position: absolute;
+   z-index: 2;
+}
+
+.quality-block .image-container {
+   position: absolute;
+   width: 120px;
+   height: 120px;
+   left: 0;
+   top: 0;
+   z-index: 1;
+}
+
+.quality-block .image-container img {
+   width: 120px;
+   height: 120px;
+}
+
+/**
+ * Tooltip style
+ **/
+
+#quality-block-tooltip {
+   position: absolute;
+   padding: 5px 10px;
+   background-color: #ffffff;
+   box-shadow: 0 0 2px 1px #000000;
+   border-radius: 2px;
+   z-index: 4;
+}
+
+/**
+ * Admin style
+ **/
+
+#block-report-text {
+   width: 600px;
+   height: 120px;
+}
