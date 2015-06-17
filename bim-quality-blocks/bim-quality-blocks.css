@@ -6,6 +6,7 @@
 
 #bim-quality-block-layers {
    padding: 5px;
+   position: relative;
 }
 
 #building-select-container {
@@ -132,6 +133,12 @@
 .quality-block .image-container img {
    width: 120px;
    height: 120px;
+}
+
+#report-text {
+   background-color: #efefef;
+   padding: 5px 10px;
+   border-radius: 2px;
 }
 
 /**

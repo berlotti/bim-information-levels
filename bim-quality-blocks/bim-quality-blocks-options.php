@@ -21,6 +21,14 @@ if( isset( $_POST['delete_confirm'], $_POST['delete'] ) && $_POST['delete_confir
    }
    print( '<div class="status">' . __( 'All blocks deleted', 'bim-quality-blocks' ) . '</div>' );
 }
+if( isset( $_POST['import'] ) ) {
+   $importStats = Array();
+   $file = fopen( $_FILES['csv'], 'r' );
+   while( ( $data = fgetcsv( $file ) ) !== false ) {
+      // TODO: import stuff from CSV
+   }
+   fclose( $handle );
+}
 
 $bimQualityBlocksOptions = BIMQualityBlocks::getOptions( true );
 $postTypes = get_post_types( Array(), 'objects' );
@@ -33,6 +41,11 @@ $pages = get_posts( Array(
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
 	<h2><?php _e( 'BIM Quality Blocks Levels Options', 'bim-quality-blocks' ); ?></h2>
+   <?php
+   if( isset( $importStats ) ) {
+      // TODO: show
+   }
+   ?>
 	<form method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<tr valign="top">

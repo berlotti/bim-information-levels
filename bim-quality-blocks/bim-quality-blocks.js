@@ -15,8 +15,11 @@ jQuery( document ).ready( function() {
 	} );
 	navigationContainer.find( ".next" ).click( function( event ) {
 		event.preventDefault();
-		if( this.id == "layer_attachments" ) {
+		if( jQuery( this ).hasClass( "submit" )  ) {
 			var report = BIMQualityBlocks.createReport();
+			var reportContent = jQuery( "#report-content" );
+			reportContent.val( JSON.stringify( report ) );
+			reportContent.parent().submit();
 		} else {
 			BIMQualityBlocks.enableNextLayer( container.find( ".layer.active" ) );
 		}
@@ -149,36 +152,46 @@ BIMQualityBlocks.showTooltip = function( event, block ) {
 		content = block.find( ".tooltip" ).html().trim();
 	}
 	if( content != "" ) {
-		tooltip.css( "left", ( event.pageX + 30 ) + "px" )
-			.css( "top", event.pageY + "px" )
+		var tooltipContainer = jQuery( "#bim-quality-block-layers" ).offset();
+		tooltip.css( "left", ( event.pageX - tooltipContainer.left + 30 ) + "px" )
+			.css( "top", ( event.pageY - tooltipContainer.top ) + "px" )
 			.removeClass( "hidden" )
 			.find( ".content" ).html( content );
 	}
 };
 
 BIMQualityBlocks.createReport = function() {
-	var report = [];
+	var report = {
+		buildingType: jQuery( "#select-building" ).val(),
+		blocks: []
+	};
+
 	jQuery( "#bim-quality-block-layers" ).find( ".layer" ).each( function() {
 		var layer = {
 			type: this.id.replace( "layer_", "" ),
 			blocks: []
 		};
 		jQuery( this ).find( ".quality-block.selected" ).each( function() {
-			layer.blocks.push( this.id.replace( "quality-block-", "") );
+			if( !jQuery( this ).hasClass( "disabled" ) ) {
+				layer.blocks.push( this.id.replace( "quality-block-", "" ) );
+			}
 		} );
-		report.push( layer );
+		report.blocks.push( layer );
 	} );
 	return report;
 };
 
 BIMQualityBlocks.buildingTypeChanged = function() {
-	if( document.getElementById( "select-building" ).value != "" ) {
-		var startLayer = jQuery( "#bim-quality-block-layers" ).find( ".layer:first" );
-		startLayer.addClass( "active" );
-		startLayer.find( ".overlay" ).addClass( "hidden" );
-	} else {
-		var layers = jQuery( "#bim-quality-block-layers" ).find( ".layer" );
-		layers.removeClass( "active" );
-		layers.find( ".overlay" ).removeClass( "hidden" );
+	var selectBuilding = document.getElementById( "select-building" );
+	if( selectBuilding ) {
+		if( selectBuilding.value != "" ) {
+			var startLayer = jQuery( "#bim-quality-block-layers" ).find( ".layer:first" );
+			startLayer.addClass( "active" );
+			startLayer.find( ".overlay" ).addClass( "hidden" );
+		} else {
+			var layers = jQuery( "#bim-quality-block-layers" ).find( ".layer" );
+			layers.removeClass( "active" );
+			layers.find( ".overlay" ).removeClass( "hidden" );
+		}
 	}
 };

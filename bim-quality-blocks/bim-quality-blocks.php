@@ -79,7 +79,8 @@ class BIMQualityBlocks {
 
 	public static function wpEnqueueScripts() {
 		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'bim-quality-blocks', plugins_url( 'bim-quality-blocks.js', __FILE__ ), Array( 'jquery' ), "1.0", true );
+      wp_enqueue_script( 'json-fallback', plugins_url( 'libraries/json.js', __FILE__ ), Array(), "1.0", true );
+      wp_enqueue_script( 'bim-quality-blocks', plugins_url( 'bim-quality-blocks.js', __FILE__ ), Array( 'jquery' ), "1.0", true );
 		wp_enqueue_style( 'bim-quality-blocks', plugins_url( 'bim-quality-blocks.css', __FILE__ ) );
 	}
 
@@ -148,60 +149,118 @@ class BIMQualityBlocks {
    }
 
    public static function showBIMQualityBlocks() {
-      print( '<div id="bim-quality-block-layers">' );
-      $blocks = BIMQualityBlocks::getQualityBlocks();
-      $number = 0;
-      foreach( BIMQualityBlocks::$layers as $key => $label ) {
-         if( $key == 'building_type' ) {
-            print( '<div id="building-select-container">' );
-            print( '<label for="select-building">' . $label . '</label>' );
-            print( '<select id="select-building" onchange="BIMQualityBlocks.buildingTypeChanged();">' );
-            print( '<option value="">' . __( 'Select a building type', 'bim-quality-blocks' ) . '</option>' );
-            foreach( $blocks as $block ) {
-               if( $block->layer == $key ) {
-                  print( '<option value="' . $block->post->ID . '">' . $block->post->post_title . '</option>' );
-               }
-            }
-            print( '</select>' );
-            print( '</div>' );
-         } else {
-            print( '<div class="layer" id="layer_' . $key . '">' );
-            print( '<div class="overlay"></div>' );
-            print( '<h3>' . $label . '</h3>' );
-            if( $number >= 2 ) {
-               print( '<div class="navigation-container">
-                           <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
-                           <a href="" class="next">' . ( $key == 'attachments' ? __( 'Finish', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
-                           <div class="clear"></div>
-                     </div>' );
-            }
-            foreach( $blocks as $block ) {
-               if( $block->layer == $key ) {
-                  print( '<div class="quality-block' . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
-                  print( '<h3>' . $block->post->post_title . '</h3>' );
-                  print( '<div class="image-container">' );
-                  $image = get_the_post_thumbnail( $block->post->ID, 'grid-icon' );
-                  if( $image == '' ) {
-                     print( '<div class="no-image-placeholder"></div>' );
-                  } else {
-                     print( '<img src="' . $image . '" alt="' . $block->post->post_title . '" />' );
+      if( isset( $_POST['report'] ) ) {
+         // To the report page!
+         BIMQualityBlocks::showReportPage();
+      } else {
+         print( '<div id="bim-quality-block-layers">' );
+         $blocks = BIMQualityBlocks::getQualityBlocks();
+         $number = 0;
+         foreach( BIMQualityBlocks::$layers as $key => $label ) {
+            if( $key == 'building_type' ) {
+               print( '<div id="building-select-container">' );
+               print( '<label for="select-building">' . $label . '</label>' );
+               print( '<select id="select-building" onchange="BIMQualityBlocks.buildingTypeChanged();">' );
+               print( '<option value="">' . __( 'Select a building type', 'bim-quality-blocks' ) . '</option>' );
+               foreach( $blocks as $block ) {
+                  if( $block->layer == $key ) {
+                     print( '<option value="' . $block->post->ID . '">' . $block->post->post_title . '</option>' );
                   }
-                  print( '</div>' );
-                  print( '<div class="tooltip hidden">' . apply_filters( 'the_content', $block->post->post_content ) . '</div>' );
-                  print( '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>' );
-                  print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
-                  print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
-                  print( '<div class="behaviour hidden">' . $block->behaviour . '</div>' );
-                  print( "</div>" );
+               }
+               print( '</select>' );
+               print( '</div>' );
+            } else {
+               print( '<div class="layer" id="layer_' . $key . '">' );
+               print( '<div class="overlay"></div>' );
+               print( '<h3>' . $label . '</h3>' );
+               if( $number >= 2 ) {
+                  print( '<div class="navigation-container">
+                              <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
+                              <a href="" class="next' . ( $key == 'attachments' ? ' submit' : '' ) . '">' . ( $key == 'attachments' ? __( 'Finish', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
+                              <div class="clear"></div>
+                        </div>' );
+               }
+               foreach( $blocks as $block ) {
+                  if( $block->layer == $key ) {
+                     print( '<div class="quality-block' . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
+                     print( '<h3>' . $block->post->post_title . '</h3>' );
+                     print( '<div class="image-container">' );
+                     $image = get_the_post_thumbnail( $block->post->ID, 'grid-icon' );
+                     if( $image == '' ) {
+                        print( '<div class="no-image-placeholder"></div>' );
+                     } else {
+                        print( '<img src="' . $image . '" alt="' . $block->post->post_title . '" />' );
+                     }
+                     print( '</div>' );
+                     print( '<div class="tooltip hidden">' . apply_filters( 'the_content', $block->post->post_content ) . '</div>' );
+                     print( '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>' );
+                     print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
+                     print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
+                     print( '<div class="behaviour hidden">' . $block->behaviour . '</div>' );
+                     print( "</div>" );
+                  }
+               }
+               print( '<div class="clear"></div>' );
+               print( '</div>' );
+            }
+            $number ++;
+         }
+         print( '<div class="clear"></div>' );
+         print( '<div class="hidden" id="quality-block-tooltip"><div class="content"></div></div>' );
+         print( '</div>' );
+         print( '<form method="post" action="">' );
+         print( '<input type="hidden" id="report-content" name="report" value="" />' );
+         print( '<input type="submit" value="" class="hidden" />' );
+         print( '</form>' );
+      }
+   }
+
+   public static function showReportPage() {
+      $report = json_decode( stripslashes( $_POST['report'] ) );
+      if( isset( $report, $report->buildingType, $report->blocks ) ) {
+         try {
+            $reportText = '<h1>' . __( 'BIM Quality Blocks Report', 'bim-quality-blocks' ) . '</h1>';
+            $buildingType = get_post( intval( $report->buildingType ) );
+            $reportText .= __( 'Building type', 'bim-quality-blocks' ) . ': ' . $buildingType->post_title;
+            $downloadFiles = Array();
+            foreach( $report->blocks as $layer ) {
+               if( !isset( $layer->type ) || !isset( BIMQualityBlocks::$layers[$layer->type] ) ) {
+                  throw new \Exception( 'Invalid report submitted' );
+               }
+               $reportText .= '<h2>' . BIMQualityBlocks::$layers[$layer->type] . '</h2>';
+               foreach( $layer->blocks as $blockId ) {
+                  $block = new QualityBlock( $blockId );
+                  $reportText .= '<h3>' . $block->post->post_title . '</h3>';
+                  $reportText .= '<p>' . $block->reportText . '</p>';
+                  $attachments = get_children( Array(
+                     'post_parent' => $block->post->ID,
+                     'post_type' => 'attachment',
+                     'post_mime_type' => Array( 'application/doc', 'application/zip','application/pdf', 'text/plain' ),
+                     'numberposts' => -1
+                  ) );
+                  $downloadFiles = array_merge( $downloadFiles, $attachments );
                }
             }
-            print( '<div class="clear"></div>' );
+            // TODO: Show download report link instead of report
+            print( '<div id="report-text">' );
+            print( $reportText );
             print( '</div>' );
+            if( count( $downloadFiles ) > 0 ) {
+               print( '<h3>' . __( 'Documents', 'bim-quality-blocks' ) . '</h3>' );
+               print( '<ul>' );
+               foreach( $downloadFiles as $attachment ) {
+                  print( '<li><a href="' . wp_get_attachment_url( $attachment->ID ) . '" target="_blank">' . $attachment->post_title . '</a></li>' );
+               }
+               print( '</ul>' );
+            } else {
+               print( '<h3>' . __( 'No documents availble for this report', 'bim-quality-blocks' ) . '</h3>' );
+            }
+         } catch( \Exception $e ) {
+            print( '<p>' . __( 'Invalid report submitted, please try again', 'bim-quality-blocks' ) . '</p>' );
          }
-         $number ++;
+      } else {
+         print( '<p>' . __( 'Invalid report submitted, please try again', 'bim-quality-blocks' ) . '</p>' );
       }
-      print( '<div class="hidden" id="quality-block-tooltip"><div class="content"></div></div>' );
-      print( '</div>' );
    }
 	
 	public static function editorWidget() {
@@ -329,16 +388,9 @@ class BIMQualityBlocks {
       return $postId;
 	}
 
-	public static function getReportHTML( $settings, $levelFilters ) {
-		$options = BIMQualityBlocks::getOptions();
-
-      $html = '';
-
-		return $html;
-	}
-	
 	public static function printWordDocument( $settings, $filters ) {
-		$html = BIMQualityBlocks::getReportHTML( $settings, $filters );
+      $html = '';
+		//$html = BIMQualityBlocks::getReportHTML( $settings, $filters );
 		header( 'Content-type: application/vnd.ms-word' );
 		header( 'Content-Disposition: attachment;Filename=bim-quality-blocks.doc' );
 ?>
