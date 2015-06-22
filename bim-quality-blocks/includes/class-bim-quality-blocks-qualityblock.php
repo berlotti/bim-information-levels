@@ -8,6 +8,7 @@ class QualityBlock {
    public $relations;
    public $deselects;
    public $behaviour;
+   public $reportXml;
 
    public function __construct( $id ) {
       if( is_object( $id ) ) {
@@ -30,6 +31,7 @@ class QualityBlock {
          $this->deselects = Array();
       }
       $this->reportText = get_post_meta( $this->post->ID, '_report_text', true );
+      $this->reportXml = get_post_meta( $this->post->ID, '_report_xml', true );
    }
 
    private function isQualityBlock() {

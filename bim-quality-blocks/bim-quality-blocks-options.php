@@ -72,6 +72,44 @@ if( is_array( $postTypes ) ) {
 					<p class="description"><?php _e( 'The post type in which BIM Quality Blocks are stored', 'bim-quality-blocks' ); ?></p>
 				</td>
 			</tr>
+         <tr valign="top">
+            <td><label for="bim-quality-blocks-report-post-type"><?php _e( 'BIM Quality Blocks report post type', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <?php
+               if( is_array( $postTypes ) ) {
+                  ?>
+                  <select name="bim_quality_blocks_options[report_post_type]" id="bim-quality-blocks-report-post-type">
+                     <?php
+                     foreach( $postTypes AS $key => $postType ) {
+                        ?>
+                        <option value="<?php print( $key ); ?>" <?php print(
+                        ( ( isset( $bimQualityBlocksOptions[ 'report_post_type' ] ) && $key == $bimQualityBlocksOptions[ 'report_post_type' ] ) ? ' selected="selected"' : '' ) ); ?>>
+                           <?php print( $postType->labels->name ); ?>
+                        </option>
+                     <?php
+                     }
+                     ?>
+                  </select>
+               <?php
+               }
+               ?>
+               <p class="description"><?php _e( 'The post type in which BIM Quality Blocks are stored', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="bim-quality-blocks-xml-header"><?php _e( 'BIM Quality Blocks XML header', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <textarea name="bim_quality_blocks_options[xml_header]" id="bim-quality-blocks-xml-header"><?php print( isset( $bimQualityBlocksOptions['xml_header'] ) ? $bimQualityBlocksOptions['xml_header'] : '' ); ?></textarea>
+               <p class="description"><?php _e( 'The generated report can include an XML file, this is the header of that XML file', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="bim-quality-blocks-xml-footer"><?php _e( 'BIM Quality Blocks XML footer', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <textarea name="bim_quality_blocks_options[xml_footer]" id="bim-quality-blocks-xml-footer"><?php print( isset( $bimQualityBlocksOptions['xml_footer'] ) ? $bimQualityBlocksOptions['xml_footer'] : '' ); ?></textarea>
+               <p class="description"><?php _e( 'The generated report can include an XML file, this is the footer of that XML file', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
 			<tr valign="top">
 				<td colspan="2">
 					<p class="submit">

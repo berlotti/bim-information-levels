@@ -40,6 +40,10 @@ class BIMQualityBlocks {
 		// --- Add shortcodes ---
 		add_shortcode( 'showBIMQualityBlocks', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'showBIMQualityBlocks' ) );
 
+      // action for ajax call (or just outside wordpress calls with WP context)
+      add_action( 'wp_ajax_bqb_download_report', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'downloadReport' ) );
+      add_action( 'wp_ajax_bqb_download_xml', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'showReportXml' ) );
+
       BIMQualityBlocks::$layers = Array(
          'building_type' => __( 'Gebouwtype', 'bim-quality-blocks' ),
          'bim_usage' => __( 'Primaire interesse in BIM', 'bim-quality-blocks' ),
@@ -129,6 +133,34 @@ class BIMQualityBlocks {
 		register_post_type( 'bim_quality_block', $postTypeArguments );
 
       add_image_size( 'grid-icon', 120, 120, true );
+
+      $postTypeArguments = Array(
+          'labels' => Array(
+              'name' => __( 'BIM Quality Blocks Reports', 'bim-quality-blocks' ),
+              'singular_name' => __( 'Report', 'bim-quality-blocks' ),
+              'add_new' => __( 'Add New', 'bim-quality-blocks' ),
+              'add_new_item' => __( 'Add New Report', 'bim-quality-blocks' ),
+              'edit_item' => __( 'Edit Report', 'bim-quality-blocks' ),
+              'new_item' => __( 'New Report', 'bim-quality-blocks' ),
+              'all_items' => __( 'All Reports', 'bim-quality-blocks' ),
+              'view_item' => __( 'View Report', 'bim-quality-blocks' ),
+              'search_items' => __( 'Search Reports', 'bim-quality-blocks' ),
+              'not_found' =>  __( 'No Reports found', 'bim-quality-blocks' ),
+              'not_found_in_trash' => __( 'No Reports found in Trash', 'bim-quality-blocks' ),
+              'parent_item_colon' => '',
+              'menu_name' => 'BIM Quality Blocks Report' ),
+          'public' => true,
+          'publicly_queryable' => true,
+          'show_ui' => true,
+          'show_in_menu' => true,
+          'query_var' => true,
+          'rewrite' => true,
+          'has_archive' => true,
+          'hierarchical' => false,
+          'menu_position' => null,
+          'supports' => Array( 'title', 'editor' )
+      );
+      register_post_type( 'bim_q_b_report', $postTypeArguments );
 	}
 
    /**
@@ -156,6 +188,8 @@ class BIMQualityBlocks {
          print( '<div id="bim-quality-block-layers">' );
          $blocks = BIMQualityBlocks::getQualityBlocks();
          $number = 0;
+         $mergedLayers = false;
+         $mergedLayerKeys = Array( 'basic_model', 'properties', 'applications' );
          foreach( BIMQualityBlocks::$layers as $key => $label ) {
             if( $key == 'building_type' ) {
                print( '<div id="building-select-container">' );
@@ -170,19 +204,28 @@ class BIMQualityBlocks {
                print( '</select>' );
                print( '</div>' );
             } else {
-               print( '<div class="layer" id="layer_' . $key . '">' );
-               print( '<div class="overlay"></div>' );
-               print( '<h3>' . $label . '</h3>' );
-               if( $number >= 2 ) {
-                  print( '<div class="navigation-container">
-                              <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
-                              <a href="" class="next' . ( $key == 'attachments' ? ' submit' : '' ) . '">' . ( $key == 'attachments' ? __( 'Finish', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
-                              <div class="clear"></div>
-                        </div>' );
+               if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) || !in_array( $key, $mergedLayerKeys ) ) {
+                  if( $mergedLayers && !in_array( $key, $mergedLayerKeys ) ) {
+                     print( '<div class="clear"></div>' );
+                     print( '</div>' );
+                  }
+                  print( '<div class="layer" id="layer_' . $key . '">' );
+                  print( '<div class="overlay"></div>' );
+                  print( '<h3>' . $label . '</h3>' );
+                  if( $number >= 2 ) {
+                     print( '<div class="navigation-container">
+                                 <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
+                                 <a href="" class="next' . ( $key == 'attachments' ? ' submit' : '' ) . '">' . ( $key == 'attachments' ? __( 'Finish', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
+                                 <div class="clear"></div>
+                           </div>' );
+                  }
+                  if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) ) {
+                     $mergedLayers = true;
+                  }
                }
                foreach( $blocks as $block ) {
                   if( $block->layer == $key ) {
-                     print( '<div class="quality-block' . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
+                     print( '<div class="quality-block ' . $block->layer . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
                      print( '<h3>' . $block->post->post_title . '</h3>' );
                      print( '<div class="image-container">' );
                      $image = get_the_post_thumbnail( $block->post->ID, 'grid-icon' );
@@ -200,8 +243,10 @@ class BIMQualityBlocks {
                      print( "</div>" );
                   }
                }
-               print( '<div class="clear"></div>' );
-               print( '</div>' );
+               if( !in_array( $key, $mergedLayerKeys ) ) {
+                  print( '<div class="clear"></div>' );
+                  print( '</div>' );
+               }
             }
             $number ++;
          }
@@ -219,7 +264,9 @@ class BIMQualityBlocks {
       $report = json_decode( stripslashes( $_POST['report'] ) );
       if( isset( $report, $report->buildingType, $report->blocks ) ) {
          try {
+            $options = BIMQualityBlocks::getOptions();
             $reportText = '<h1>' . __( 'BIM Quality Blocks Report', 'bim-quality-blocks' ) . '</h1>';
+            $xml = isset( $options['xml_header'] ) ? $options['xml_header'] : '';
             $buildingType = get_post( intval( $report->buildingType ) );
             $reportText .= __( 'Building type', 'bim-quality-blocks' ) . ': ' . $buildingType->post_title;
             $downloadFiles = Array();
@@ -227,39 +274,81 @@ class BIMQualityBlocks {
                if( !isset( $layer->type ) || !isset( BIMQualityBlocks::$layers[$layer->type] ) ) {
                   throw new \Exception( 'Invalid report submitted' );
                }
-               $reportText .= '<h2>' . BIMQualityBlocks::$layers[$layer->type] . '</h2>';
-               foreach( $layer->blocks as $blockId ) {
-                  $block = new QualityBlock( $blockId );
-                  $reportText .= '<h3>' . $block->post->post_title . '</h3>';
-                  $reportText .= '<p>' . $block->reportText . '</p>';
-                  $attachments = get_children( Array(
-                     'post_parent' => $block->post->ID,
-                     'post_type' => 'attachment',
-                     'post_mime_type' => Array( 'application/doc', 'application/zip','application/pdf', 'text/plain' ),
-                     'numberposts' => -1
-                  ) );
-                  $downloadFiles = array_merge( $downloadFiles, $attachments );
+               if( count( $layer->blocks ) > 0 ) {
+                  $reportText .= '<h2>' . BIMQualityBlocks::$layers[ $layer->type ] . '</h2>';
+                  foreach( $layer->blocks as $blockId ) {
+                     $block = new QualityBlock( $blockId );
+                     $reportText .= '<h3>' . $block->post->post_title . '</h3>';
+                     $reportText .= '<p>' . $block->reportText . '</p>';
+                     $attachments = get_children( Array(
+                         'post_parent'    => $block->post->ID,
+                         'post_type'      => 'attachment',
+                         'post_mime_type' => Array( 'application/doc', 'application/zip', 'application/pdf', 'text/plain' ),
+                         'numberposts'    => - 1
+                     ) );
+                     $downloadFiles = array_merge( $downloadFiles, $attachments );
+                     $xml .= $block->reportXml;
+                  }
                }
             }
-            // TODO: Show download report link instead of report
-            print( '<div id="report-text">' );
-            print( $reportText );
-            print( '</div>' );
+
+            $xml .= $options['xml_footer'];
+            // write report to post type
+            $postData = Array(
+               'post_title' => __( 'Report for', 'bim-quality-blocks' ) . ' ' . BIMQualityBlocks::getDisplayName( get_current_user_id() ),
+               'post_content' => $reportText,
+               'post_type' => $options['report_post_type']
+            );
+            $reportId = wp_insert_post( $postData );
+            add_post_meta( $reportId, '_report', $report );
+            add_post_meta( $reportId, '_xml', $xml );
+            $downloadFileIds = Array();
+            print( '<a href="' . add_query_arg( Array( 'action' => 'bqb_download_report', 'id' => $reportId ), admin_url( 'admin-ajax.php' ) ) . '" target="_blank" id="download-report-link">' . __( 'Download report', 'bim-quality-blocks' ) . '</a><br />' );
+            print( '<a href="' . add_query_arg( Array( 'action' => 'bqb_download_xml', 'id' => $reportId ), admin_url( 'admin-ajax.php' ) ) . '" target="_blank" id="download-xml-link">' . __( 'Download XML', 'bim-quality-blocks' ) . '</a><br />' );
             if( count( $downloadFiles ) > 0 ) {
                print( '<h3>' . __( 'Documents', 'bim-quality-blocks' ) . '</h3>' );
                print( '<ul>' );
                foreach( $downloadFiles as $attachment ) {
                   print( '<li><a href="' . wp_get_attachment_url( $attachment->ID ) . '" target="_blank">' . $attachment->post_title . '</a></li>' );
+                  $downloadFileIds[] = $attachment->ID;
                }
                print( '</ul>' );
             } else {
-               print( '<h3>' . __( 'No documents availble for this report', 'bim-quality-blocks' ) . '</h3>' );
+               print( '<h3>' . __( 'No documents available for this report', 'bim-quality-blocks' ) . '</h3>' );
             }
+            add_post_meta( $reportId, '_downloads', $downloadFileIds );
          } catch( \Exception $e ) {
             print( '<p>' . __( 'Invalid report submitted, please try again', 'bim-quality-blocks' ) . '</p>' );
          }
       } else {
          print( '<p>' . __( 'Invalid report submitted, please try again', 'bim-quality-blocks' ) . '</p>' );
+      }
+   }
+
+   /**
+    * @param $userId
+    *
+    * @return array
+    */
+   public static function getDisplayName( $userId ) {
+      if( !is_object( $userId ) && $userId == 0 ) {
+         return '';
+      } else {
+         /** @var \wpdb $wpdb */
+         global $wpdb;
+         if( is_object( $userId ) ) {
+            $displayName = $userId->display_name;
+         } else {
+            $displayName = $wpdb->get_var( "SELECT display_name
+					FROM {$wpdb->users}
+					WHERE ID = " . intval( $userId ) );
+         }
+         if( strpos( $displayName, '@' ) !== false ) {
+            $displayName = explode( '@', $displayName );
+            return $displayName[0];
+         } else {
+            return $displayName;
+         }
       }
    }
 	
@@ -328,7 +417,9 @@ class BIMQualityBlocks {
             ?>
          </select><br />
          <label for="block-report-text"><?php _e( 'Report text', 'bim-quality-blocks' ); ?></label><br />
-         <textarea id="block-report-text" name="quality_block_report_text" placeholder="<?php _e( 'Report text used in the final report if this block is enabled', 'bim-quality-blocks' ); ?>"><?php print( get_post_meta( $post->ID, '_report_text', true ) ); ?></textarea>
+         <textarea id="block-report-text" name="quality_block_report_text" placeholder="<?php _e( 'Report text used in the final report if this block is enabled', 'bim-quality-blocks' ); ?>"><?php print( get_post_meta( $post->ID, '_report_text', true ) ); ?></textarea><br />
+         <label for="block-report-xml"><?php _e( 'Report xml', 'bim-quality-blocks' ); ?></label><br />
+         <textarea id="block-report-xml" name="quality_block_report_xml" placeholder="<?php _e( 'Report XML used in the final report XML if this block is enabled', 'bim-quality-blocks' ); ?>"><?php print( get_post_meta( $post->ID, '_report_xml', true ) ); ?></textarea><br />
 		</div>
 		<input type="hidden" name="bim_quality_blocks_noncename" value="<?php print( wp_create_nonce(__FILE__) ); ?>" />
 <?php
@@ -379,6 +470,12 @@ class BIMQualityBlocks {
          }
          update_post_meta( $postId, '_report_text', $reportText );
 
+         $reportXml = filter_input( INPUT_POST, 'quality_block_report_xml', FILTER_DEFAULT );
+         if( !isset( $reportXml ) || !$reportXml ) {
+            $reportXml = '';
+         }
+         update_post_meta( $postId, '_report_xml', $reportXml );
+
          $layer = filter_input( INPUT_POST, 'quality_block_layer', FILTER_SANITIZE_STRING );
          if( !isset( $layer ) || !$layer ) {
             $layer = '';
@@ -388,18 +485,37 @@ class BIMQualityBlocks {
       return $postId;
 	}
 
-	public static function printWordDocument( $settings, $filters ) {
-      $html = '';
-		//$html = BIMQualityBlocks::getReportHTML( $settings, $filters );
-		header( 'Content-type: application/vnd.ms-word' );
-		header( 'Content-Disposition: attachment;Filename=bim-quality-blocks.doc' );
-?>
-<!--html
+   public static function showReportXml() {
+      if( is_user_logged_in() && isset( $_GET['id'] ) ) {
+         $options = BIMQualityBlocks::getOptions();
+         $report = get_post( intval( $_GET['id'] ) );
+         if( isset( $report ) && $report->post_author == get_current_user_id() && $report->post_type == $options['report_post_type'] ) {
+            header( 'Content-type: text/xml' );
+            print( get_post_meta( $report->ID, '_xml', true ) );
+            exit();
+         } else {
+            _e( 'Report not available', 'bim-quality-blocks' );
+         }
+      } else {
+         _e( 'Reports are only available if you log in', 'bim-quality-blocks' );
+      }
+   }
+
+
+   public static function downloadReport() {
+      if( is_user_logged_in() && isset( $_GET['id'] ) ) {
+         $options = BIMQualityBlocks::getOptions();
+         $report = get_post( intval( $_GET['id'] ) );
+         if( isset( $report ) && $report->post_author == get_current_user_id() && $report->post_type == $options['report_post_type'] ) {
+            header( 'Content-type: application/vnd.ms-word' );
+            header( 'Content-Disposition: attachment;Filename=bim-quality-blocks-report.doc' );
+            ?>
+<html
     xmlns:o='urn:schemas-microsoft-com:office:office'
     xmlns:w='urn:schemas-microsoft-com:office:word'
     xmlns='http://www.w3.org/TR/REC-html40'>
     <head>
-    	<title>BIM Information Levels</title>
+    	<title><?php print( $report->post_title ); ?></title>
     	<xml>
     	    <w:worddocument xmlns:w="#unknown">
 	            <w:view>Print</w:view>
@@ -408,12 +524,17 @@ class BIMQualityBlocks {
         	</w:worddocument>
     	</xml>
 	</head>
-	<body lang=EN-US>
-		<?php print( $html ); ?>
-	</body>
-</html-->
-<?php
-	}
+	<body lang=EN-US><?php print( $report->post_content ); ?></body>
+</html>
+         <?php
+            exit();
+         } else {
+            _e( 'Report not available', 'bim-quality-blocks' );
+         }
+      } else {
+         _e( 'Reports are only available if you log in', 'bim-quality-blocks' );
+      }
+   }
 }
 
 $bimQualityBlocks = new BIMQualityBlocks();
