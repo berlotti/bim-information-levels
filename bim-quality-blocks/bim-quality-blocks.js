@@ -125,7 +125,7 @@ BIMQualityBlocks.disableBlocks = function( block ) {
 			}
 		} );
 		jQuery( this ).find( ".quality-block.disabled" ).each( function() {
-			jQuery( this ).parent().append( jQuery( this ).remove() );
+			jQuery( this ).parent().find( "> .clear" ).before( jQuery( this ).remove() );
 		} );
 	} );
 	var deselects = block.find( ".deselect" ).html().split( "," );

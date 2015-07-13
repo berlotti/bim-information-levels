@@ -14,18 +14,12 @@
 }
 
 .layer {
-   float: left;
-   width: 150px;
+   width: auto;
    position: relative;
    padding: 5px 10px;
    margin: 0 10px 10px 0;
    border-radius: 3px;
    box-sizing: content-box;
-}
-
-#layer_building_type, #layer_bim_usage {
-   float: none;
-   width: 390px;
 }
 
 .layer.active {
@@ -87,6 +81,11 @@
    overflow: hidden;
 }
 
+#layer_bim_usage .quality-block {
+   width: 253px;
+   height: 60px;
+}
+
 .quality-block.basic_model {
    border: 1px solid red;
 }
@@ -124,7 +123,6 @@
    font-size: 14px;
    margin: 0 0 5px 0;
    display: block;
-   width: 110px;
    top: 5px;
    left: 5px;
    height: 20px;

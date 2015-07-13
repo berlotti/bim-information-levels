@@ -1,5 +1,13 @@
 @CHARSET "UTF-8";
 
+table .number {
+   text-align: right;
+}
+
+.error-messages li {
+   color: #dd0000;
+}
+
 .question-label, #top .question-label {
 	display: inline;
 }
@@ -100,6 +108,14 @@
 #required-information td, #required-information th {
 	padding: 3px 5px;
 	border-bottom: 1px solid #dedede;
+}
+
+#required-information .protocol-select {
+   width: auto;
+}
+
+#required-information .small-width {
+   width: 80px;
 }
 
 .question-title {

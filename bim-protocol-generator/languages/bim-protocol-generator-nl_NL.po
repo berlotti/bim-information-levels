@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BIM Protocol Generator\n"
-"POT-Creation-Date: 2014-06-11 14:36+0100\n"
-"PO-Revision-Date: 2014-06-11 14:37+0100\n"
+"POT-Creation-Date: 2015-07-13 14:01+0100\n"
+"PO-Revision-Date: 2015-07-13 14:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: English\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Next question"
 msgstr "Volgende vraag"
 
-#: bim-protocol-generator.php:81 bim-protocol-generator.php:819
+#: bim-protocol-generator.php:81 bim-protocol-generator.php:821
 msgid "None"
 msgstr "Geen"
 
@@ -97,16 +97,13 @@ msgstr "Antwoorden"
 msgid "Other"
 msgstr "Anders"
 
-#: bim-protocol-generator.php:314 bim-protocol-generator.php:880
-#: bim-protocol-generator.php:1166 bim-protocol-generator.php:1398
-#: bim-protocol-generator.php:1588
+#: bim-protocol-generator.php:314 bim-protocol-generator.php:882
+#: bim-protocol-generator.php:1188
 msgid "Project"
 msgstr "Project"
 
-#: bim-protocol-generator.php:315 bim-protocol-generator.php:662
-#: bim-protocol-generator.php:881 bim-protocol-generator.php:1167
-#: bim-protocol-generator.php:1405 bim-protocol-generator.php:1406
-#: bim-protocol-generator.php:1588
+#: bim-protocol-generator.php:315 bim-protocol-generator.php:663
+#: bim-protocol-generator.php:883 bim-protocol-generator.php:1189
 msgid "Phase"
 msgstr "Fase"
 
@@ -134,9 +131,8 @@ msgstr "Welk formaat heeft je voorkeur?"
 msgid "What kind of modeling agreements?"
 msgstr "Welke modeleer afspraak?"
 
-#: bim-protocol-generator.php:410 bim-protocol-generator.php:1468
-#: bim-protocol-generator.php:1471 bim-protocol-generator.php:1474
-#: bim-protocol-generator.php:1477
+#: bim-protocol-generator.php:410 bim-protocol-generator.php:1638
+#: bim-protocol-generator.php:1651 bim-protocol-generator.php:1658
 msgid "Required information"
 msgstr "Benodigde informatie"
 
@@ -156,103 +152,102 @@ msgstr "Volgende"
 msgid "Submit"
 msgstr "Versturen"
 
-#: bim-protocol-generator.php:600
+#: bim-protocol-generator.php:601
 msgid "Select one of the options"
 msgstr "Selecteer een van de opties"
 
-#: bim-protocol-generator.php:602 bim-protocol-generator.php:608
+#: bim-protocol-generator.php:603 bim-protocol-generator.php:609
 msgid "Check at least one of the options"
 msgstr "Selecteer ten minste een van de opties"
 
-#: bim-protocol-generator.php:604
+#: bim-protocol-generator.php:605
 msgid "Select one of the goals"
 msgstr "Selecteer een doel"
 
-#: bim-protocol-generator.php:606
+#: bim-protocol-generator.php:607
 msgid "Select a 0 point template"
 msgstr "Selecteer een nulpunt template"
 
-#: bim-protocol-generator.php:643
+#: bim-protocol-generator.php:644
 msgid "Thank you for filling out the BIM protocol generator form"
 msgstr "Bedankt voor het invullen van het BIM protocol generator formulier"
 
-#: bim-protocol-generator.php:652 bim-protocol-generator.php:668
+#: bim-protocol-generator.php:653 bim-protocol-generator.php:670
 msgid "Download the report"
 msgstr "Download het rapport"
 
-#: bim-protocol-generator.php:679 bim-protocol-generator.php:1609
+#: bim-protocol-generator.php:681 bim-protocol-generator.php:1801
 msgid "completed"
 msgstr "afgerond"
 
-#: bim-protocol-generator.php:698 bim-protocol-generator.php:1588
+#: bim-protocol-generator.php:700
 msgid "Progress"
 msgstr "Voortgang"
 
-#: bim-protocol-generator.php:699 bim-protocol-generator.php:1409
-#: bim-protocol-generator.php:1588
+#: bim-protocol-generator.php:701 bim-protocol-generator.php:1532
 msgid "Participants"
 msgstr "Deelnemers"
 
-#: bim-protocol-generator.php:706
+#: bim-protocol-generator.php:708
 msgid "No BIM protocol generator questions available for you at the moment."
 msgstr ""
 "Geen BIM protocol generator vragenlijst beschikbaar voor je op het moment."
 
-#: bim-protocol-generator.php:708
+#: bim-protocol-generator.php:710
 msgid "Make sure you provided the correct code."
 msgstr "Controleer of je de juiste code hebt gebruikt."
 
-#: bim-protocol-generator.php:790
+#: bim-protocol-generator.php:792
 msgid "Information"
 msgstr "Informatie"
 
-#: bim-protocol-generator.php:791
+#: bim-protocol-generator.php:793
 msgid "Requesting party"
 msgstr "Vragende partij"
 
-#: bim-protocol-generator.php:792
+#: bim-protocol-generator.php:794
 msgid "Responding party"
 msgstr "Leverende partij"
 
-#: bim-protocol-generator.php:793
+#: bim-protocol-generator.php:795
 msgid "Level"
 msgstr "Niveau"
 
-#: bim-protocol-generator.php:794
+#: bim-protocol-generator.php:796
 msgid "Status"
 msgstr "Status"
 
-#: bim-protocol-generator.php:795
+#: bim-protocol-generator.php:797
 msgid "Request preference"
 msgstr "Vragende voorkeur"
 
-#: bim-protocol-generator.php:796
+#: bim-protocol-generator.php:798
 msgid "Response options"
 msgstr "Leverende opties"
 
-#: bim-protocol-generator.php:797
+#: bim-protocol-generator.php:799
 msgid "Proposal"
 msgstr "Voorstel"
 
-#: bim-protocol-generator.php:798 bim-protocol-generator.php:1457
-#: bim-protocol-generator.php:1461 bim-protocol-generator.php:1465
+#: bim-protocol-generator.php:800 bim-protocol-generator.php:1627
+#: bim-protocol-generator.php:1635
 msgid "Modeling template"
 msgstr "Modeleer template"
 
-#: bim-protocol-generator.php:965
+#: bim-protocol-generator.php:967
 msgid "The goal for this phase is"
 msgstr "Het doel voor deze fase is"
 
-#: bim-protocol-generator.php:976
+#: bim-protocol-generator.php:978
 msgid "Not everyone agrees on the goal. The following goals have been selected"
 msgstr ""
 "Niet iedereen is het eens over het doel. De volgende doelen zijn geselecteerd"
 
-#: bim-protocol-generator.php:987 bim-protocol-generator.php:1009
+#: bim-protocol-generator.php:989 bim-protocol-generator.php:1011
 msgid "The team is going to use"
 msgstr "Het team gaat het volgende gebruiken"
 
-#: bim-protocol-generator.php:998
+#: bim-protocol-generator.php:1000
 msgid ""
 "Not everyone agrees on the 0 point template. The following options have been "
 "selected"
@@ -260,7 +255,7 @@ msgstr ""
 "Niet iedereen is het eens over de nulpunt template. De volgende opties zijn "
 "geselecteerd"
 
-#: bim-protocol-generator.php:1020
+#: bim-protocol-generator.php:1022
 msgid ""
 "Not everyone agrees on the modeling template. The following options have "
 "been selected"
@@ -268,165 +263,226 @@ msgstr ""
 "Niet iedereen is het eens over de modeleer template. De volgende opties zijn "
 "geselecteerd"
 
-#: bim-protocol-generator.php:1032
+#: bim-protocol-generator.php:1034
 msgid "The team sees the following partner as leading"
 msgstr "Het team ziet de volgende partner als leading"
 
-#: bim-protocol-generator.php:1035
+#: bim-protocol-generator.php:1037
 msgid "Not everyone agrees who should be the leading partner"
 msgstr "Niet iedereen is het eens wie de leading partner zou moeten zijn"
 
-#: bim-protocol-generator.php:1069 bim-protocol-generator.php:1072
+#: bim-protocol-generator.php:1072 bim-protocol-generator.php:1075
+#: bim-protocol-generator.php:1116 bim-protocol-generator.php:1119
 msgid "Party"
 msgstr "Partij"
 
-#: bim-protocol-generator.php:1070
+#: bim-protocol-generator.php:1073 bim-protocol-generator.php:1117
 msgid "Check outgoing"
 msgstr "Controleer bij versturen"
 
-#: bim-protocol-generator.php:1071
+#: bim-protocol-generator.php:1074 bim-protocol-generator.php:1118
 msgid "Check incoming"
 msgstr "Controleer bij binnenkomst"
 
-#: bim-protocol-generator.php:1135
+#: bim-protocol-generator.php:1115
+msgid "Parties who do not exchange information"
+msgstr "Deelnemers welke geen informatie uitwisselen"
+
+#: bim-protocol-generator.php:1156
+msgid "This document was generated by bimprotocolgenerator.com on"
+msgstr "Dit document was aangemaakt door bimprotocolgenerator.com op"
+
+#: bim-protocol-generator.php:1157
 msgid "The average \"agreement percentage\" of this BIM protocol is"
 msgstr "De gemiddelde \"overeenkomstpercentage\" van dit BIM protocol is"
 
-#: bim-protocol-generator.php:1137
+#: bim-protocol-generator.php:1159
 msgid "Disclaimer"
 msgstr "Disclaimer"
 
-#: bim-protocol-generator.php:1139 bim-protocol-generator-options.php:174
+#: bim-protocol-generator.php:1161 bim-protocol-generator-options.php:174
 #: bim-protocol-generator-options.php:215
 msgid "Definitions"
 msgstr "Defenities"
 
-#: bim-protocol-generator.php:1152
+#: bim-protocol-generator.php:1174
 msgid "BIM Protocol Generator Report"
 msgstr "BIM Protocol Generator Rapport"
 
-#: bim-protocol-generator.php:1165
+#: bim-protocol-generator.php:1187
 msgid "A BIM Protocol report has been generated."
 msgstr "Een BIM Protocol rapport is aangemaakt."
 
-#: bim-protocol-generator.php:1168
+#: bim-protocol-generator.php:1190
 msgid "You can download the report from the following link:"
 msgstr "Je kunt het rapport downloaden via de volgende link:"
 
-#: bim-protocol-generator.php:1170 bim-protocol-generator.php:1377
+#: bim-protocol-generator.php:1192 bim-protocol-generator.php:1476
 msgid "Best regards"
 msgstr "Met vriendeijke groet"
 
-#: bim-protocol-generator.php:1189 bim-protocol-generator.php:1217
-#: bim-protocol-generator.php:1245
+#: bim-protocol-generator.php:1211 bim-protocol-generator.php:1239
+#: bim-protocol-generator.php:1267
 msgid "Add New"
 msgstr "Voeg nieuwe toe"
 
-#: bim-protocol-generator.php:1190
+#: bim-protocol-generator.php:1212
 msgid "Add New Question"
 msgstr "Voeg nieuwe vraag toe"
 
-#: bim-protocol-generator.php:1191
+#: bim-protocol-generator.php:1213
 msgid "Edit Question"
 msgstr "Edit vraag"
 
-#: bim-protocol-generator.php:1192
+#: bim-protocol-generator.php:1214
 msgid "New Question"
 msgstr "Nieuwe vraag"
 
-#: bim-protocol-generator.php:1193
+#: bim-protocol-generator.php:1215
 msgid "All Questions"
 msgstr "Alle vragen"
 
-#: bim-protocol-generator.php:1194
+#: bim-protocol-generator.php:1216
 msgid "View Question"
 msgstr "Bekijk vraag"
 
-#: bim-protocol-generator.php:1195
+#: bim-protocol-generator.php:1217
 msgid "Search Questions"
 msgstr "Doorzoek vragen"
 
-#: bim-protocol-generator.php:1196
+#: bim-protocol-generator.php:1218
 msgid "No Questions found"
 msgstr "Geen vragen gevonden"
 
-#: bim-protocol-generator.php:1197
+#: bim-protocol-generator.php:1219
 msgid "No Questions found in Trash"
 msgstr "Geen vragen in de prullenbak"
 
-#: bim-protocol-generator.php:1218
+#: bim-protocol-generator.php:1240
 msgid "Add New Initiator"
 msgstr "Voeg initiator toe"
 
-#: bim-protocol-generator.php:1219
+#: bim-protocol-generator.php:1241
 msgid "Edit Initiator"
 msgstr "Edit Initiator"
 
-#: bim-protocol-generator.php:1220
+#: bim-protocol-generator.php:1242
 msgid "New Initiator"
 msgstr "Nieuwe initiator"
 
-#: bim-protocol-generator.php:1221
+#: bim-protocol-generator.php:1243
 msgid "All Initiators"
 msgstr "Alle Initiators"
 
-#: bim-protocol-generator.php:1222
+#: bim-protocol-generator.php:1244
 msgid "View Initiator"
 msgstr "Bekijk initiators"
 
-#: bim-protocol-generator.php:1223
+#: bim-protocol-generator.php:1245
 msgid "Search Initiators"
 msgstr "Doorzoek initiators"
 
-#: bim-protocol-generator.php:1224
+#: bim-protocol-generator.php:1246
 msgid "No Initiator found"
 msgstr "Geen initiator gevonden"
 
-#: bim-protocol-generator.php:1225
+#: bim-protocol-generator.php:1247
 msgid "No Initiators found in Trash"
 msgstr "Geen initiator gevonden in de prullenbak"
 
-#: bim-protocol-generator.php:1246
+#: bim-protocol-generator.php:1268
 msgid "Add New Answer"
 msgstr "Voeg antwoord toe"
 
-#: bim-protocol-generator.php:1247
+#: bim-protocol-generator.php:1269
 msgid "Edit Answer"
 msgstr "Edit antwoord"
 
-#: bim-protocol-generator.php:1248
+#: bim-protocol-generator.php:1270
 msgid "New Answer"
 msgstr "Nieuw antwoord"
 
-#: bim-protocol-generator.php:1249
+#: bim-protocol-generator.php:1271
 msgid "All Answers"
 msgstr "Alle antwoorden"
 
-#: bim-protocol-generator.php:1250
+#: bim-protocol-generator.php:1272
 msgid "View Answer"
 msgstr "Bekijk antwoorden"
 
-#: bim-protocol-generator.php:1251
+#: bim-protocol-generator.php:1273
 msgid "Search Answers"
 msgstr "Doorzoek antwoorden"
 
-#: bim-protocol-generator.php:1252
+#: bim-protocol-generator.php:1274
 msgid "No Answers found"
 msgstr "Geen antwoorden gevonden"
 
-#: bim-protocol-generator.php:1253
+#: bim-protocol-generator.php:1275
 msgid "No Answers found in Trash"
 msgstr "Geen antwoorden gevonden in de prullenbak"
 
-#: bim-protocol-generator.php:1272
+#: bim-protocol-generator.php:1294
 msgid "Please log in to initiate a BIM Protocol."
 msgstr "Log in om een BIM Protocol aan te maken"
 
-#: bim-protocol-generator.php:1372
+#: bim-protocol-generator.php:1357
+msgid "Enter a valid project name"
+msgstr "Voer een geldige projectnaam in"
+
+#: bim-protocol-generator.php:1361
+msgid "Enter a valid project phase"
+msgstr "Voer een geldige project fase in"
+
+#: bim-protocol-generator.php:1365
+msgid "A BIM protocol requires at least 2 participants"
+msgstr "Er moeten minimaal 2 deelnemers zijn"
+
+#: bim-protocol-generator.php:1371
+msgid "Invalid participant entered"
+msgstr "Incorrecte deelnemer opgegeven"
+
+#: bim-protocol-generator.php:1376
+msgid "A BIM protocol requires at least 2 goals"
+msgstr "Er dienen minimaal 2 doelen opgegeven te worden"
+
+#: bim-protocol-generator.php:1382
+msgid "Invalid goal entered"
+msgstr "Ongeldig doel opgegeven"
+
+#: bim-protocol-generator.php:1388
+msgid "A BIM protocol requires at least 2 zero point templates"
+msgstr "Er dienen minimaal 2 nulpunt templates te worden opgegeven"
+
+#: bim-protocol-generator.php:1394
+msgid "Invalid zero point template entered"
+msgstr "Ongeldig nulpunt template"
+
+#: bim-protocol-generator.php:1399
+msgid "A BIM protocol requires at least 2 modeling templates"
+msgstr "Er dienen minimaal 2 modeleer templates te worden opgegeven"
+
+#: bim-protocol-generator.php:1405
+msgid "Invalid modeling template entered"
+msgstr "Ongeldige modeleer template opgegeven"
+
+#: bim-protocol-generator.php:1412
+msgid "Invalid required information item entered"
+msgstr "Ongeldige waarde opgegeven bij benodigde informatie"
+
+#: bim-protocol-generator.php:1416
+msgid "A BIM protocol requires at least 2 information statuses"
+msgstr "Er dienen minimaal 2 statussen te worden opgegeven"
+
+#: bim-protocol-generator.php:1422
+msgid "Invalid status entered"
+msgstr "Ongeldige status opgegeven"
+
+#: bim-protocol-generator.php:1471
 msgid "Invitation to BIM Protocol Generator questions"
 msgstr "Uitnodiging voor BIM Protocol vragenlijst"
 
-#: bim-protocol-generator.php:1374
+#: bim-protocol-generator.php:1473
 msgid ""
 "You have been invited to fill in the BIM Protocol Generator questions for a "
 "project phase."
@@ -434,19 +490,19 @@ msgstr ""
 "Je hebt een uitnodiging gekregen om een BIM Protocol vragenlijst in te "
 "vullen voor een project fase."
 
-#: bim-protocol-generator.php:1375
+#: bim-protocol-generator.php:1474
 msgid "Follow the link below to get started:"
 msgstr "Volg de link hieronder om de vragenlijst in te vullen:"
 
-#: bim-protocol-generator.php:1380
+#: bim-protocol-generator.php:1479
 msgid "Invitation sent to"
 msgstr "Uitnodiging verstuurd aan"
 
-#: bim-protocol-generator.php:1383
+#: bim-protocol-generator.php:1482
 msgid "Could not send invitation to"
 msgstr "Uitnodiging kon niet worden verstuurd aan"
 
-#: bim-protocol-generator.php:1392
+#: bim-protocol-generator.php:1491
 msgid ""
 "There was a problem storing the data for this BIM protocol generator, try "
 "again or contact an admin"
@@ -454,115 +510,201 @@ msgstr ""
 "Er was een probleem met het opslaan van de data voor deze BIM protocol "
 "vragenlijst, probeer het nogmaals of neem contact op met een administrator"
 
-#: bim-protocol-generator.php:1401 bim-protocol-generator.php:1402
+#: bim-protocol-generator.php:1498
+msgid "A BIM protocol could not be initiated because"
+msgstr "Er kan geen BIM protocol aangemaakt worden omdat"
+
+#: bim-protocol-generator.php:1518
+msgid "Project information"
+msgstr "Project informatie"
+
+#: bim-protocol-generator.php:1519
+msgid ""
+"Please provide some general meta-information about the project. This is "
+"being used in the header and title of the generated BIM protocol."
+msgstr ""
+"Voer algemene informatie van het project in. Deze informatie wordt gebruikt "
+"in het BIM protocol."
+
+#: bim-protocol-generator.php:1522 bim-protocol-generator.php:1523
 msgid "Project name"
 msgstr "Project naam"
 
-#: bim-protocol-generator.php:1412 bim-protocol-generator.php:1421
-#: bim-protocol-generator.php:1425
+#: bim-protocol-generator.php:1524
+msgid "(the name under which the project is known)"
+msgstr "(de naam waaronder het project bekend is)"
+
+#: bim-protocol-generator.php:1527 bim-protocol-generator.php:1528
+msgid "Project phase name"
+msgstr "Project fase naam"
+
+#: bim-protocol-generator.php:1529
+msgid "(for example: concept, specification, etc...)"
+msgstr "(bijvoorbeeld: concept, specificatie, etc...)"
+
+#: bim-protocol-generator.php:1533
+msgid ""
+"Please list the participants in this phase. After initiating the protocol "
+"generator, all participants will get an invitation. This list is also used "
+"to answer some questions (for example: ‘who do you think should be the BIM "
+"manager’)"
+msgstr ""
+
+#: bim-protocol-generator.php:1537 bim-protocol-generator.php:1553
+#: bim-protocol-generator.php:1562 bim-protocol-generator.php:1593
+#: bim-protocol-generator.php:1602 bim-protocol-generator.php:1610
+#: bim-protocol-generator.php:1618
 msgid "Name"
 msgstr "Naam"
 
-#: bim-protocol-generator.php:1413 bim-protocol-generator.php:1422
-#: bim-protocol-generator.php:1425
+#: bim-protocol-generator.php:1538 bim-protocol-generator.php:1554
+#: bim-protocol-generator.php:1562
 msgid "Email"
 msgstr "Email"
 
-#: bim-protocol-generator.php:1419
-msgid "Change your first and lastname in your profile"
+#: bim-protocol-generator.php:1545
+msgid "change your name in your profile"
 msgstr "Pas je voor- en achternaam aan in je profiel"
 
-#: bim-protocol-generator.php:1419
+#: bim-protocol-generator.php:1545
 msgid "here"
 msgstr "hier"
 
-#: bim-protocol-generator.php:1425
-msgid "More participants"
-msgstr "Meer deelnemers"
+#: bim-protocol-generator.php:1562
+msgid "Click here to add another participant"
+msgstr "Klik hier om nog een deelnemer toe te voegen"
 
-#: bim-protocol-generator.php:1428
-msgid "Define goals"
-msgstr "Definieer doelen"
+#: bim-protocol-generator.php:1565
+msgid "Project goals"
+msgstr "Project doelen"
 
-#: bim-protocol-generator.php:1431 bim-protocol-generator.php:1434
-#: bim-protocol-generator.php:1437
+#: bim-protocol-generator.php:1566
+msgid ""
+"Define the possible answers to question 1: “why do you think the team is "
+"going to work with BIM”. The participants will only have the options you "
+"fill out here to answer the question. Examples can be ‘create drawings’, "
+"‘visualize the design’, ‘coordination of the engineering’, etc. Please "
+"provide as clear and ad much goals as possible."
+msgstr ""
+
+#: bim-protocol-generator.php:1570
+msgid "Possible goal"
+msgstr "Doel"
+
+#: bim-protocol-generator.php:1578 bim-protocol-generator.php:1585
 msgid "Goal"
 msgstr "Doel"
 
-#: bim-protocol-generator.php:1437
-msgid "More goals"
-msgstr "Meer doelen"
+#: bim-protocol-generator.php:1585 bim-protocol-generator.php:1610
+#: bim-protocol-generator.php:1635 bim-protocol-generator.php:1658
+#: bim-protocol-generator.php:1681
+msgid "Click here to add more possible answers"
+msgstr "Klik hier om meer antwoord mogelijkheden toe te voegen"
 
-#: bim-protocol-generator.php:1440
-msgid "0 point templates"
+#: bim-protocol-generator.php:1588
+msgid "Origin templates"
 msgstr "Nulpunt templates"
 
-#: bim-protocol-generator.php:1443 bim-protocol-generator.php:1447
-#: bim-protocol-generator.php:1451
-msgid "0 point template"
-msgstr "Nulpunt template"
+#: bim-protocol-generator.php:1589
+msgid ""
+"There are several methods to match the origin of different discipline models "
+"(aspect models). The participants are being asked which concept has their "
+"preference. The participants will only have the options you fill out here to "
+"answer the question. You have to provide the name of the concept and an URL "
+"with more information about it. Examples can be ‘the block’ at <a href="
+"\"http://nationalbimguidelines.nl/origintemplates/block\" target=\"_blank"
+"\">http://nationalbimguidelines.nl/origintemplates/block</a> or ‘CoBIM’ from "
+"‘<a href=\"http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/"
+"COBIM2012/cobim_2_inventory_bim_v1.pdf\" target=\"_blank\">http://files."
+"kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/"
+"cobim_2_inventory_bim_v1.pdf</a>’. If you don’t know what to fill out, "
+"please find inspiration on <a href=\"http://bimprotocolgenerator.com/"
+"initiate/origintemplates/\" target=\"_blank\">http://bimprotocolgenerator."
+"com/initiate/origintemplates/</a>"
+msgstr ""
 
-#: bim-protocol-generator.php:1444 bim-protocol-generator.php:1448
-#: bim-protocol-generator.php:1451 bim-protocol-generator.php:1458
-#: bim-protocol-generator.php:1462 bim-protocol-generator.php:1465
-#: bim-protocol-generator.php:1605
+#: bim-protocol-generator.php:1594 bim-protocol-generator.php:1603
+#: bim-protocol-generator.php:1610 bim-protocol-generator.php:1619
+#: bim-protocol-generator.php:1628 bim-protocol-generator.php:1635
+#: bim-protocol-generator.php:1797
 msgid "URL"
 msgstr "URL"
 
-#: bim-protocol-generator.php:1451
-msgid "More 0 point templates"
-msgstr "Meer nulpunt templates"
-
-#: bim-protocol-generator.php:1454
-msgid "Modeling templates"
+#: bim-protocol-generator.php:1613
+msgid "Modelling templates/guidelines"
 msgstr "Modeleer templates"
 
-#: bim-protocol-generator.php:1465
-msgid "More modeling templates"
-msgstr "Meer modeleer templates"
+#: bim-protocol-generator.php:1614
+msgid ""
+"There are several guidelines and agreements about the way a BIM model should "
+"be constructed. The participants are being asked which template/guideline/"
+"agreement has their preference. The participants will only have the options "
+"you fill out here to answer the question. You have to provide the name of "
+"the agreement template and an URL with more information about it. Examples "
+"can be ‘GSA guidelines’ at <a href=\"http://www.gsa.gov/portal/"
+"content/102281\" target=\"_blank\">http://www.gsa.gov/portal/content/102281</"
+"a> or ‘CoBIM architectural’ from ‘<a href=\"http://files.kotisivukone.com/en."
+"buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf"
+"\" target=\"_blank\">http://files.kotisivukone.com/en.buildingsmart."
+"kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf</a>’. If you "
+"don’t know what to fill out, please find inspiration on <a href=\"http://"
+"bimprotocolgenerator.com/initiate/modelguidelines/\" target=\"_blank"
+"\">http://bimprotocolgenerator.com/initiate/modelguidelines/</a>"
+msgstr ""
 
-#: bim-protocol-generator.php:1477
-msgid "More required information"
-msgstr "Meer benodigde informatie"
+#: bim-protocol-generator.php:1639
+msgid ""
+"In question 8 the participants will be asked what information they need from "
+"the other project participants. This will be asked as a matrix/list what "
+"information they need, from who, in what format and on what level and what "
+"the status of the information should be. The participants are free to add "
+"the information they need, but as an initiator you can provide mandatory "
+"information blocks that have to be answered. For example if you fill out "
+"‘building part A’ in this list, every participant has to define how they "
+"want to receive information from ‘building part A’, from who, in what "
+"format, etc."
+msgstr ""
 
-#: bim-protocol-generator.php:1480
-msgid "Information statuses"
-msgstr "Informatie statussen"
+#: bim-protocol-generator.php:1643
+msgid "Required information blocks"
+msgstr "Benodigde informatie"
 
-#: bim-protocol-generator.php:1483 bim-protocol-generator.php:1486
-#: bim-protocol-generator.php:1489
+#: bim-protocol-generator.php:1661 bim-protocol-generator.php:1674
+#: bim-protocol-generator.php:1681
 msgid "Information status"
 msgstr "Informatie status"
 
-#: bim-protocol-generator.php:1489
-msgid "More information statuses"
-msgstr "Meer informatie statussen"
+#: bim-protocol-generator.php:1662
+msgid ""
+"In question 8 the participants will be asked what information they need from "
+"the other project participants. This will be asked as a matrix/list what "
+"information they need, from who, in what format and on what level and what "
+"the status of the information should be. In this list you can define what "
+"kind of ‘status’ the participants can request the information to be at. "
+"Examples can be ‘concept’, ‘definitive’, ‘proposal’, etc."
+msgstr ""
 
-#: bim-protocol-generator.php:1493
+#: bim-protocol-generator.php:1666
+msgid "Possible statuses of information"
+msgstr "Mogelijke statussen van informatie"
+
+#: bim-protocol-generator.php:1685
 msgid "Send invitations"
 msgstr "Verstuur uitnodigingen"
 
-#: bim-protocol-generator.php:1588
-msgid "Language"
-msgstr "Taal"
-
-#: bim-protocol-generator.php:1588
-msgid "Action"
-msgstr "Actie"
-
-#: bim-protocol-generator.php:1627
+#: bim-protocol-generator.php:1826
 msgid "Report ready"
 msgstr "Rapport gereed"
 
-#: bim-protocol-generator.php:1629
-msgid "Force generate report"
-msgstr "Forceer aanmaken rapport"
+#: bim-protocol-generator.php:1828
+msgid "Force report"
+msgstr "Forceer rapport"
 
-#: bim-protocol-generator.php:1638
-msgid "default"
-msgstr "standaard"
+#: bim-protocol-generator.php:1836
+msgid "All complete"
+msgstr "Afgerond"
 
-#: bim-protocol-generator.php:1649
+#: bim-protocol-generator.php:1847
 msgid "Please log in to see your initiated protocols."
 msgstr "Log in om je aangemaakt protocols te zien."
 
@@ -677,6 +819,36 @@ msgid ""
 "languages"
 msgstr ""
 "Voer alle hoofdstukken in en zet deze in dezelfde volgorde in elke taal"
+
+#~ msgid "Click here to add more posible answers"
+#~ msgstr "Klik hier om meer antwoord mogelijkheden toe te voegen"
+
+#~ msgid "Language"
+#~ msgstr "Taal"
+
+#~ msgid "Action"
+#~ msgstr "Actie"
+
+#~ msgid "default"
+#~ msgstr "standaard"
+
+#~ msgid "More participants"
+#~ msgstr "Meer deelnemers"
+
+#~ msgid "Define goals"
+#~ msgstr "Definieer doelen"
+
+#~ msgid "0 point template"
+#~ msgstr "Nulpunt template"
+
+#~ msgid "More 0 point templates"
+#~ msgstr "Meer nulpunt templates"
+
+#~ msgid "More required information"
+#~ msgstr "Meer benodigde informatie"
+
+#~ msgid "Information statuses"
+#~ msgstr "Informatie statussen"
 
 #~ msgid "Dit rapport is reeds verstuurd."
 #~ msgstr "Dit rapport is reeds verstuurd."
