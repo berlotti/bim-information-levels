@@ -104,6 +104,12 @@ BIMQualityBlocks.disableNextLayers = function( layer ) {
 };
 
 BIMQualityBlocks.disableBlocks = function( block ) {
+	var deselects = block.find( ".deselect" ).html().split( "," );
+	for( i in deselects ) {
+		if( deselects.hasOwnProperty( i ) ) {
+			jQuery( "#quality-block-" + deselects[i] ).removeClass( "selected" );
+		}
+	}
 	var layerContainer = jQuery( "#bim-quality-block-layers" );
 	layerContainer.find( ".quality-block" ).removeClass( "disabled" );
 	layerContainer.find( ".reason-list" ).html( "" );
@@ -128,10 +134,22 @@ BIMQualityBlocks.disableBlocks = function( block ) {
 			jQuery( this ).parent().find( "> .clear" ).before( jQuery( this ).remove() );
 		} );
 	} );
-	var deselects = block.find( ".deselect" ).html().split( "," );
-	for( i in deselects ) {
-		if( deselects.hasOwnProperty( i ) ) {
-			jQuery( "#quality-block-" + deselects[i] ).removeClass( "selected" );
+	var selectBuilding = jQuery( "#select-building" );
+	var buildingType = selectBuilding.val();
+	if( buildingType != "" ) {
+		var excludes = jQuery( "#quality-block-" + buildingType ).find( ".exclude" ).html().split( "," );
+		for( var i in excludes ) {
+			if( excludes.hasOwnProperty( i ) ) {
+				var excludeBlock = jQuery( "#quality-block-" + excludes[i] );
+				excludeBlock.addClass( "disabled" );
+				var title = selectBuilding.find( "option:selected" ).text();
+				var text = "&quot;" + title + "&quot; " + excludeBlock.find( ".disabled-tooltip .start-text" ).html();
+				var reason = excludeBlock.find( ".disabled-tooltip .reason-list" );
+				if( reason.html() != "" ) {
+					text = ", " + text;
+				}
+				reason.html( reason.html() + text );
+			}
 		}
 	}
 	BIMQualityBlocks.initializeEvents();
@@ -188,6 +206,10 @@ BIMQualityBlocks.buildingTypeChanged = function() {
 			var startLayer = jQuery( "#bim-quality-block-layers" ).find( ".layer:first" );
 			startLayer.addClass( "active" );
 			startLayer.find( ".overlay" ).addClass( "hidden" );
+			var block = jQuery( "#quality-block-" + selectBuilding.value );
+			if( block.length > 0 ) {
+				BIMQualityBlocks.disableBlocks( block );
+			}
 		} else {
 			var layers = jQuery( "#bim-quality-block-layers" ).find( ".layer" );
 			layers.removeClass( "active" );

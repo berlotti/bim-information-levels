@@ -193,15 +193,24 @@ class BIMQualityBlocks {
          foreach( BIMQualityBlocks::$layers as $key => $label ) {
             if( $key == 'building_type' ) {
                print( '<div id="building-select-container">' );
+               $html = '<div class="hidden">';
                print( '<label for="select-building">' . $label . '</label>' );
                print( '<select id="select-building" onchange="BIMQualityBlocks.buildingTypeChanged();">' );
                print( '<option value="">' . __( 'Select a building type', 'bim-quality-blocks' ) . '</option>' );
                foreach( $blocks as $block ) {
                   if( $block->layer == $key ) {
                      print( '<option value="' . $block->post->ID . '">' . $block->post->post_title . '</option>' );
+                     $html .= '<div class="quality-block ' . $block->layer . ' hidden" id="quality-block-' . $block->post->ID . '">';
+                     $html .= '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>';
+                     $html .= '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>';
+                     $html .= '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>';
+                     $html .= '<div class="behaviour hidden">' . $block->behaviour . '</div>';
+                     $html .=  '</div>';
                   }
                }
                print( '</select>' );
+               $html .= '</div>';
+               print( $html );
                print( '</div>' );
             } else {
                if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) || !in_array( $key, $mergedLayerKeys ) ) {
@@ -240,7 +249,7 @@ class BIMQualityBlocks {
                      print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
                      print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
                      print( '<div class="behaviour hidden">' . $block->behaviour . '</div>' );
-                     print( "</div>" );
+                     print( '</div>' );
                   }
                }
                if( !in_array( $key, $mergedLayerKeys ) ) {
@@ -313,8 +322,6 @@ class BIMQualityBlocks {
                   $downloadFileIds[] = $attachment->ID;
                }
                print( '</ul>' );
-            } else {
-               print( '<h3>' . __( 'No documents available for this report', 'bim-quality-blocks' ) . '</h3>' );
             }
             add_post_meta( $reportId, '_downloads', $downloadFileIds );
          } catch( \Exception $e ) {
