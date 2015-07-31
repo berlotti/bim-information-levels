@@ -39,6 +39,7 @@ class BIMQualityBlocks {
 		
 		// --- Add shortcodes ---
 		add_shortcode( 'showBIMQualityBlocks', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'showBIMQualityBlocks' ) );
+      add_shortcode( 'showBIMQualityBlocksReportList', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'showBIMQualityBlocksReportList' ) );
 
       // action for ajax call (or just outside wordpress calls with WP context)
       add_action( 'wp_ajax_bqb_download_report', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'downloadReport' ) );
@@ -52,7 +53,10 @@ class BIMQualityBlocks {
          'applications' => __( 'Toepassingen', 'bim-quality-blocks' ),
          'attachments' => __( 'Bijlagen', 'bim-quality-blocks' )
       );
-	}
+
+      add_action( 'wp_ajax_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
+      add_action( 'wp_ajax_nopriv_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
+   }
 
    /**
     * @param $class
@@ -132,6 +136,34 @@ class BIMQualityBlocks {
 		);
 		register_post_type( 'bim_quality_block', $postTypeArguments );
 
+      $postTypeArguments = Array(
+          'labels' => Array(
+              'name' => __( 'Private BQ Blocks', 'bim-quality-blocks' ),
+              'singular_name' => __( 'Private BQ Block', 'bim-quality-blocks' ),
+              'add_new' => __( 'Add New', 'bim-quality-blocks' ),
+              'add_new_item' => __( 'Add New Private BQ Block', 'bim-quality-blocks' ),
+              'edit_item' => __( 'Edit Private BQ Block', 'bim-quality-blocks' ),
+              'new_item' => __( 'New Private BQ Block', 'bim-quality-blocks' ),
+              'all_items' => __( 'All Private BQ Blocks', 'bim-quality-blocks' ),
+              'view_item' => __( 'View Private BQ Block', 'bim-quality-blocks' ),
+              'search_items' => __( 'Search Private BQ Blocks', 'bim-quality-blocks' ),
+              'not_found' =>  __( 'No Private BQ Blocks found', 'bim-quality-blocks' ),
+              'not_found_in_trash' => __( 'No Private BQ Blocks found in Trash', 'bim-quality-blocks' ),
+              'parent_item_colon' => '',
+              'menu_name' => 'Private BQ Blocks' ),
+          'public' => true,
+          'publicly_queryable' => true,
+          'show_ui' => true,
+          'show_in_menu' => true,
+          'query_var' => true,
+          'rewrite' => true,
+          'has_archive' => true,
+          'hierarchical' => false,
+          'menu_position' => null,
+          'supports' => Array( 'title', 'editor', 'thumbnail', 'custom-fields' )
+      );
+      register_post_type( 'private_bqblock', $postTypeArguments );
+
       add_image_size( 'grid-icon', 120, 120, true );
 
       $postTypeArguments = Array(
@@ -158,7 +190,7 @@ class BIMQualityBlocks {
           'has_archive' => true,
           'hierarchical' => false,
           'menu_position' => null,
-          'supports' => Array( 'title', 'editor' )
+          'supports' => Array( 'title', 'editor', 'author' )
       );
       register_post_type( 'bim_q_b_report', $postTypeArguments );
 	}
@@ -181,97 +213,149 @@ class BIMQualityBlocks {
    }
 
    public static function showBIMQualityBlocks() {
-      if( isset( $_POST['report'] ) ) {
-         // To the report page!
-         BIMQualityBlocks::showReportPage();
-      } else {
-         print( '<div id="bim-quality-block-layers">' );
-         $blocks = BIMQualityBlocks::getQualityBlocks();
-         $number = 0;
-         $mergedLayers = false;
-         $mergedLayerKeys = Array( 'basic_model', 'properties', 'applications' );
-         foreach( BIMQualityBlocks::$layers as $key => $label ) {
-            if( $key == 'building_type' ) {
-               print( '<div id="building-select-container">' );
-               $html = '<div class="hidden">';
-               print( '<label for="select-building">' . $label . '</label>' );
-               print( '<select id="select-building" onchange="BIMQualityBlocks.buildingTypeChanged();">' );
-               print( '<option value="">' . __( 'Select a building type', 'bim-quality-blocks' ) . '</option>' );
-               foreach( $blocks as $block ) {
-                  if( $block->layer == $key ) {
-                     print( '<option value="' . $block->post->ID . '">' . $block->post->post_title . '</option>' );
-                     $html .= '<div class="quality-block ' . $block->layer . ' hidden" id="quality-block-' . $block->post->ID . '">';
-                     $html .= '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>';
-                     $html .= '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>';
-                     $html .= '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>';
-                     $html .= '<div class="behaviour hidden">' . $block->behaviour . '</div>';
-                     $html .=  '</div>';
+      if( is_user_logged_in() ) {
+         if( isset( $_POST['report'] ) ) {
+            // To the report page!
+            BIMQualityBlocks::showReportPage();
+         } else {
+            print( '<div id="bim-quality-block-layers">' );
+            print( '<a href="' . add_query_arg( Array( 'action' => 'bimqbcallback' ), admin_url( 'admin-ajax.php' ) ) . '" class="hidden" id="bim-quality-blocks-ajax"></a>' );
+
+            print( '<label for="report-title">' . __( 'Report title', 'bim-quality-blocks' ) . '</label><br />' );
+            print( '<input type="text" id="report-title" placeholder="' . __( 'Report title', 'bim-quality-blocks' ) . '" required title="' . __( 'Fill in a title for this report', 'bim-quality-report' ) . '" /><br /><br />' );
+
+            $blocks = BIMQualityBlocks::getQualityBlocks();
+            $number = 0;
+            $mergedLayers = false;
+            $mergedLayerKeys = Array( 'basic_model', 'properties', 'applications' );
+            foreach( BIMQualityBlocks::$layers as $key => $label ) {
+               if( $key == 'building_type' ) {
+                  print( '<div id="building-select-container">' );
+                  $html = '<div class="hidden">';
+                  print( '<label for="select-building">' . $label . '</label><br />' );
+                  print( '<select id="select-building" onchange="BIMQualityBlocks.buildingTypeChanged();">' );
+                  print( '<option value="">' . __( 'Select a building type', 'bim-quality-blocks' ) . '</option>' );
+                  foreach( $blocks as $block ) {
+                     if( $block->layer == $key ) {
+                        print( '<option value="' . $block->post->ID . '">' . $block->post->post_title . '</option>' );
+                        $html .= '<div class="quality-block ' . $block->layer . ' hidden" id="quality-block-' . $block->post->ID . '">';
+                        $html .= '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>';
+                        $html .= '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>';
+                        $html .= '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>';
+                        $html .= '<div class="behaviour hidden">' . $block->behaviour . '</div>';
+                        $html .= '</div>';
+                     }
                   }
-               }
-               print( '</select>' );
-               $html .= '</div>';
-               print( $html );
-               print( '</div>' );
-            } else {
-               if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) || !in_array( $key, $mergedLayerKeys ) ) {
-                  if( $mergedLayers && !in_array( $key, $mergedLayerKeys ) ) {
+                  print( '</select>' );
+                  $html .= '</div>';
+                  print( $html );
+                  print( '</div>' );
+               } else {
+                  if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) || !in_array( $key, $mergedLayerKeys ) ) {
+                     if( $mergedLayers && !in_array( $key, $mergedLayerKeys ) ) {
+                        print( '<div class="clear"></div>' );
+                        print( '</div>' );
+                     }
+                     print( '<div class="layer" id="layer_' . $key . '">' );
+                     print( '<div class="overlay"></div>' );
+                     print( '<h3>' . $label . '</h3>' );
+                     if( $number >= 2 ) {
+                        print( '<div class="navigation-container">
+                                    <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
+                                    <a href="" class="next' . ( $key == 'attachments' ? ' end-page' : '' ) . '">' . ( $key == 'attachments' ? __( 'Next page', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
+                                    <div class="clear"></div>
+                              </div>' );
+                     }
+                     if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) ) {
+                        $mergedLayers = true;
+                     }
+                  }
+                  foreach( $blocks as $block ) {
+                     if( $block->layer == $key ) {
+                        print( '<div class="quality-block ' . $block->layer . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
+                        print( '<h3>' . $block->post->post_title . '</h3>' );
+                        print( '<div class="image-container">' );
+                        $image = get_the_post_thumbnail( $block->post->ID, 'grid-icon' );
+                        if( $image == '' ) {
+                           print( '<div class="no-image-placeholder"></div>' );
+                        } else {
+                           print( '<img src="' . $image . '" alt="' . $block->post->post_title . '" />' );
+                        }
+                        print( '</div>' );
+                        print( '<div class="tooltip hidden">' . apply_filters( 'the_content', $block->post->post_content ) . '</div>' );
+                        print( '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>' );
+                        print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
+                        print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
+                        print( '<div class="behaviour hidden">' . $block->behaviour . '</div>' );
+                        print( '</div>' );
+                     }
+                  }
+                  if( !in_array( $key, $mergedLayerKeys ) ) {
                      print( '<div class="clear"></div>' );
                      print( '</div>' );
                   }
-                  print( '<div class="layer" id="layer_' . $key . '">' );
-                  print( '<div class="overlay"></div>' );
-                  print( '<h3>' . $label . '</h3>' );
-                  if( $number >= 2 ) {
-                     print( '<div class="navigation-container">
-                                 <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
-                                 <a href="" class="next' . ( $key == 'attachments' ? ' submit' : '' ) . '">' . ( $key == 'attachments' ? __( 'Finish', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
-                                 <div class="clear"></div>
-                           </div>' );
-                  }
-                  if( !$mergedLayers && in_array( $key, $mergedLayerKeys ) ) {
-                     $mergedLayers = true;
-                  }
                }
-               foreach( $blocks as $block ) {
-                  if( $block->layer == $key ) {
-                     print( '<div class="quality-block ' . $block->layer . ( $block->behaviour == 'normal' ? ' selected' : '' ) . '" id="quality-block-' . $block->post->ID . '">' );
-                     print( '<h3>' . $block->post->post_title . '</h3>' );
-                     print( '<div class="image-container">' );
-                     $image = get_the_post_thumbnail( $block->post->ID, 'grid-icon' );
-                     if( $image == '' ) {
-                        print( '<div class="no-image-placeholder"></div>' );
-                     } else {
-                        print( '<img src="' . $image . '" alt="' . $block->post->post_title . '" />' );
-                     }
-                     print( '</div>' );
-                     print( '<div class="tooltip hidden">' . apply_filters( 'the_content', $block->post->post_content ) . '</div>' );
-                     print( '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>' );
-                     print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
-                     print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
-                     print( '<div class="behaviour hidden">' . $block->behaviour . '</div>' );
-                     print( '</div>' );
-                  }
-               }
-               if( !in_array( $key, $mergedLayerKeys ) ) {
-                  print( '<div class="clear"></div>' );
-                  print( '</div>' );
-               }
+               $number ++;
             }
-            $number ++;
+            print( '<div class="clear"></div>' );
+            print( '<div class="hidden" id="quality-block-tooltip"><div class="content"></div></div>' );
+            print( '</div>' );
+
+            $options = BIMQualityBlocks::getOptions();
+            $privateBlocks = get_posts( Array(
+               'post_type' => $options['private_bqblocks_post_type'],
+               'post_status' => 'private',
+               'posts_per_page' => -1
+            ) );
+
+            print( '<div id="private-blocks" class="hidden">' );
+            print( '<h3>' . __( 'Private blocks', 'bim-quality-blocks' ) . '</h3>' );
+            print( '<div id="private-block-editor">' );
+            print( '<h4 class="hidden edit-title">' . __( 'Edit private block', 'bim-quality-blocks' ) . '</h4>' );
+            print( '<h4 class="new-title">' . __( 'Add new private block', 'bim-quality-blocks' ) . '</h4>' );
+            print( '<input type="hidden" id="private-block-id" value="" />' );
+            print( '<label for="private-block-title">' . __( 'Title', 'bim-quality-blocks' ) . '</label><br />' );
+            print( '<input type="text" id="private-block-title" placeholder="' . __( 'Private block title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in a title for this private block', 'bim-quality-report' ) . '" /><br /><br />' );
+            print( '<label for="private-block-text">' . __( 'Report text', 'bim-quality-blocks' ) . '</label><br />' );
+            print( '<textarea id="private-block-text" placeholder="' . __( 'Report title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the report text when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
+            print( '<label for="private-block-xml">' . __( 'Report XML', 'bim-quality-blocks' ) . '</label><br />' );
+            print( '<textarea id="private-block-xml" placeholder="' . __( 'Report XML', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the xml snippet used when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
+            print( '<br />' );
+            print( '<a href="" class="button" id="save-private-block">' . __( 'Save', 'bim-quality-blocks' ) . '</a>' );
+            print( '<a href="" class="button hidden" id="cancel-edit-private-block">' . __( 'Cancel', 'bim-quality-blocks' ) . '</a>' );
+
+            print( '</div>' );
+            print( '<div id="private-block-list">' );
+            foreach( $privateBlocks as $privateBlock ) {
+               print( BIMQualityBlocks::getPrivateBlockHtml( $privateBlock ) );
+            }
+            print( '<div class="clear"></div>' );
+            print( '</div>' );
+            print( '<a href="" class="button submit">' . __( 'Finish', 'bim-quality-blocks' ) . '</a>' );
+            print( '</div>' );
+
+            print( '<form method="post" action="">' );
+            print( '<input type="hidden" id="report-content" name="report" value="" />' );
+            print( '<input type="submit" value="" class="hidden" />' );
+            print( '</form>' );
          }
-         print( '<div class="clear"></div>' );
-         print( '<div class="hidden" id="quality-block-tooltip"><div class="content"></div></div>' );
-         print( '</div>' );
-         print( '<form method="post" action="">' );
-         print( '<input type="hidden" id="report-content" name="report" value="" />' );
-         print( '<input type="submit" value="" class="hidden" />' );
-         print( '</form>' );
+      } else {
+         print( '<p>' . __( 'Log in to use BIM quality blocks', 'bim-quality-blocks' ) . '</p>' );
       }
+   }
+
+   public static function getPrivateBlockHtml( $privateBlock ) {
+      $html = '<div class="private-block" id="private-block-' . $privateBlock->ID . '">';
+      $html .= '<strong class="title">' . $privateBlock->post_title . '</strong><br />';
+      $html .= '<div class="text">' . $privateBlock->post_content . '</div>';
+      $html .= '<div class="xml hidden">' . get_post_meta( $privateBlock->ID, 'xml', true ) . '</div>';
+      $html .= '</div>';
+      return $html;
    }
 
    public static function showReportPage() {
       $report = json_decode( stripslashes( $_POST['report'] ) );
-      if( isset( $report, $report->buildingType, $report->blocks ) ) {
+      if( isset( $report, $report->buildingType, $report->blocks, $report->title ) && $report->title != '' && is_array( $report->blocks ) ) {
          try {
             $options = BIMQualityBlocks::getOptions();
             $reportText = '<h1>' . __( 'BIM Quality Blocks Report', 'bim-quality-blocks' ) . '</h1>';
@@ -304,7 +388,7 @@ class BIMQualityBlocks {
             $xml .= $options['xml_footer'];
             // write report to post type
             $postData = Array(
-               'post_title' => __( 'Report for', 'bim-quality-blocks' ) . ' ' . BIMQualityBlocks::getDisplayName( get_current_user_id() ),
+               'post_title' => $report->title,
                'post_content' => $reportText,
                'post_type' => $options['report_post_type']
             );
@@ -360,7 +444,7 @@ class BIMQualityBlocks {
    }
 	
 	public static function editorWidget() {
-		global $post, $wpdb;
+		global $post;//, $wpdb;
 		
 		//$options = BIMQualityBlocks::getOptions();
 
@@ -433,7 +517,7 @@ class BIMQualityBlocks {
 	}
 		
 	public static function saveEditorWidget( $postId ) {
-		global $wpdb;
+		//global $wpdb;
 		if( !isset( $_POST[ 'bim_quality_blocks_noncename' ] ) || !wp_verify_nonce( $_POST[ 'bim_quality_blocks_noncename' ], __FILE__ ) ) {
 			return $postId;
 		}
@@ -534,13 +618,94 @@ class BIMQualityBlocks {
 	<body lang=EN-US><?php print( $report->post_content ); ?></body>
 </html>
          <?php
-            exit();
+            exit(); // Just to be sure nothing outputs anything after we print the report
          } else {
             _e( 'Report not available', 'bim-quality-blocks' );
          }
       } else {
          _e( 'Reports are only available if you log in', 'bim-quality-blocks' );
       }
+   }
+
+   public static function showBIMQualityBlocksReportList() {
+      if( is_user_logged_in() ) {
+         $options = BIMQualityBlocks::getOptions();
+         $reports = get_posts( Array(
+            'post_type' => $options['report_post_type'],
+            'post_author' => get_current_user_id(),
+            'post_status' => 'draft',
+            'posts_per_page' => -1
+         ) );
+         if( count( $reports ) > 0 ) {
+            $buildingTypes = Array();
+            print( '<table>' );
+            print( '<tr><th>' . __( 'Building type', 'bim-quality-blocks' ) . '</th><th>' . __( 'Title', 'bim-quality-blocks' ) . '</th><th>' . __( 'XML', 'bim-quality-blocks' ) . '</th><th>' . __( 'Documents', 'bim-quality-blocks' ) . '</th><th>' . __( 'Date', 'bim-quality-blocks' ) . '</th></tr>' );
+            foreach( $reports as $report ) {
+               $downloadFiles = get_post_meta( $report->ID, '_downloads', true );
+               $reportData = get_post_meta( $report->ID, '_report', true );
+               if( count( $downloadFiles ) > 0 ) {
+                  $html = '<ul class="table-ul">';
+                  foreach( $downloadFiles as $attachmentId ) {
+                     $attachment = get_post( $attachmentId );
+                     $html .= '<li><a href="' . wp_get_attachment_url( $attachmentId ) . '" target="_blank">' . $attachment->post_title . '</a></li>';
+                  }
+                  $html .= '</ul>';
+               } else {
+                  $html = __( 'No documents', 'bim-quality-blocks' );
+               }
+
+               if( !isset( $buildingTypes[ $reportData->buildingType ] ) ) {
+                  $buildingTypes[ $reportData->buildingType ] = get_post( $reportData->buildingType );
+               }
+
+               print( '<tr>' .
+                   '<td>' . $buildingTypes[ $reportData->buildingType ]->post_title . '</td>' .
+                   '<td><a href="' . add_query_arg( Array( 'action' => 'bqb_download_report', 'id' => $report->ID ), admin_url( 'admin-ajax.php' ) ) . '" target="_blank" id="download-report-link">' . $report->post_title . '</a></td>' .
+                   '<td><a href="' . add_query_arg( Array( 'action' => 'bqb_download_xml', 'id' => $report->ID ), admin_url( 'admin-ajax.php' ) ) . '" target="_blank" id="download-xml-link">' . __( 'Download XML', 'bim-quality-blocks' ) . '</a></td>' .
+                   '<td>' . $html . '</td>' .
+                   '<td>' . date( 'Y-m-d H:i', strtotime( $report->post_date ) ) . '</td></tr>' );
+            }
+            print( '</table>' );
+         } else {
+            print( '<p>' . __( 'You have no reports, try to create one', 'bim-quality-blocks' ) . '</p>' );
+         }
+      } else {
+         print( '<p>' . __( 'Log in to be able to use BIM quality blocks', 'bim-quality-blocks' ) . '</p>' );
+      }
+   }
+
+   public static function ajaxCallback() {
+      // Save or update private blocks
+      if( is_user_logged_in() && isset( $_POST['title'] ) && $_POST['title'] != '' ) {
+         $options = BIMQualityBlocks::getOptions();
+         $existing = false;
+         if( isset( $_POST['id'] ) && ctype_digit( $_POST['id'] ) ) {
+            $existing = get_post( intval( $_POST['id'] ) );
+            if( !isset( $existing ) || $existing->post_type != $options['private_bqblocks_post_type'] || $existing->post_author != get_current_user_id() ) {
+               $existing = false;
+            }
+         }
+         $reportText = ( isset( $_POST['text'] ) && $_POST['text'] != '' ) ? sanitize_text_field( $_POST['text'] ) : '';
+         $reportXml = ( isset( $_POST['xml'] ) && $_POST['xml'] != '' ) ? sanitize_text_field( $_POST['xml'] ) : '';
+         $postData = Array(
+            'post_title' => sanitize_text_field( $_POST['title'] ),
+            'post_content' => $reportText,
+            'post_type' => $options['private_bqblocks_post_type'],
+            'post_status' => 'private'
+         );
+
+         if( $existing === false ) {
+            $postId = wp_insert_post( $postData );
+            add_post_meta( $postId, 'xml', $reportXml );
+         } else {
+            $postId = $existing->ID;
+            wp_update_post( $postData );
+            update_post_meta( $postId, 'xml', $reportXml );
+         }
+         $post = get_post( $postId );
+         print( BIMQualityBlocks::getPrivateBlockHtml( $post ) );
+      }
+      exit(); // When we are done we do not allow anything else to be done
    }
 }
 

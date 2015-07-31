@@ -4,6 +4,14 @@
    display: none;
 }
 
+.table-ul {
+   margin-bottom: 0;
+}
+
+input.invalid {
+   border: 1px solid #dd0000;
+}
+
 #bim-quality-block-layers {
    padding: 5px;
    position: relative;
@@ -176,4 +184,38 @@
 #block-report-xml {
    width: 600px;
    height: 120px;
+}
+
+/**
+ * Private block style
+ **/
+
+#private-block-editor {
+   margin-bottom: 20px;
+}
+
+#private-block-list {
+   margin-bottom: 20px;
+}
+
+#private-block-list .private-block {
+   float: left;
+   width: 120px;
+   height: 120px;
+   border-radius: 4px;
+   margin: 5px;
+   background-color: #D0D6E2;
+   box-shadow: 0 0 3px 1px #555555;
+   cursor: pointer;
+   position: relative;
+   overflow: hidden;
+   padding: 3px 6px;
+}
+
+#private-block-list .private-block.selected {
+   background-color: #6F98E4;
+}
+
+#private-block-list .private-block.mouseover {
+   box-shadow: 0 0 3px 1px #000000;
 }

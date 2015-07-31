@@ -7,22 +7,77 @@ jQuery( document ).ready( function() {
 	BIMQualityBlocks.initializeEvents();
 	var container = jQuery( "#bim-quality-block-layers" );
 	var navigationContainer = container.find( ".navigation-container" );
+	var titleInput = jQuery( "#report-title" );
 	navigationContainer.find( ".previous" ).click( function( event ) {
 		event.preventDefault();
-
 		BIMQualityBlocks.activatePreviousLayer( container.find( ".layer.active" ) );
 		BIMQualityBlocks.disableNextLayers( container.find( ".layer.active" ) );
 	} );
 	navigationContainer.find( ".next" ).click( function( event ) {
 		event.preventDefault();
-		if( jQuery( this ).hasClass( "submit" )  ) {
-			var report = BIMQualityBlocks.createReport();
-			var reportContent = jQuery( "#report-content" );
-			reportContent.val( JSON.stringify( report ) );
-			reportContent.parent().submit();
+		if( jQuery( this ).hasClass( "end-page" )  ) {
+			if( titleInput.val() == "" ) {
+				titleInput.addClass( "invalid" );
+				jQuery( "html, body" ).animate( { scrollTop: 0 }, "fast" );
+			} else {
+				jQuery( "#bim-quality-block-layers" ).addClass( "hidden" );
+				jQuery( "#private-blocks" ).removeClass( "hidden" );
+			}
 		} else {
 			BIMQualityBlocks.enableNextLayer( container.find( ".layer.active" ) );
 		}
+	} );
+	titleInput.keyup( function() {
+		if( this.value != "" ) {
+			titleInput.removeClass( "invalid" );
+		} else {
+			titleInput.addClass( "invalid" );
+		}
+	} );
+	jQuery( "#save-private-block" ).click( function( event ) {
+		event.preventDefault();
+		var privateBlockTitle = jQuery( "#private-block-title" );
+
+		if( privateBlockTitle.val() != "" ) {
+			var privateBlockText = jQuery( "#private-block-text" );
+			var privateBlockXml = jQuery( "#private-block-xml" );
+			var privateBlockId = jQuery( "#private-block-id" );
+			var data = {
+				title: privateBlockTitle.val(),
+				text: privateBlockText.val(),
+				xml: privateBlockXml.val()
+			};
+
+			// Check if editing
+			if( privateBlockId.val() != "" ) {
+				data.id = privateBlockId.val();
+			}
+
+			jQuery.post( jQuery( "#bim-quality-blocks-ajax" ).attr( "href" ), data, function( response ) {
+				privateBlockTitle.val( "" );
+				privateBlockText.val( "" );
+				privateBlockXml.val( "" );
+				if( privateBlockId.val() != "" ) {
+					// TODO: set editor to new instead of edit!
+				}
+				privateBlockId.val( "" );
+				jQuery( "#private-block-list" ).find( "> .clear" ).before( response );
+				BIMQualityBlocks.initializeEvents();
+			} );
+		}
+	} );
+	jQuery( "#cancel-edit-private-block" ).click( function( event ) {
+		event.preventDefault();
+		// TODO: store private block
+	} );
+	jQuery( "#finish-private-block" ).click( function( event ) {
+		event.preventDefault();
+		// TODO: Add private blocks to report
+		var report = BIMQualityBlocks.createReport();
+		report.title = titleInput.val();
+		var reportContent = jQuery( "#report-content" );
+		reportContent.val( JSON.stringify( report ) );
+		reportContent.parent().submit();
 	} );
 	BIMQualityBlocks.buildingTypeChanged();
 } );
@@ -35,6 +90,21 @@ BIMQualityBlocks.initializeEvents = function() {
 		} ).off( "mouseout" ).mouseout( function() {
 			jQuery( this ).removeClass( "mouseover" );
 			BIMQualityBlocks.hideTooltip();
+		} );
+
+	jQuery( "#private-block-list" ).find( ".private-block" ).off( "click" ).click( function( event ) {
+		var block = jQuery( this );
+		if( block.hasClass( "selected" ) ) {
+			block.removeClass( "selected" );
+		} else {
+			block.addClass( "selected" );
+		}
+	} ).off( "mouseover" ).mouseover( function( event ) {
+			jQuery( this ).addClass( "mouseover" );
+			//BIMQualityBlocks.showTooltip( event, this );
+		} ).off( "mouseout" ).mouseout( function() {
+			jQuery( this ).removeClass( "mouseover" );
+			//BIMQualityBlocks.hideTooltip();
 		} );
 };
 

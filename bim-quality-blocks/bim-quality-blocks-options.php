@@ -73,6 +73,30 @@ if( is_array( $postTypes ) ) {
 				</td>
 			</tr>
          <tr valign="top">
+            <td><label for="private-bim-quality-blocks-post-type"><?php _e( 'Private BIM Quality Blocks post type', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <?php
+               if( is_array( $postTypes ) ) {
+                  ?>
+                  <select name="bim_quality_blocks_options[private_bqblocks_post_type]" id="private-bim-quality-blocks-post-type">
+                     <?php
+                     foreach( $postTypes AS $key => $postType ) {
+                        ?>
+                        <option value="<?php print( $key ); ?>" <?php print(
+                        ( ( isset( $bimQualityBlocksOptions[ 'private_bqblocks_post_type' ] ) && $key == $bimQualityBlocksOptions[ 'private_bqblocks_post_type' ] ) ? ' selected="selected"' : '' ) ); ?>>
+                           <?php print( $postType->labels->name ); ?>
+                        </option>
+                     <?php
+                     }
+                     ?>
+                  </select>
+               <?php
+               }
+               ?>
+               <p class="description"><?php _e( 'The post type in which private BIM Quality Blocks are stored', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
             <td><label for="bim-quality-blocks-report-post-type"><?php _e( 'BIM Quality Blocks report post type', 'bim-quality-blocks' ); ?></label></td>
             <td>
                <?php
