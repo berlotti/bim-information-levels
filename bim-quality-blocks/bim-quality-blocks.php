@@ -346,6 +346,7 @@ class BIMQualityBlocks {
 
    public static function getPrivateBlockHtml( $privateBlock ) {
       $html = '<div class="private-block" id="private-block-' . $privateBlock->ID . '">';
+      $html .= '<a href="" class="edit-private-block">' . __( 'edit', 'bim-quality-blocks' ) . '</a>';
       $html .= '<strong class="title">' . $privateBlock->post_title . '</strong><br />';
       $html .= '<div class="text">' . $privateBlock->post_content . '</div>';
       $html .= '<div class="xml hidden">' . get_post_meta( $privateBlock->ID, 'xml', true ) . '</div>';
@@ -355,7 +356,7 @@ class BIMQualityBlocks {
 
    public static function showReportPage() {
       $report = json_decode( stripslashes( $_POST['report'] ) );
-      if( isset( $report, $report->buildingType, $report->blocks, $report->title ) && $report->title != '' && is_array( $report->blocks ) ) {
+      if( isset( $report, $report->buildingType, $report->blocks, $report->title, $report->privateBlocks ) && $report->title != '' && is_array( $report->blocks ) && is_array( $report->privateBlocks ) ) {
          try {
             $options = BIMQualityBlocks::getOptions();
             $reportText = '<h1>' . __( 'BIM Quality Blocks Report', 'bim-quality-blocks' ) . '</h1>';
@@ -381,6 +382,17 @@ class BIMQualityBlocks {
                      ) );
                      $downloadFiles = array_merge( $downloadFiles, $attachments );
                      $xml .= $block->reportXml;
+                  }
+               }
+            }
+            if( count( $report->privateBlocks ) > 0 ) {
+               $reportText .= '<h2>' . __( 'Private blocks', 'bim-quality-blocks' ) . '</h2>';
+               foreach( $report->privateBlocks as $privateBlockId ) {
+                  $privateBlock = get_post( $privateBlockId );
+                  if( $privateBlock->post_author == get_current_user_id() && $privateBlock->post_type == $options['private_bqblocks_post_type'] ) {
+                     $reportText .= '<h3>' . $privateBlock->post_title . '</h3>';
+                     $reportText .= '<p>' . $privateBlock->post_content . '</p>';
+                     $xml .= get_post_meta( $privateBlock->ID, 'xml', true );
                   }
                }
             }
@@ -698,7 +710,7 @@ class BIMQualityBlocks {
             $postId = wp_insert_post( $postData );
             add_post_meta( $postId, 'xml', $reportXml );
          } else {
-            $postId = $existing->ID;
+            $postData['ID'] = $postId = $existing->ID;
             wp_update_post( $postData );
             update_post_meta( $postId, 'xml', $reportXml );
          }

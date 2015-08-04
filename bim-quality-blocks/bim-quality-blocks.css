@@ -219,3 +219,11 @@ input.invalid {
 #private-block-list .private-block.mouseover {
    box-shadow: 0 0 3px 1px #000000;
 }
+
+#private-block-list .private-block .edit-private-block {
+   position: absolute;
+   z-index: 1;
+   top: 0;
+   right: 0;
+   color: #ffffff;
+}

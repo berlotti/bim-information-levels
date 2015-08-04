@@ -58,9 +58,13 @@ jQuery( document ).ready( function() {
 				privateBlockText.val( "" );
 				privateBlockXml.val( "" );
 				if( privateBlockId.val() != "" ) {
-					// TODO: set editor to new instead of edit!
+					jQuery( "#private-block-" + privateBlockId.val() ).remove();
+					privateBlockId.val( "" );
+					var editor = jQuery( "#private-block-editor" );
+					editor.find( ".edit-title" ).addClass( "hidden" );
+					editor.find( ".new-title" ).removeClass( "hidden" );
+					editor.find( "#cancel-edit-private-block" ).addClass( "hidden" );
 				}
-				privateBlockId.val( "" );
 				jQuery( "#private-block-list" ).find( "> .clear" ).before( response );
 				BIMQualityBlocks.initializeEvents();
 			} );
@@ -68,11 +72,17 @@ jQuery( document ).ready( function() {
 	} );
 	jQuery( "#cancel-edit-private-block" ).click( function( event ) {
 		event.preventDefault();
-		// TODO: store private block
+		var editor = jQuery( "#private-block-editor" );
+		editor.find( "#private-block-id" ).val( "" );
+		editor.find( ".edit-title" ).addClass( "hidden" );
+		editor.find( ".new-title" ).removeClass( "hidden" );
+		editor.find( "#cancel-edit-private-block" ).addClass( "hidden" );
+		editor.find( "#private-block-title" ).val( "" );
+		editor.find( "#private-block-text" ).val( "" );
+		editor.find( "#private-block-xml" ).val( "" );
 	} );
-	jQuery( "#finish-private-block" ).click( function( event ) {
+	jQuery( "#private-blocks" ).find( ".submit" ).click( function( event ) {
 		event.preventDefault();
-		// TODO: Add private blocks to report
 		var report = BIMQualityBlocks.createReport();
 		report.title = titleInput.val();
 		var reportContent = jQuery( "#report-content" );
@@ -92,12 +102,16 @@ BIMQualityBlocks.initializeEvents = function() {
 			BIMQualityBlocks.hideTooltip();
 		} );
 
-	jQuery( "#private-block-list" ).find( ".private-block" ).off( "click" ).click( function( event ) {
-		var block = jQuery( this );
-		if( block.hasClass( "selected" ) ) {
-			block.removeClass( "selected" );
-		} else {
-			block.addClass( "selected" );
+	var privateBlockList = jQuery( "#private-block-list" );
+
+	privateBlockList.find( ".private-block" ).off( "click" ).click( function( event ) {
+		if( event.currentTarget == event.target ) {
+			var block = jQuery( this );
+			if( block.hasClass( "selected" ) ) {
+				block.removeClass( "selected" );
+			} else {
+				block.addClass( "selected" );
+			}
 		}
 	} ).off( "mouseover" ).mouseover( function( event ) {
 			jQuery( this ).addClass( "mouseover" );
@@ -106,6 +120,19 @@ BIMQualityBlocks.initializeEvents = function() {
 			jQuery( this ).removeClass( "mouseover" );
 			//BIMQualityBlocks.hideTooltip();
 		} );
+
+	privateBlockList.find( ".edit-private-block" ).off( "click" ).click( function( event ) {
+		event.preventDefault();
+		var block = jQuery( this ).parent();
+		var editor = jQuery( "#private-block-editor" );
+		editor.find( "#private-block-id" ).val( block.attr( "id" ).replace( "private-block-", "" ) );
+		editor.find( ".edit-title" ).removeClass( "hidden" );
+		editor.find( ".new-title" ).addClass( "hidden" );
+		editor.find( "#cancel-edit-private-block" ).removeClass( "hidden" );
+		editor.find( "#private-block-title" ).val( block.find( ".title" ).html() );
+		editor.find( "#private-block-text" ).val( block.find( ".text" ).html() );
+		editor.find( "#private-block-xml" ).val( block.find( ".xml" ).html() );
+	} );
 };
 
 BIMQualityBlocks.blockClicked = function() {
@@ -251,7 +278,8 @@ BIMQualityBlocks.showTooltip = function( event, block ) {
 BIMQualityBlocks.createReport = function() {
 	var report = {
 		buildingType: jQuery( "#select-building" ).val(),
-		blocks: []
+		blocks: [],
+		privateBlocks: []
 	};
 
 	jQuery( "#bim-quality-block-layers" ).find( ".layer" ).each( function() {
@@ -265,6 +293,10 @@ BIMQualityBlocks.createReport = function() {
 			}
 		} );
 		report.blocks.push( layer );
+	} );
+
+	jQuery( "#private-block-list" ).find( ".private-block.selected" ).each( function() {
+		report.privateBlocks.push( jQuery( this ).attr( "id" ).replace( "private-block-", "" ) );
 	} );
 	return report;
 };
