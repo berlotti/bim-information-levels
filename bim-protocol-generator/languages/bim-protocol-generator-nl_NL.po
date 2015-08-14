@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BIM Protocol Generator\n"
-"POT-Creation-Date: 2015-07-13 14:01+0100\n"
-"PO-Revision-Date: 2015-07-30 18:15+0200\n"
+"POT-Creation-Date: 2015-08-14 15:27+0100\n"
+"PO-Revision-Date: 2015-08-14 15:28+0100\n"
 "Last-Translator: Leon <poedit@berlotti.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.3\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: /home/bastiaan/workspace/projecten/wordpress-alternative/"
 "wp-content/plugins/bim-protocol-generator\n"
@@ -18,7 +18,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: bim-protocol-generator.php:44 bim-protocol-generator-options.php:62
-msgid "BIM Protocol Generator Options"
+#, fuzzy
+msgid "BIM Execution plan Generator Options"
 msgstr "BIM Uitvoeringsplan Generator Opties"
 
 #: bim-protocol-generator.php:49
@@ -66,24 +67,27 @@ msgid "Initiator goals"
 msgstr "Initiator doelen"
 
 #: bim-protocol-generator.php:114
-msgid "0 Point Templates"
-msgstr "Nulpunt sjabloon"
+msgid "Origin Methodology"
+msgstr ""
 
 #: bim-protocol-generator.php:117
-msgid "Modeling Templates"
+#, fuzzy
+msgid "Modelling Guidelines"
 msgstr "Modeleer templates"
 
-#: bim-protocol-generator.php:120
-msgid "Required information (matrix)"
-msgstr "Benodigde informatie (matrix)"
+#: bim-protocol-generator.php:120 bim-protocol-generator.php:1638
+#: bim-protocol-generator.php:1651
+#, fuzzy
+msgid "Requested information"
+msgstr "Benodigde informatie"
 
 #: bim-protocol-generator.php:123
 msgid "Leading partner"
 msgstr "Leading partner"
 
 #: bim-protocol-generator.php:126
-msgid "Thanks page, end of questions"
-msgstr "Dank pagina, einde van de vragenlijst"
+msgid "Thank you."
+msgstr ""
 
 #: bim-protocol-generator.php:131
 msgid "Question settings"
@@ -109,7 +113,8 @@ msgid "Phase"
 msgstr "Fase"
 
 #: bim-protocol-generator.php:366
-msgid "What do you need? (information)"
+#, fuzzy
+msgid "What data do you need?"
 msgstr "Wat heb je nodig? (informatie)"
 
 #: bim-protocol-generator.php:367
@@ -129,11 +134,11 @@ msgid "What kind of format would you prefer?"
 msgstr "Welk formaat heeft je voorkeur?"
 
 #: bim-protocol-generator.php:371
-msgid "What kind of modeling agreements?"
+#, fuzzy
+msgid "What kind of modelling agreements?"
 msgstr "Welke modeleer afspraak?"
 
-#: bim-protocol-generator.php:410 bim-protocol-generator.php:1638
-#: bim-protocol-generator.php:1651 bim-protocol-generator.php:1658
+#: bim-protocol-generator.php:410 bim-protocol-generator.php:1658
 msgid "Required information"
 msgstr "Benodigde informatie"
 
@@ -166,12 +171,12 @@ msgid "Select one of the goals"
 msgstr "Selecteer een doel"
 
 #: bim-protocol-generator.php:607
-msgid "Select a 0 point template"
-msgstr "Selecteer een nulpunt template"
+msgid "Select an origin methodology"
+msgstr ""
 
 #: bim-protocol-generator.php:644
-msgid "Thank you for filling out the BIM protocol generator form"
-msgstr "Bedankt voor het invullen van het BIM protocol generator formulier"
+msgid "Thank you for answering the questions. Please submit your answers."
+msgstr ""
 
 #: bim-protocol-generator.php:653 bim-protocol-generator.php:670
 msgid "Download the report"
@@ -190,7 +195,8 @@ msgid "Participants"
 msgstr "Deelnemers"
 
 #: bim-protocol-generator.php:708
-msgid "No BIM protocol generator questions available for you at the moment."
+#, fuzzy
+msgid "No questions available for you at the moment."
 msgstr ""
 "Geen BIM protocol generator vragenlijst beschikbaar voor je op het moment."
 
@@ -203,11 +209,13 @@ msgid "Information"
 msgstr "Informatie"
 
 #: bim-protocol-generator.php:793
-msgid "Requesting party"
+#, fuzzy
+msgid "Requesting partner"
 msgstr "Vragende partij"
 
 #: bim-protocol-generator.php:794
-msgid "Responding party"
+#, fuzzy
+msgid "Responding partner"
 msgstr "Leverende partij"
 
 #: bim-protocol-generator.php:795
@@ -230,9 +238,9 @@ msgstr "Leverende opties"
 msgid "Proposal"
 msgstr "Voorstel"
 
-#: bim-protocol-generator.php:800 bim-protocol-generator.php:1627
-#: bim-protocol-generator.php:1635
-msgid "Modeling template"
+#: bim-protocol-generator.php:800
+#, fuzzy
+msgid "Modelling template"
 msgstr "Modeleer template"
 
 #: bim-protocol-generator.php:967
@@ -249,9 +257,10 @@ msgid "The team is going to use"
 msgstr "Het team gaat het volgende gebruiken"
 
 #: bim-protocol-generator.php:1000
+#, fuzzy
 msgid ""
-"Not everyone agrees on the 0 point template. The following options have been "
-"selected"
+"Not everyone agrees on the origin methodology. The following options have "
+"been selected"
 msgstr ""
 "Niet iedereen is het eens over de nulpunt template. De volgende opties zijn "
 "geselecteerd"
@@ -274,7 +283,8 @@ msgstr "Niet iedereen is het eens wie de leading partner zou moeten zijn"
 
 #: bim-protocol-generator.php:1072 bim-protocol-generator.php:1075
 #: bim-protocol-generator.php:1116 bim-protocol-generator.php:1119
-msgid "Party"
+#, fuzzy
+msgid "Partner"
 msgstr "Partij"
 
 #: bim-protocol-generator.php:1073 bim-protocol-generator.php:1117
@@ -286,15 +296,18 @@ msgid "Check incoming"
 msgstr "Controleer bij binnenkomst"
 
 #: bim-protocol-generator.php:1115
-msgid "Parties who do not exchange information"
+#, fuzzy
+msgid "Partners who do not exchange information"
 msgstr "Deelnemers welke geen informatie uitwisselen"
 
 #: bim-protocol-generator.php:1156
-msgid "This document was generated by bimprotocolgenerator.com on"
+#, fuzzy
+msgid "This document was generated by bimexecutionplangenerator.com on"
 msgstr "Dit document was aangemaakt door bimprotocolgenerator.com op"
 
 #: bim-protocol-generator.php:1157
-msgid "The average \"agreement percentage\" of this BIM protocol is"
+#, fuzzy
+msgid "The average \"agreement percentage\" of this BIM Execution plan is"
 msgstr "De gemiddelde \"overeenkomstpercentage\" van dit BIM protocol is"
 
 #: bim-protocol-generator.php:1159
@@ -307,15 +320,17 @@ msgid "Definitions"
 msgstr "Defenities"
 
 #: bim-protocol-generator.php:1174
-msgid "BIM Protocol Generator Report"
-msgstr "BIM Protocol Generator Rapport"
+msgid "BIM Execution plan (concept)"
+msgstr ""
 
 #: bim-protocol-generator.php:1187
-msgid "A BIM Protocol report has been generated."
+#, fuzzy
+msgid "A BIM concept Execution plan has been generated."
 msgstr "Een BIM Protocol rapport is aangemaakt."
 
 #: bim-protocol-generator.php:1190
-msgid "You can download the report from the following link:"
+#, fuzzy
+msgid "You can download the concept execution plan from the following link:"
 msgstr "Je kunt het rapport downloaden via de volgende link:"
 
 #: bim-protocol-generator.php:1192 bim-protocol-generator.php:1476
@@ -424,7 +439,8 @@ msgid "No Answers found in Trash"
 msgstr "Geen antwoorden gevonden in de prullenbak"
 
 #: bim-protocol-generator.php:1294
-msgid "Please log in to initiate a BIM Protocol."
+#, fuzzy
+msgid "Please log in to initiate a BIM execution plan."
 msgstr "Log in om een BIM Protocol aan te maken"
 
 #: bim-protocol-generator.php:1357
@@ -436,7 +452,8 @@ msgid "Enter a valid project phase"
 msgstr "Voer een geldige project fase in"
 
 #: bim-protocol-generator.php:1365
-msgid "A BIM protocol requires at least 2 participants"
+#, fuzzy
+msgid "A BIM Execution plan requires at least 2 participants"
 msgstr "Er moeten minimaal 2 deelnemers zijn"
 
 #: bim-protocol-generator.php:1371
@@ -444,7 +461,8 @@ msgid "Invalid participant entered"
 msgstr "Incorrecte deelnemer opgegeven"
 
 #: bim-protocol-generator.php:1376
-msgid "A BIM protocol requires at least 2 goals"
+#, fuzzy
+msgid "A BIM Execution plan questionnaire requires at least 2 goals"
 msgstr "Er dienen minimaal 2 doelen opgegeven te worden"
 
 #: bim-protocol-generator.php:1382
@@ -452,27 +470,36 @@ msgid "Invalid goal entered"
 msgstr "Ongeldig doel opgegeven"
 
 #: bim-protocol-generator.php:1388
-msgid "A BIM protocol requires at least 2 zero point templates"
-msgstr "Er dienen minimaal 2 nulpunt templates te worden opgegeven"
+#, fuzzy
+msgid "A BIM Execution plan questionnaire requires at least 2 origin templates"
+msgstr "Er dienen minimaal 2 modeleer templates te worden opgegeven"
 
 #: bim-protocol-generator.php:1394
-msgid "Invalid zero point template entered"
-msgstr "Ongeldig nulpunt template"
+#, fuzzy
+msgid "Invalid origin template entered"
+msgstr "Ongeldige modeleer template opgegeven"
 
 #: bim-protocol-generator.php:1399
-msgid "A BIM protocol requires at least 2 modeling templates"
+#, fuzzy
+msgid ""
+"A BIM Execution plan questionnaire requires at least 2 modelling templates"
 msgstr "Er dienen minimaal 2 modeleer templates te worden opgegeven"
 
 #: bim-protocol-generator.php:1405
-msgid "Invalid modeling template entered"
+#, fuzzy
+msgid "Invalid modelling template entered"
 msgstr "Ongeldige modeleer template opgegeven"
 
 #: bim-protocol-generator.php:1412
-msgid "Invalid required information item entered"
+#, fuzzy
+msgid "Invalid requested information item entered"
 msgstr "Ongeldige waarde opgegeven bij benodigde informatie"
 
 #: bim-protocol-generator.php:1416
-msgid "A BIM protocol requires at least 2 information statuses"
+#, fuzzy
+msgid ""
+"A BIM Execution plan questionnaire requires at least 2 types of information "
+"status"
 msgstr "Er dienen minimaal 2 statussen te worden opgegeven"
 
 #: bim-protocol-generator.php:1422
@@ -480,13 +507,15 @@ msgid "Invalid status entered"
 msgstr "Ongeldige status opgegeven"
 
 #: bim-protocol-generator.php:1471
-msgid "Invitation to BIM Protocol Generator questions"
+#, fuzzy
+msgid "Invitation to BIM Execution plan questions"
 msgstr "Uitnodiging voor BIM Protocol vragenlijst"
 
 #: bim-protocol-generator.php:1473
+#, fuzzy
 msgid ""
-"You have been invited to fill in the BIM Protocol Generator questions for a "
-"project phase."
+"You have been invited to fill in the BIM Execution plan Generator questions "
+"for a project phase."
 msgstr ""
 "Je hebt een uitnodiging gekregen om een BIM Protocol vragenlijst in te "
 "vullen voor een project fase."
@@ -504,15 +533,17 @@ msgid "Could not send invitation to"
 msgstr "Uitnodiging kon niet worden verstuurd aan"
 
 #: bim-protocol-generator.php:1491
+#, fuzzy
 msgid ""
-"There was a problem storing the data for this BIM protocol generator, try "
-"again or contact an admin"
+"There was a problem storing the data for this BIM Execution plan generator, "
+"try again or contact an admin"
 msgstr ""
 "Er was een probleem met het opslaan van de data voor deze BIM protocol "
 "vragenlijst, probeer het nogmaals of neem contact op met een administrator"
 
 #: bim-protocol-generator.php:1498
-msgid "A BIM protocol could not be initiated because"
+#, fuzzy
+msgid "A BIM Execution plan could not be initiated because"
 msgstr "Er kan geen BIM protocol aangemaakt worden omdat"
 
 #: bim-protocol-generator.php:1518
@@ -520,9 +551,10 @@ msgid "Project information"
 msgstr "Project informatie"
 
 #: bim-protocol-generator.php:1519
+#, fuzzy
 msgid ""
 "Please provide some general meta-information about the project. This is "
-"being used in the header and title of the generated BIM protocol."
+"being used in the header and title of the generated BIM execution plan."
 msgstr ""
 "Voer algemene informatie van het project in. Deze informatie wordt gebruikt "
 "in het BIM protocol."
@@ -547,8 +579,7 @@ msgstr "(bijvoorbeeld: concept, specificatie, etc...)"
 msgid ""
 "Please list the participants in this phase. After initiating the protocol "
 "generator, all participants will get an invitation. This list is also used "
-"to answer some questions (for example: ‘who do you think should be the BIM "
-"manager’)"
+"to answer some questions.)"
 msgstr ""
 
 #: bim-protocol-generator.php:1537 bim-protocol-generator.php:1553
@@ -564,12 +595,13 @@ msgid "Email"
 msgstr "Email"
 
 #: bim-protocol-generator.php:1545
-msgid "change your name in your profile"
+#, fuzzy
+msgid "change your name on your "
 msgstr "Pas je voor- en achternaam aan in je profiel"
 
 #: bim-protocol-generator.php:1545
-msgid "here"
-msgstr "hier"
+msgid "account page"
+msgstr ""
 
 #: bim-protocol-generator.php:1562
 msgid "Click here to add another participant"
@@ -581,11 +613,11 @@ msgstr "Project doelen"
 
 #: bim-protocol-generator.php:1566
 msgid ""
-"Define the possible answers to question 1: “why do you think the team is "
-"going to work with BIM”. The participants will only have the options you "
-"fill out here to answer the question. Examples can be ‘create drawings’, "
-"‘visualize the design’, ‘coordination of the engineering’, etc. Please "
-"provide as clear and ad much goals as possible."
+"Define the possible answers to question 1: why do you think the team is "
+"going to work with BIM. The participants will only have the options you fill "
+"out here to answer the question. Examples can be create drawings, visualize "
+"the design, coordination of the engineering, etc. Please provide as clear "
+"and ad much goals as possible."
 msgstr ""
 
 #: bim-protocol-generator.php:1570
@@ -609,19 +641,19 @@ msgstr "Nulpunt templates"
 #: bim-protocol-generator.php:1589
 msgid ""
 "There are several methods to match the origin of different discipline models "
-"(aspect models). The participants are being asked which concept has their "
-"preference. The participants will only have the options you fill out here to "
-"answer the question. You have to provide the name of the concept and an URL "
-"with more information about it. Examples can be ‘the block’ at <a href="
-"\"http://nationalbimguidelines.nl/origintemplates/block\" target=\"_blank"
-"\">http://nationalbimguidelines.nl/origintemplates/block</a> or ‘CoBIM’ from "
-"‘<a href=\"http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/"
-"COBIM2012/cobim_2_inventory_bim_v1.pdf\" target=\"_blank\">http://files."
-"kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/"
+"(aspect models). The participants are being asked which methodology has "
+"their preference. The participants will only have the options you fill out "
+"here to answer the question. You have to provide the name of the concept and "
+"an URL with more information about it. Examples can be ‘the block’ at <a "
+"href=\"http://nationalbimguidelines.nl/origintemplates/block\" target="
+"\"_blank\">http://nationalbimguidelines.nl/origintemplates/block</a> or "
+"‘CoBIM’ from ‘<a href=\"http://files.kotisivukone.com/en.buildingsmart."
+"kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf\" target=\"_blank"
+"\">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/"
 "cobim_2_inventory_bim_v1.pdf</a>’. If you don’t know what to fill out, "
-"please find inspiration on <a href=\"http://bimprotocolgenerator.com/"
-"initiate/origintemplates/\" target=\"_blank\">http://bimprotocolgenerator."
-"com/initiate/origintemplates/</a>"
+"please find inspiration on <a href=\"http://bimexecutionplangenerator.com/"
+"initiate/origintemplates/\" target=\"_blank\">http://"
+"bimexecutionplangenerator.com/initiate/origintemplates/</a>"
 msgstr ""
 
 #: bim-protocol-generator.php:1594 bim-protocol-generator.php:1603
@@ -649,25 +681,32 @@ msgid ""
 "\" target=\"_blank\">http://files.kotisivukone.com/en.buildingsmart."
 "kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf</a>’. If you "
 "don’t know what to fill out, please find inspiration on <a href=\"http://"
-"bimprotocolgenerator.com/initiate/modelguidelines/\" target=\"_blank"
-"\">http://bimprotocolgenerator.com/initiate/modelguidelines/</a>"
+"bimexecutionplangenerator.com/initiate/modelguidelines/\" target=\"_blank"
+"\">http://bimexecutionplangenerator.com/initiate/modelguidelines/</a>"
 msgstr ""
+
+#: bim-protocol-generator.php:1627 bim-protocol-generator.php:1635
+msgid "Modeling template"
+msgstr "Modeleer template"
 
 #: bim-protocol-generator.php:1639
 msgid ""
 "In question 8 the participants will be asked what information they need from "
-"the other project participants. This will be asked as a matrix/list what "
+"other project participants. This will be asked as a matrix/list what "
 "information they need, from who, in what format and on what level and what "
 "the status of the information should be. The participants are free to add "
 "the information they need, but as an initiator you can provide mandatory "
 "information blocks that have to be answered. For example if you fill out "
 "‘building part A’ in this list, every participant has to define how they "
 "want to receive information from ‘building part A’, from who, in what "
-"format, etc."
+"format, etc. See how this question could look to users in ‘<a href=\"http://"
+"bimexecutionplangenerator.com/initiate/informationmatrix\" target=\"_blank"
+"\">this example’."
 msgstr ""
 
 #: bim-protocol-generator.php:1643
-msgid "Required information blocks"
+#, fuzzy
+msgid "Requested information blocks"
 msgstr "Benodigde informatie"
 
 #: bim-protocol-generator.php:1661 bim-protocol-generator.php:1674
@@ -718,7 +757,8 @@ msgid "Initiator post type"
 msgstr "Initiator post type"
 
 #: bim-protocol-generator-options.php:85
-msgid "The post type in which questionaire information is stored"
+#, fuzzy
+msgid "The post type in which questionnaire information is stored"
 msgstr "Het post type waarin de vragenlijst informatie wordt opgeslagen"
 
 #: bim-protocol-generator-options.php:90
@@ -772,17 +812,15 @@ msgid "Disclaimer text"
 msgstr "Disclaimer tekst"
 
 #: bim-protocol-generator-options.php:170
-#: bim-protocol-generator-options.php:211
-msgid ""
-"This disclaimer text is included in the generated reports for the "
-"participants and initiator of a protocol."
+#, fuzzy
+msgid "This disclaimer text is included in the generated execution plan."
 msgstr "De disclaimer tekst die in aangemaakt rapporten wordt geplaatst"
 
 #: bim-protocol-generator-options.php:177
-#: bim-protocol-generator-options.php:218
+#, fuzzy
 msgid ""
-"The text included in the report under the header definitions, it should "
-"contain definitions!"
+"The text included in the execution plan under the header definitions, it "
+"should contain definitions!"
 msgstr ""
 "De tekst die in het aangemaakt rapport wordt geplaatst onder kop definities."
 
@@ -793,8 +831,9 @@ msgstr "Rapport hoofdstukken"
 
 #: bim-protocol-generator-options.php:184
 #: bim-protocol-generator-options.php:225
+#, fuzzy
 msgid ""
-"Comma seperated list of chapters for the report. The order used here will be "
+"Comma separated list of chapters for the report. The order used here will be "
 "maintained"
 msgstr ""
 "Komma gescheiden lijst met hoofdstukken in het rapport. De volgorde wordt "
@@ -807,12 +846,26 @@ msgstr "Informatie niveaus"
 
 #: bim-protocol-generator-options.php:191
 #: bim-protocol-generator-options.php:233
+#, fuzzy
 msgid ""
-"Comma seperated list of information levels, these have to be set for every "
+"Comma separated list of information levels, these have to be set for every "
 "used language."
 msgstr ""
 "Komma gescheiden lijst met informatie niveaus, deze moeten per taal "
 "ingesteld worden."
+
+#: bim-protocol-generator-options.php:211
+msgid ""
+"This disclaimer text is included in the generated reports for the "
+"participants and initiator of a protocol."
+msgstr "De disclaimer tekst die in aangemaakt rapporten wordt geplaatst"
+
+#: bim-protocol-generator-options.php:218
+msgid ""
+"The text included in the report under the header definitions, it should "
+"contain definitions!"
+msgstr ""
+"De tekst die in het aangemaakt rapport wordt geplaatst onder kop definities."
 
 #: bim-protocol-generator-options.php:226
 msgid ""
@@ -820,6 +873,36 @@ msgid ""
 "languages"
 msgstr ""
 "Voer alle hoofdstukken in en zet deze in dezelfde volgorde in elke taal"
+
+#~ msgid "0 Point Templates"
+#~ msgstr "Nulpunt sjabloon"
+
+#~ msgid "Modeling Templates"
+#~ msgstr "Modeleer templates"
+
+#~ msgid "Required information (matrix)"
+#~ msgstr "Benodigde informatie (matrix)"
+
+#~ msgid "Thanks page, end of questions"
+#~ msgstr "Dank pagina, einde van de vragenlijst"
+
+#~ msgid "Select a 0 point template"
+#~ msgstr "Selecteer een nulpunt template"
+
+#~ msgid "Thank you for filling out the BIM protocol generator form"
+#~ msgstr "Bedankt voor het invullen van het BIM protocol generator formulier"
+
+#~ msgid "BIM Protocol Generator Report"
+#~ msgstr "BIM Protocol Generator Rapport"
+
+#~ msgid "A BIM protocol requires at least 2 zero point templates"
+#~ msgstr "Er dienen minimaal 2 nulpunt templates te worden opgegeven"
+
+#~ msgid "Invalid zero point template entered"
+#~ msgstr "Ongeldig nulpunt template"
+
+#~ msgid "here"
+#~ msgstr "hier"
 
 #~ msgid "Click here to add more posible answers"
 #~ msgstr "Klik hier om meer antwoord mogelijkheden toe te voegen"
