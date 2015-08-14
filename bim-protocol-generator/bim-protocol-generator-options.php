@@ -59,7 +59,7 @@ $pages = get_posts( Array(
 ?>
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
-	<h2><?php _e( 'BIM Protocol Generator Options' ); ?></h2>
+	<h2><?php _e( 'BIM Execution plan Generator Options' ); ?></h2>
 	<form method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<tr valign="top">
@@ -82,7 +82,7 @@ if( is_array( $postTypes ) ) {
 <?php
 }
 ?>
-					<p class="description"><?php _e( 'The post type in which questionaire information is stored', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'The post type in which questionnaire information is stored', 'bim-protocol-generator' ); ?></p>
 				</td>
 				
 			</tr>
@@ -167,28 +167,28 @@ if( count( $availableLanguages ) == 0 ) {
 				<td><label for="disclaimer-text"><?php _e( 'Disclaimer text', 'bim-protocol-generator' ); ?></label></td>
 				<td>
 					<textarea cols="30" rows="4" id="disclaimer-text" name="bim_protocol_generator_options[disclaimer_text]"><?php print( isset( $bimProtocolGeneratorOptions[ 'disclaimer_text' ] ) ? stripslashes( $bimProtocolGeneratorOptions[ 'disclaimer_text' ] ) : '' ); ?></textarea>
-					<p class="description"><?php _e( 'This disclaimer text is included in the generated reports for the participants and initiator of a protocol.', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'This disclaimer text is included in the generated execution plan.', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">
 				<td><label for="definitions"><?php _e( 'Definitions', 'bim-protocol-generator' ); ?></label></td>
 				<td>
 					<textarea cols="30" rows="4" id="definitions" name="bim_protocol_generator_options[definitions]"><?php print( isset( $bimProtocolGeneratorOptions[ 'definitions' ] ) ? stripslashes( $bimProtocolGeneratorOptions[ 'definitions' ] ) : '' ); ?></textarea>
-					<p class="description"><?php _e( 'The text included in the report under the header definitions, it should contain definitions!', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'The text included in the execution plan under the header definitions, it should contain definitions!', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">
 				<td><label for="report-chapters"><?php _e( 'Report chapters', 'bim-protocol-generator' ); ?></label></td>
 				<td>
 					<textarea cols="30" rows="4" id="report-chapters" name="bim_protocol_generator_options[report_chapters]"><?php print( $chapters ); ?></textarea>
-					<p class="description"><?php _e( 'Comma seperated list of chapters for the report. The order used here will be maintained', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'Comma separated list of chapters for the report. The order used here will be maintained', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">
 				<td><label for="information-levels"><?php _e( 'Information Levels', 'bim-protocol-generator' ); ?></label></td>
 				<td>
 					<textarea cols="30" rows="4" id="information-levels" name="bim_protocol_generator_options[information_levels]"><?php print( $informationLevels ); ?></textarea>
-					<p class="description"><?php _e( 'Comma seperated list of information levels, these have to be set for every used language.', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'Comma separated list of information levels, these have to be set for every used language.', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 <?php
@@ -222,7 +222,7 @@ if( count( $availableLanguages ) == 0 ) {
 				<td><label for="report-chapters<?php print( $suffix ); ?>"><?php _e( 'Report chapters', 'bim-protocol-generator' ); ?> (<?php print( $language[ 'display_name' ] ); ?>)</label></td>
 				<td>
 					<textarea cols="30" rows="4" id="report-chapters<?php print( $suffix ); ?>" name="bim_protocol_generator_options[report_chapters<?php print( $suffix ); ?>]"><?php print( $languageChapters ); ?></textarea>
-					<p class="description"><?php _e( 'Comma seperated list of chapters for the report. The order used here will be maintained', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'Comma separated list of chapters for the report. The order used here will be maintained', 'bim-protocol-generator' ); ?></p>
 					<p class="description"><?php _e( 'Make sure to show all chapters and put them in the same order for all languages', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
@@ -230,7 +230,7 @@ if( count( $availableLanguages ) == 0 ) {
 				<td><label for="information-levels<?php print( $suffix ); ?>"><?php _e( 'Information Levels', 'bim-protocol-generator' ); ?> (<?php print( $language[ 'display_name' ] ); ?>)</label></td>
 				<td>
 					<textarea cols="30" rows="4" id="information-levels<?php print( $suffix ); ?>" name="bim_protocol_generator_options[information_levels<?php print( $suffix ); ?>]"><?php print( $languageInformationLevels ); ?></textarea>
-					<p class="description"><?php _e( 'Comma seperated list of information levels, these have to be set for every used language.', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'Comma separated list of information levels, these have to be set for every used language.', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 <?php

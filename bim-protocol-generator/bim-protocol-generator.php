@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: BIM Protocol Generator
-Plugin URI:
+Plugin Name: BIM Execution plan Generator
+Plugin URI: http://bimtoolset.org
 Description:
 Version: 1.0
 Author: Bastiaan Grutters
@@ -39,9 +39,9 @@ class BIMProtocolGenerator {
 		load_plugin_textdomain( 'bim-protocol-generator', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
-	public static function optionsMenu() {
+	public static function optionsMenu() {33
 		$pfile = basename( dirname( __FILE__ ) ) . '/bim-protocol-generator-options.php';
-		add_options_page( 'bim-protocol-generator', __( 'BIM Protocol Generator Options', 'bim-protocol-generator' ), 'activate_plugins', $pfile );
+		add_options_page( 'bim-protocol-generator', __( 'BIM Execution plan Generator Options', 'bim-protocol-generator' ), 'activate_plugins', $pfile );
 	}
 
 	public static function questionsEditorInit() {
@@ -111,19 +111,19 @@ class BIMProtocolGenerator {
 			<?php _e( 'Initiator goals', 'bim-protocol-generator' ); ?>
 		</option>
 		<option value="0pointtemplate"<?php print( $typeQuestion == '0pointtemplate' ? ' selected="selected"' : '' ); ?>>
-			<?php _e( '0 Point Templates', 'bim-protocol-generator' ); ?>
+			<?php _e( 'Origin Methodology', 'bim-protocol-generator' ); ?>
 		</option>
 		<option value="modelingtemplate"<?php print( $typeQuestion == 'modelingtemplate' ? ' selected="selected"' : '' ); ?>>
-			<?php _e( 'Modeling Templates', 'bim-protocol-generator' ); ?>
+			<?php _e( 'Modelling Guidelines', 'bim-protocol-generator' ); ?>
 		</option>
 		<option value="required_information"<?php print( $typeQuestion == 'required_information' ? ' selected="selected"' : '' ); ?>>
-			<?php _e( 'Required information (matrix)', 'bim-protocol-generator' ); ?>
+			<?php _e( 'Requested information', 'bim-protocol-generator' ); ?>
 		</option>
 		<option value="leading_partner"<?php print( $typeQuestion == 'leading_partner' ? ' selected="selected"' : '' ); ?>>
 			<?php _e( 'Leading partner', 'bim-protocol-generator' ); ?>
 		</option>
 		<option value="end"<?php print( $typeQuestion == 'end' ? ' selected="selected"' : '' ); ?>>
-			<?php _e( 'Thanks page, end of questions', 'bim-protocol-generator' ); ?>
+			<?php _e( 'Thank you.', 'bim-protocol-generator' ); ?>
 		</option>
 	</select>
 	<div class="clear"></div>
@@ -363,12 +363,12 @@ class BIMProtocolGenerator {
             		$html .= '<div class="clear"></div>';
             		$answerNumber ++;
             	}*/
-            	$html .= '<table id="required-information"><tr class="odd"><th>' . __( 'What do you need? (information)', 'bim-protocol-generator' ) . '</th>';
+            	$html .= '<table id="required-information"><tr class="odd"><th>' . __( 'What data do you need?', 'bim-protocol-generator' ) . '</th>';
             	$html .= '<th>' . __( 'Who should provide it?', 'bim-protocol-generator' ) . '</th>';
             	$html .= '<th class="small-width">' . __( 'At which information level?', 'bim-protocol-generator' ) . '</th>';
             	$html .= '<th class="small-width">' . __( 'With what status?', 'bim-protocol-generator' ) . '</th>';
             	$html .= '<th class="small-width">' . __( 'What kind of format would you prefer?', 'bim-protocol-generator' ) . '</th>';
-            	$html .= '<th>' . __( 'What kind of modeling agreements?', 'bim-protocol-generator' ) . '</th></tr>';
+            	$html .= '<th>' . __( 'What kind of modelling agreements?', 'bim-protocol-generator' ) . '</th></tr>';
 				   foreach( $information as $key => $informationItem ) {
 	            	$html .= '<tr class="' . ( $key % 2 == 0 ? 'even' : 'odd' ) . '" id="row-' . $key . '"><td>' . $informationItem . '</td>';
 	            	$html .= '<td><select class="protocol-select" name="answer_' . $currentPage . '_' . $questionNumber . '[participant][]">';
@@ -604,7 +604,7 @@ class BIMProtocolGenerator {
             			} elseif( $question->questionType == 'goals'  ) {
             				$message .= __( 'Select one of the goals', 'bim-protocol-generator' ) . '<br />';
             			} elseif( $question->questionType == '0pointtemplate'  ) {
-            				$message .= __( 'Select a 0 point template', 'bim-protocol-generator' ) . '<br />';
+            				$message .= __( 'Select an origin methodology', 'bim-protocol-generator' ) . '<br />';
             			} elseif( $question->questionType == 'required_information'  ) {
             				$message .= __( 'Check at least one of the options', 'bim-protocol-generator' ) . '<br />';
             			}
@@ -641,7 +641,7 @@ class BIMProtocolGenerator {
 
          if( $page > count( $questions[ 'pages' ] ) && isset( $_POST[ 'next' ] ) && $_POST[ 'next' ] != '' ) {
          	print( '<p>' );
-         	_e( 'Thank you for filling out the BIM protocol generator form', 'bim-protocol-generator' );
+         	_e( 'Thank you for answering the questions. Please submit your answers.', 'bim-protocol-generator' );
          	print( '</p>' );
          	// Set status to complete for these answers, so the form is no longer available for this code
          	update_post_meta( $previousAnswers[ 'postId' ], '_status', 'complete' );
@@ -705,7 +705,7 @@ class BIMProtocolGenerator {
       } else {
 ?>
 <p>
-	<?php _e( 'No BIM protocol generator questions available for you at the moment.', 'bim-protocol-generator' ); ?>
+	<?php _e( 'No questions available for you at the moment.', 'bim-protocol-generator' ); ?>
 	<br />
 	<?php _e( 'Make sure you provided the correct code.', 'bim-protocol-generator' ); ?>
 </p>
@@ -790,14 +790,14 @@ class BIMProtocolGenerator {
       			if( $chapter != '' ) {
 	      			// add the required information table to the report
 	      			$chapters[$chapter] .= '<table id="required-information"><tr><th>' . __( 'Information', 'bim-protocol-generator' ) . '</th>';
-	      			$chapters[$chapter] .= '<th>' . __( 'Requesting party', 'bim-protocol-generator' ) . '</th>';
-	      			$chapters[$chapter] .= '<th>' . __( 'Responding party', 'bim-protocol-generator' ) . '</th>';
+	      			$chapters[$chapter] .= '<th>' . __( 'Requesting partner', 'bim-protocol-generator' ) . '</th>';
+	      			$chapters[$chapter] .= '<th>' . __( 'Responding partner', 'bim-protocol-generator' ) . '</th>';
 	      			$chapters[$chapter] .= '<th>' . __( 'Level', 'bim-protocol-generator' ) . '</th>';
 	      			$chapters[$chapter] .= '<th>' . __( 'Status', 'bim-protocol-generator' ) . '</th>';
 	      			$chapters[$chapter] .= '<th>' . __( 'Request preference', 'bim-protocol-generator' ) . '</th>';
 	      			$chapters[$chapter] .= '<th>' . __( 'Response options', 'bim-protocol-generator' ) . '</th>';
 	      			$chapters[$chapter] .= '<th>' . __( 'Proposal', 'bim-protocol-generator' ) . '</th>';
-	      			$chapters[$chapter] .= '<th>' . __( 'Modeling template', 'bim-protocol-generator' ) . '</th></tr>';
+	      			$chapters[$chapter] .= '<th>' . __( 'Modelling template', 'bim-protocol-generator' ) . '</th></tr>';
 
 	      			$information = get_post_meta( $questions[ 'postId' ], 'information', true );
 	      			$modelingTemplates = get_post_meta( $questions[ 'postId' ], 'modelingTemplates', true );
@@ -997,7 +997,7 @@ class BIMProtocolGenerator {
 		      				}
 		      			} else {
 		      				$chapters[$chapter] .= '<br />';
-		      				$chapters[$chapter] .= __( 'Not everyone agrees on the 0 point template. The following options have been selected', 'bim-protocol-generator' ) . ':<br />';
+		      				$chapters[$chapter] .= __( 'Not everyone agrees on the origin methodology. The following options have been selected', 'bim-protocol-generator' ) . ':<br />';
 		      				foreach( $zeroPoints as $zeroPoint ) {
 		      					foreach( $theAnswers as $theAnswer ) {
 		      						if( $theAnswer == $zeroPoint[0] ) {
@@ -1069,10 +1069,10 @@ class BIMProtocolGenerator {
 
 		      			if( isset( $inOutPutSet[ 'input_check' ] ) && isset( $inOutPutSet[ 'output_check' ] ) ) {
                         $noShowTable = '';
-		      				$chapters[$chapter] .= '<table><tr><th>' . __( 'Party', 'bim-protocol-generator' ) . '</th>';
+		      				$chapters[$chapter] .= '<table><tr><th>' . __( 'Partner', 'bim-protocol-generator' ) . '</th>';
 		      				$chapters[$chapter] .= '<th>' . __( 'Check outgoing', 'bim-protocol-generator' ) . '</th>';
 		      				$chapters[$chapter] .= '<th>' . __( 'Check incoming', 'bim-protocol-generator' ) . '</th>';
-		      				$chapters[$chapter] .= '<th>' . __( 'Party', 'bim-protocol-generator' ) . '</th></tr>';
+		      				$chapters[$chapter] .= '<th>' . __( 'Partner', 'bim-protocol-generator' ) . '</th></tr>';
 		      				foreach( $inOutPut as $code => $values ) {
 		      				 	foreach( $inOutPut as $code2 => $values2 ) {
 		      				 		if( $code != $code2 ) {
@@ -1112,11 +1112,11 @@ class BIMProtocolGenerator {
 		      				}
 		      				$chapters[$chapter] .= '</table>';
                         if( $noShowTable != '' ) {
-                           $noShowTable = '<h3>' . __( 'Parties who do not exchange information', 'bim-protocol-generator' ) . '</h3>' .
-                              '<table><tr><th>' . __( 'Party', 'bim-protocol-generator' ) . '</th>' .
+                           $noShowTable = '<h3>' . __( 'Partners who do not exchange information', 'bim-protocol-generator' ) . '</h3>' .
+                              '<table><tr><th>' . __( 'Partner', 'bim-protocol-generator' ) . '</th>' .
                               '<th>' . __( 'Check outgoing', 'bim-protocol-generator' ) . '</th>' .
                               '<th>' . __( 'Check incoming', 'bim-protocol-generator' ) . '</th>' .
-                              '<th>' . __( 'Party', 'bim-protocol-generator' ) . '</th></tr>' . $noShowTable;
+                              '<th>' . __( 'Partner', 'bim-protocol-generator' ) . '</th></tr>' . $noShowTable;
                            $chapters[$chapter] .= $noShowTable . '</table>';
                         }
 		      			}
@@ -1152,9 +1152,9 @@ class BIMProtocolGenerator {
 
       $agreementRatio = round( $stats[ 'agreed' ] / ( $stats[ 'agreed' ] + $stats[ 'notAgreed' ] ) * 100, 2 );
       // Set the average agreement percentage
-      $html = '<img id="logo" src="' . plugins_url( 'images/logo.png', __FILE__ ) . '" alt="BIM Protocol Generator" /><br /><br />' .
-      	__( 'This document was generated by bimprotocolgenerator.com on', 'bim-protocol-generator' ) . ' ' . date( 'Y-m-d H:i' ) . '.<br /><br />' .
-      	str_replace( '{agreement_percentage}', '<strong>' . __( 'The average "agreement percentage" of this BIM protocol is', 'bim-protocol-generator' ) . ': ' . $agreementRatio . '%</strong><br />', $html );
+      $html = '<img id="logo" src="' . plugins_url( 'images/logo.png', __FILE__ ) . '" alt="BIM Execution plan Generator" /><br /><br />' .
+      	__( 'This document was generated by bimexecutionplangenerator.com on', 'bim-protocol-generator' ) . ' ' . date( 'Y-m-d H:i' ) . '.<br /><br />' .
+      	str_replace( '{agreement_percentage}', '<strong>' . __( 'The average "agreement percentage" of this BIM Execution plan is', 'bim-protocol-generator' ) . ': ' . $agreementRatio . '%</strong><br />', $html );
 
       $html .= '<h2 class="disclaimer-title">' . __( 'Disclaimer', 'bim-protocol-generator' ) . '</h2>';
       $html .= '<p>' . stripslashes( $options[ 'disclaimer_text' . $suffix ] ) . '</p>';
@@ -1171,7 +1171,7 @@ class BIMProtocolGenerator {
       update_post_meta( $questions[ 'postId' ], '_report_status', 'complete' );
 
       // go through all participants and send email
-      $title = __( 'BIM Protocol Generator Report', 'bim-protocol-generator' );
+      $title = __( 'BIM Execution plan (concept)', 'bim-protocol-generator' );
       $initiatorId = get_post_meta( $questions[ 'postId' ], 'initiator', true );
       $initiatorUser = get_userdata( $initiatorId );
       if( $questions[ 'language' ] != '' && function_exists( 'icl_object_id' ) ) {
@@ -1184,10 +1184,10 @@ class BIMProtocolGenerator {
 
       foreach( $participants as $participant ) {
       	$content = $participant[0] . ",\n\n" .
-      			__( 'A BIM Protocol report has been generated.', 'bim-protocol-generator' ) . "\n" .
+      			__( 'A BIM concept Execution plan has been generated.', 'bim-protocol-generator' ) . "\n" .
       			__( 'Project', 'bim-protocol-generator' ) . ': ' . $projectName . "\n" .
       			__( 'Phase', 'bim-protocol-generator' ) . ': ' . $projectPhase . "\n" .
-      			__( 'You can download the report from the following link:', 'bim-protocol-generator' ) . "\n" .
+      			__( 'You can download the concept execution plan from the following link:', 'bim-protocol-generator' ) . "\n" .
       			$uri . "?code={$codes[0]}-{$participant[2]}\n\n" .
       			__( 'Best regards', 'bim-protocol-generator' ) . ",\n" .
       			$initiatorUser->user_firstname . ' ' . $initiatorUser->user_lastname;
@@ -1291,7 +1291,7 @@ class BIMProtocolGenerator {
 
 	public static function showInitiatorForm() {
 		if( !is_user_logged_in() ) {
-			_e( 'Please log in to initiate a BIM Protocol.', 'bim-protocol-generator' );
+			_e( 'Please log in to initiate a BIM execution plan.', 'bim-protocol-generator' );
 			//wp_login_form(); // This is apparently not compatible with BruteForce
 		} else {
 			$currentUser = wp_get_current_user();
@@ -1362,7 +1362,7 @@ class BIMProtocolGenerator {
             }
 
             if( count( $participants ) < 2 ) {
-               $message[] = __( 'A BIM protocol requires at least 2 participants', 'bim-protocol-generator' );
+               $message[] = __( 'A BIM Execution plan requires at least 2 participants', 'bim-protocol-generator' );
                $valid = false;
             } else {
                foreach( $participants as $participant ) {
@@ -1373,7 +1373,7 @@ class BIMProtocolGenerator {
                }
             }
             if( count( $goals ) < 2 ) {
-               $message[] = __( 'A BIM protocol requires at least 2 goals', 'bim-protocol-generator' );
+               $message[] = __( 'A BIM Execution plan questionnaire requires at least 2 goals', 'bim-protocol-generator' );
                $valid = false;
             } else {
                foreach( $goals as $goal ) {
@@ -1385,35 +1385,35 @@ class BIMProtocolGenerator {
             }
 
             if( count( $zeroPoints ) < 2 ) {
-               $message[] = __( 'A BIM protocol requires at least 2 zero point templates', 'bim-protocol-generator' );
+               $message[] = __( 'A BIM Execution plan questionnaire requires at least 2 origin templates', 'bim-protocol-generator' );
                $valid = false;
             } else {
                foreach( $zeroPoints as $zeroPoint ) {
                   if( $zeroPoint[0] === false || $zeroPoint[1] === false || !isset( $zeroPoint[0], $zeroPoint[1] ) ) {
                      $valid = false;
-                     $message[] = __( 'Invalid zero point template entered', 'bim-protocol-generator' );
+                     $message[] = __( 'Invalid origin template entered', 'bim-protocol-generator' );
                   }
                }
             }
             if( count( $modelingTemplates ) < 2 ) {
-               $message[] = __( 'A BIM protocol requires at least 2 modeling templates', 'bim-protocol-generator' );
+               $message[] = __( 'A BIM Execution plan questionnaire requires at least 2 modelling templates', 'bim-protocol-generator' );
                $valid = false;
             } else {
                foreach( $modelingTemplates as $modelingTemplate ) {
                   if( $modelingTemplate[0] === false || $modelingTemplate[1] === false || !isset( $modelingTemplate[0], $modelingTemplate[1] ) ) {
                      $valid = false;
-                     $message[] = __( 'Invalid modeling template entered', 'bim-protocol-generator' );
+                     $message[] = __( 'Invalid modelling template entered', 'bim-protocol-generator' );
                   }
                }
             }
             foreach( $information as $informationItem ) {
                if( $informationItem === false || !isset( $informationItem ) ) {
                   $valid = false;
-                  $message[] = __( 'Invalid required information item entered', 'bim-protocol-generator' );
+                  $message[] = __( 'Invalid requested information item entered', 'bim-protocol-generator' );
                }
             }
             if( count( $statuses ) < 2 ) {
-               $message[] = __( 'A BIM protocol requires at least 2 information statuses', 'bim-protocol-generator' );
+               $message[] = __( 'A BIM Execution plan questionnaire requires at least 2 types of information status', 'bim-protocol-generator' );
                $valid = false;
             } else {
                foreach( $statuses as $status ) {
@@ -1468,9 +1468,9 @@ class BIMProtocolGenerator {
                   }
                   // send out emails to all the participants with the unique link to their questions
                   foreach( $participants as $participant ) {
-                     $subject = __( 'Invitation to BIM Protocol Generator questions', 'bim-protocol-generator' );
+                     $subject = __( 'Invitation to BIM Execution plan questions', 'bim-protocol-generator' );
                      $content = $participant[0] . ",\n\n" .
-                         __( 'You have been invited to fill in the BIM Protocol Generator questions for a project phase.', 'bim-protocol-generator' ) . "\n" .
+                         __( 'You have been invited to fill in the BIM Execution plan Generator questions for a project phase.', 'bim-protocol-generator' ) . "\n" .
                          __( 'Follow the link below to get started:', 'bim-protocol-generator' ) . "\n" .
                          $uri . "?code={$uniqId}-{$participant[2]}\n\n" .
                          __( 'Best regards', 'bim-protocol-generator' ) . ",\n" .
@@ -1488,14 +1488,14 @@ class BIMProtocolGenerator {
                   }
                } else {
                   ?>
-                  <p><?php _e( 'There was a problem storing the data for this BIM protocol generator, try again or contact an admin', 'bim-protocol-generator' ); ?></p>
+                  <p><?php _e( 'There was a problem storing the data for this BIM Execution plan generator, try again or contact an admin', 'bim-protocol-generator' ); ?></p>
                <?php
                }
             }
          }
 			if( !$valid ) {
             if( count( $message ) > 0 ) {
-               print( '<strong>' . __( 'A BIM protocol could not be initiated because', 'bim-protocol-generator' ) . ':</strong><br />' );
+               print( '<strong>' . __( 'A BIM Execution plan could not be initiated because', 'bim-protocol-generator' ) . ':</strong><br />' );
                print( '<ul class="error-messages"><li>' );
                print( implode( '</li><li>', $message ) );
                print( '</li></ul>' );
@@ -1516,7 +1516,7 @@ class BIMProtocolGenerator {
 ?>
 			<form method="post" action="">
 				<h3>1. <?php _e( 'Project information', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'Please provide some general meta-information about the project. This is being used in the header and title of the generated BIM protocol.', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'Please provide some general meta-information about the project. This is being used in the header and title of the generated BIM execution plan.', 'bim-protocol-generator' ); ?></p>
 				<table id="initiator-table" class="bim-protocol-generator-table">
 					<tr>
 						<td><label for="project-name"><?php _e( 'Project name', 'bim-protocol-generator' ); ?></label></td>
@@ -1530,7 +1530,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>2. <?php _e( 'Participants', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'Please list the participants in this phase. After initiating the protocol generator, all participants will get an invitation. This list is also used to answer some questions (for example: ‘who do you think should be the BIM manager’)', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'Please list the participants in this phase. After initiating the protocol generator, all participants will get an invitation. This list is also used to answer some questions.)', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
                <tr>
 						<th></th>
@@ -1542,7 +1542,7 @@ class BIMProtocolGenerator {
 						<td>1) </td>
 						<td><?php print( $currentUser->user_firstname . ' ' . $currentUser->user_lastname ); ?></td>
 						<td><?php print( $currentUser->user_email ); ?></td>
-						<td><span class="table-description"><?php _e( 'change your name in your profile', 'bim-protocol-generator' ); ?> <a href="<?php bloginfo( 'wpurl' ); ?>/wp-admin/profile.php" target="_blank"><?php _e( 'here', 'bim-protocol-generator' ); ?></a></span></td>
+						<td><span class="table-description"><?php _e( 'change your name on your ', 'bim-protocol-generator' ); ?> <a href="<?php bloginfo( 'wpurl' ); ?>/account" target="_blank"><?php _e( 'account page', 'bim-protocol-generator' ); ?></a></span></td>
 					</tr>
             <?php
             $number = 2;
@@ -1563,7 +1563,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>3. <?php _e( 'Project goals', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'Define the possible answers to question 1: “why do you think the team is going to work with BIM”. The participants will only have the options you fill out here to answer the question. Examples can be ‘create drawings’, ‘visualize the design’, ‘coordination of the engineering’, etc. Please provide as clear and ad much goals as possible.', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'Define the possible answers to question 1: why do you think the team is going to work with BIM. The participants will only have the options you fill out here to answer the question. Examples can be create drawings, visualize the design, coordination of the engineering, etc. Please provide as clear and ad much goals as possible.', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
 					<tr>
 						<th></th>
@@ -1586,7 +1586,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>4. <?php _e( 'Origin templates', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'There are several methods to match the origin of different discipline models (aspect models). The participants are being asked which concept has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the concept and an URL with more information about it. Examples can be ‘the block’ at <a href="http://nationalbimguidelines.nl/origintemplates/block" target="_blank">http://nationalbimguidelines.nl/origintemplates/block</a> or ‘CoBIM’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimprotocolgenerator.com/initiate/origintemplates/" target="_blank">http://bimprotocolgenerator.com/initiate/origintemplates/</a>', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'There are several methods to match the origin of different discipline models (aspect models). The participants are being asked which methodology has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the concept and an URL with more information about it. Examples can be ‘the block’ at <a href="http://nationalbimguidelines.nl/origintemplates/block" target="_blank">http://nationalbimguidelines.nl/origintemplates/block</a> or ‘CoBIM’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimexecutionplangenerator.com/initiate/origintemplates/" target="_blank">http://bimexecutionplangenerator.com/initiate/origintemplates/</a>', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
 					<tr>
 						<th></th>
@@ -1611,7 +1611,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>5. <?php _e( 'Modelling templates/guidelines', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'There are several guidelines and agreements about the way a BIM model should be constructed. The participants are being asked which template/guideline/agreement has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the agreement template and an URL with more information about it. Examples can be ‘GSA guidelines’ at <a href="http://www.gsa.gov/portal/content/102281" target="_blank">http://www.gsa.gov/portal/content/102281</a> or ‘CoBIM architectural’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimprotocolgenerator.com/initiate/modelguidelines/" target="_blank">http://bimprotocolgenerator.com/initiate/modelguidelines/</a>', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'There are several guidelines and agreements about the way a BIM model should be constructed. The participants are being asked which template/guideline/agreement has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the agreement template and an URL with more information about it. Examples can be ‘GSA guidelines’ at <a href="http://www.gsa.gov/portal/content/102281" target="_blank">http://www.gsa.gov/portal/content/102281</a> or ‘CoBIM architectural’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimexecutionplangenerator.com/initiate/modelguidelines/" target="_blank">http://bimexecutionplangenerator.com/initiate/modelguidelines/</a>', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
 					<tr>
 						<th></th>
@@ -1635,12 +1635,12 @@ class BIMProtocolGenerator {
 						<td colspan="3"><a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( 'modelingtemplate', [ '<?php _e( 'Modeling template', 'bim-protocol-generator' ); ?>', '<?php _e( 'URL', 'bim-protocol-generator' ); ?>' ] );"><?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?></a></td>
 					</tr>
 				</table>
-				<h3>6. <?php _e( 'Required information', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'In question 8 the participants will be asked what information they need from the other project participants. This will be asked as a matrix/list what information they need, from who, in what format and on what level and what the status of the information should be. The participants are free to add the information they need, but as an initiator you can provide mandatory information blocks that have to be answered. For example if you fill out ‘building part A’ in this list, every participant has to define how they want to receive information from ‘building part A’, from who, in what format, etc.', 'bim-protocol-generator' ); ?></p>
+				<h3>6. <?php _e( 'Requested information', 'bim-protocol-generator' ); ?></h3>
+				<p><?php _e( 'In question 8 the participants will be asked what information they need from other project participants. This will be asked as a matrix/list what information they need, from who, in what format and on what level and what the status of the information should be. The participants are free to add the information they need, but as an initiator you can provide mandatory information blocks that have to be answered. For example if you fill out ‘building part A’ in this list, every participant has to define how they want to receive information from ‘building part A’, from who, in what format, etc. See how this question could look to users in ‘<a href="http://bimexecutionplangenerator.com/initiate/informationmatrix" target="_blank">this example’.', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
 					<tr>
 						<th></th>
-						<th><?php _e( 'Required information blocks', 'bim-protocol-generator' ); ?></th>
+						<th><?php _e( 'Requested information blocks', 'bim-protocol-generator' ); ?></th>
 					</tr>
                <?php
                $number = 1;
@@ -1648,7 +1648,7 @@ class BIMProtocolGenerator {
                   ?>
 					<tr class="information-row">
 						<td class="row-number"><span class="row-number"><?php print( $number ); ?>) </span></td>
-						<td><input type="text" name="information_<?php print( $number ); ?>" placeholder="<?php _e( 'Required information', 'bim-protocol-generator' ); ?>" value="<?php print( $informationItem ); ?>" /></td>
+						<td><input type="text" name="information_<?php print( $number ); ?>" placeholder="<?php _e( 'Requested information', 'bim-protocol-generator' ); ?>" value="<?php print( $informationItem ); ?>" /></td>
 					</tr>
                   <?php
                   $number ++;
