@@ -9,105 +9,105 @@ table .number {
 }
 
 .question-label, #top .question-label {
-	display: inline;
+   display: inline;
 }
 
 #questions-meta label {
-	display: block;
-	float: left;
-	width: 180px;
+   display: block;
+   float: left;
+   width: 180px;
 }
 
 #questions-meta select {
-	float: left;
-	width: 640px;
+   float: left;
+   width: 640px;
 }
 
 #questions-meta textarea {
-	float: left;
-	width: 640px;
-	height: 120px;
+   float: left;
+   width: 640px;
+   height: 120px;
 }
 
 #questions-meta input {
-	float: left;
-	width: 640px;
+   float: left;
+   width: 640px;
 }
 
 #questions-meta .clear {
-	clear: both;
+   clear: both;
 }
 
 #answers-container {
-	padding-top: 5px;
-	margin-top: 5px;
-	border-top: 2px dotted #bbbbbb;
+   padding-top: 5px;
+   margin-top: 5px;
+   border-top: 2px dotted #bbbbbb;
 }
 
 #answers-container .answer {
-	border-bottom: 2px dotted #bbbbbb;
-	padding-bottom: 5px;
-	margin-bottom: 5px;
-	position: relative;
+   border-bottom: 2px dotted #bbbbbb;
+   padding-bottom: 5px;
+   margin-bottom: 5px;
+   position: relative;
 }
 
 #answers-container .answer .control-links {
-	position: absolute;
-	right: 20px;
-	top: 0px;
-	width: 60px;
-	height: 32px;
-	line-height: 32px;
-	font-size: 24px;
+   position: absolute;
+   right: 20px;
+   top: 0px;
+   width: 60px;
+   height: 32px;
+   line-height: 32px;
+   font-size: 24px;
 }
 
 #answers-container .answer .control-links a:link, #answers-container .answer .control-links a:visited {
-	text-decoration: none;
-	font-weight: bold;
-	padding: 0px 10px;
+   text-decoration: none;
+   font-weight: bold;
+   padding: 0px 10px;
 }
 
 .button-container {
-	padding-top: 30px;
+   padding-top: 30px;
 }
 
 #protocol-list th, #protocol-list td, #protocol-list tr {
-	vertical-align: middle;
+   vertical-align: middle;
 }
 
 #protocol-list th, #required-information th {
-	font-weight: bold;
+   font-weight: bold;
 }
 
 #protocol-list td {
-	padding: 2px 5px;
+   padding: 2px 5px;
 }
 
 #protocol-list .odd {
-	background-color: #efefef;
+   background-color: #efefef;
 }
 
 #initiator-table th, #initiator-table td, #initiator-table tr {
-	vertical-align: middle;
+   vertical-align: middle;
 }
 
 #initiator-table td {
-	padding: 2px 5px;
+   padding: 2px 5px;
 }
 
 #required-information th, #required-information td, #required-information tr {
-	vertical-align: middle;
+   vertical-align: middle;
 }
 
 #required-information {
-	border-top: 1px solid #dedede;
-	border-left: 1px solid #dedede;
-	border-right: 1px solid #dedede;
+   border-top: 1px solid #dedede;
+   border-left: 1px solid #dedede;
+   border-right: 1px solid #dedede;
 }
 
 #required-information td, #required-information th {
-	padding: 3px 5px;
-	border-bottom: 1px solid #dedede;
+   padding: 3px 5px;
+   border-bottom: 1px solid #dedede;
 }
 
 #required-information .protocol-select {
@@ -119,17 +119,17 @@ table .number {
 }
 
 .question-title {
-	margin-top: 5px;
-	margin-bottom: 5px;
+   margin-top: 5px;
+   margin-bottom: 5px;
 }
 
 .message {
-	border: 2px solid #dd0000;
-	color: #dd0000;
-	background-color: #FFD4D4;
-	padding: 5px;
-	border-radius: 5px;
-	margin-bottom: 10px;
+   border: 2px solid #dd0000;
+   color: #dd0000;
+   background-color: #FFD4D4;
+   padding: 5px;
+   border-radius: 5px;
+   margin-bottom: 10px;
 }
 
 #bim-initiator-form h3 {
@@ -137,12 +137,21 @@ table .number {
 }
 
 .row-number {
-	vertical-align: middle;
-	padding-right: 3px;
+   vertical-align: middle;
+   padding-right: 3px;
    width: 40px;
 }
 
 .bim-protocol-generator-table th {
-	text-align: left;
-	font-weight: bold;
+   text-align: left;
+   font-weight: bold;
+}
+
+#main-content .bim-protocol-generator-table, .bim-protocol-generator-table {
+   border-width: 0;
+}
+
+#main-content .bim-protocol-generator-table th, .bim-protocol-generator-table th, #main-content .bim-protocol-generator-table td, .bim-protocol-generator-table td {
+   padding: 3px 5px;
+   border-width: 0;
 }
