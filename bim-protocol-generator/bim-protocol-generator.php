@@ -1514,7 +1514,7 @@ class BIMProtocolGenerator {
             $statuses = isset( $statuses ) ? $statuses : Array();
             $statuses[] = '';
 ?>
-			<form method="post" action="">
+			<form method="post" action="" id="bim-initiator-form">
 				<h3>1. <?php _e( 'Project information', 'bim-protocol-generator' ); ?></h3>
 				<p><?php _e( 'Please provide some general meta-information about the project. This is being used in the header and title of the generated BIM execution plan.', 'bim-protocol-generator' ); ?></p>
 				<table id="initiator-table" class="bim-protocol-generator-table">
@@ -1636,7 +1636,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>6. <?php _e( 'Requested information', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'In question 8 the participants will be asked what information they need from other project participants. This will be asked as a matrix/list what information they need, from who, in what format and on what level and what the status of the information should be. The participants are free to add the information they need, but as an initiator you can provide mandatory information blocks that have to be answered. For example if you fill out ‘building part A’ in this list, every participant has to define how they want to receive information from ‘building part A’, from who, in what format, etc. See how this question could look to users in ‘<a href="http://bimexecutionplangenerator.com/initiate/informationmatrix" target="_blank">this example’.', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'In question 8 the participants will be asked what information they need from other project participants. This will be asked as a matrix/list what information they need, from who, in what format and on what level and what the status of the information should be. The participants are free to add the information they need, but as an initiator you can provide mandatory information blocks that have to be answered. For example if you fill out ‘building part A’ in this list, every participant has to define how they want to receive information from ‘building part A’, from who, in what format, etc. See how this question could look to users in ‘<a href="http://bimexecutionplangenerator.com/initiate/informationmatrix" target="_blank">this example</a>’.', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
 					<tr>
 						<th></th>
