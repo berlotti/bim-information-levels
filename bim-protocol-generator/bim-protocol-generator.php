@@ -39,7 +39,7 @@ class BIMProtocolGenerator {
 		load_plugin_textdomain( 'bim-protocol-generator', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
-	public static function optionsMenu() {33
+	public static function optionsMenu() {
 		$pfile = basename( dirname( __FILE__ ) ) . '/bim-protocol-generator-options.php';
 		add_options_page( 'bim-protocol-generator', __( 'BIM Execution plan Generator Options', 'bim-protocol-generator' ), 'activate_plugins', $pfile );
 	}
