@@ -129,12 +129,48 @@ class WordPressBimserver {
    public function userRegister( $userId ) {
       $options = WordPressBimserver::getOptions();
       $userData = get_user_by( 'id', $userId );
-      $username = $userData->get( 'user_login' );
-      // TODO: password generated or extract from $_POST...
-      $password = '';
-      // TODO: probably need an email address too
-      $email = '';
-      // TODO: register
+      $username = $userData->get( 'user_email' );
+      // Password generated
+      if( function_exists( 'openssl_random_pseudo_bytes' ) ) {
+         $password = bin2hex( openssl_random_pseudo_bytes( 8 ) );
+      } else {
+         // Unsafe fallback method in case openssl is not available for php
+         $password = uniqid();
+      }
+
+      $name = '';
+      if( isset( $_POST['first_name'] ) ) {
+         $name .= $_POST['first_name'];
+      }
+      if( isset( $_POST['last_name'] ) ) {
+         if( $name != '' ) {
+            $name .= ' ';
+         }
+         $name .= $_POST['last_name'];
+      }
+      if( $name == '' ) {
+         $name = $userData->get( 'user_login' );
+      }
+
+      $parameters = Array(
+         'username' => $username,
+         'password' => $password,
+         'name' => $name,
+         'type' => 'USER',
+         'selfRegistration' => true,
+         'resetUrl' => ''
+      );
+
+
+      // register
+      $bimserver = new BimServerApi( $options['url'] );
+      try {
+         $response = $bimserver->apiCall( 'ServiceInterface', 'addUserWithPassword', $parameters );
+         // TODO: maybe extract user oid and store it too
+         update_user_meta( $userId, '_bimserver_password', $password );
+      } catch( \Exception $e ) {
+         // TODO: Error registering on the BIM server... what do we do?
+      }
    }
 }
 

@@ -4,12 +4,15 @@ namespace WordPressBimserver;
 
 class BimServerApi {
 
-   function __construct($baseUrl, $token) {
+   private $baseUrl;
+   private $token;
+
+   function __construct($baseUrl, $token = '') {
       $this->baseUrl = $baseUrl;
       $this->token = $token;
    }
 
-   private function do_post_request($url, $data, $optional_headers = null) {
+   private function do_post_request( $url, $data ) {
       $ch = curl_init($url);
 
       curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -83,11 +86,11 @@ class BimServerApi {
             throw new \Exception("No response");
          }
       }
+      return isset( $response['result'] ) ? $response['result'] : $response;
    }
 
    private function buildRequest($interface, $method, $parameters) {
       $request = array(
-          "token" => $this->token,
           "requests" => array(
               array(
                   "interface" => $interface,
@@ -96,6 +99,9 @@ class BimServerApi {
               )
           )
       );
+      if( $this->token != '' ) {
+         $request['token'] = $this->token;
+      }
       return $request;
    }
 
@@ -301,6 +307,47 @@ class BimServerApi {
           "roid" => $roid
       ));
       return $this->call($request);
+   }
+
+   /**
+    * @return string
+    */
+   public function getBaseUrl() {
+      return $this->baseUrl;
+   }
+
+   /**
+    * @param string $baseUrl
+    */
+   public function setBaseUrl( $baseUrl ) {
+      $this->baseUrl = $baseUrl;
+   }
+
+   /**
+    * @return string
+    */
+   public function isToken() {
+      return $this->token;
+   }
+
+   /**
+    * @param string $token
+    */
+   public function setToken( $token ) {
+      $this->token = $token;
+   }
+
+   /**
+    * @param       $interface
+    * @param       $method
+    * @param array $parameters
+    *
+    * @return array|mixed|object
+    * @throws \Exception
+    */
+   public function apiCall( $interface, $method, $parameters = Array() ) {
+      $request = $this->buildRequest( $interface, $method, $parameters );
+      return $this->call( $request );
    }
 }
 ?>
