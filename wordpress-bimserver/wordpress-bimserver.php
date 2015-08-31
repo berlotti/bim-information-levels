@@ -10,7 +10,9 @@ Author URI: http://www.bastiaangrutters.nl
 
 /*
  * Usage: Place shortcodes in pages:
- * [showWordPressBimserver]
+ * [showBimserverSettings]
+ * [showIfcForm]
+ * [showReports]
  */
 
 namespace WordPressBimserver;
@@ -31,12 +33,10 @@ class WordPressBimserver {
       // Add post types etc at the WordPress init action
       add_action( 'init', Array( '\WordPressBimserver\WordPressBimserver', 'wordPressInit' ) );
       
-      // --- Add shortcodes ---
-      //add_shortcode( 'showWordPressBimserver', Array( '\WordPressBimserver\WordPressBimserver', 'showWordPressBimserver' ) );
-
-      // action for ajax call (or just outside wordpress calls with WP context)
-      add_action( 'wp_ajax_bqb_download_report', Array( '\WordPressBimserver\WordPressBimserver', 'downloadReport' ) );
-      add_action( 'wp_ajax_bqb_download_xml', Array( '\WordPressBimserver\WordPressBimserver', 'showReportXml' ) );
+      // --- Shortcodes ---
+      add_shortcode( 'showBimserverSettings', Array( '\WordPressBimserver\WordPressBimserver', 'showBimserverSettings' ) );
+      add_shortcode( 'showIfcForm', Array( '\WordPressBimserver\WordPressBimserver', 'showIfcForm' ) );
+      add_shortcode( 'showReports', Array( '\WordPressBimserver\WordPressBimserver', 'showReports' ) );
 
       // Registration action
       add_action( 'user_register', Array( '\WordPressBimserver\WordPressBimserver', 'userRegister' ), 10, 1 );
@@ -111,21 +111,6 @@ class WordPressBimserver {
       register_post_type( 'wp_bimserver_report', $postTypeArguments );
    }
    
-   public static function downloadReport() {
-      if( is_user_logged_in() && isset( $_GET['id'] ) ) {
-      } else {
-         _e( 'Reports are only available if you log in', 'wordpress-bimserver' );
-      }
-   }
-   
-   public static function ajaxCallback() {
-      // Save or update private blocks
-      if( is_user_logged_in() && isset( $_POST['title'] ) && $_POST['title'] != '' ) {
-         $options = WordPressBimserver::getOptions();
-      }
-      exit(); // When we are done we do not allow anything else to be done
-   }
-
    public function userRegister( $userId ) {
       $options = WordPressBimserver::getOptions();
       $userData = get_user_by( 'id', $userId );
@@ -166,10 +151,101 @@ class WordPressBimserver {
       $bimserver = new BimServerApi( $options['url'] );
       try {
          $response = $bimserver->apiCall( 'ServiceInterface', 'addUserWithPassword', $parameters );
-         // TODO: maybe extract user oid and store it too
          update_user_meta( $userId, '_bimserver_password', $password );
+         update_user_meta( $userId, '_bimserver_uoid', $response );
+         $bimserverUser = new BimserverUser( get_current_user_id() );
+         $poid = $bimserverUser->apiCall( 'Bimsie1ServiceInterface', 'addProject', Array(
+            'projectName' => 'WordPressBimserver',
+            'schema' => ''
+         ) );
+         update_user_meta( $userId, '_bimserver_poid', $poid );
       } catch( \Exception $e ) {
          // TODO: Error registering on the BIM server... what do we do?
+      }
+   }
+
+   public function showBimserverSettings() {
+      if( is_user_logged_in() ) {
+         $bimserverUser = new BimserverUser( get_current_user_id() );
+         if( $bimserverUser->isBimserverUser() ) {
+            $userSettings = $bimserverUser->getBimserverUserSettings();
+            if( isset( $_POST['submit'] ) ) {
+               // TODO: store settings
+
+            }
+            // TODO: generate a form based on the settings
+            ?>
+             <form method="post" action="">
+                <?php
+
+                ?>
+                <input type="submit" name="submit" value="<?php _e( '', 'wordpress-bimserver' ); ?>" />
+             </form>
+             <?php
+         } else {
+            _e( 'This is not a valid Bimserver user',  'wordpress-bimserver' );
+         }
+      }
+   }
+
+   public function showIfcForm() {
+      if( is_user_logged_in() ) {
+         $options = WordPressBimserver::getOptions();
+         $error = false;
+         if( isset( $_POST['submit'], $_FILES['ifc'] ) ) {
+            // upload the IFC to the bimserver and start the service
+            $comment = isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
+            $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
+            $size = strlen( $data );
+            $filename = $_FILES['ifc']['name'];
+            $poid = get_user_meta( get_current_user_id(), '_bimserver_poid', true );
+            $deserializer = ''; // TODO: figure out what value to use for this
+
+            $parameters = Array(
+               'poid' => $poid,
+               'comment' => $comment,
+               'deserializerOid' => $deserializer,
+               'fileSize' => $size,
+               'fileName' => $filename,
+               'data' => $data,
+               'merge' => $options['new_project'] == 'no',
+               'sync' => true
+            );
+
+            try {
+               $user = new BimserverUser( get_current_user_id() );
+               $result = $user->apiCall( 'ServiceInterface', 'checkin', $parameters );
+
+               // TODO: make this async
+
+               // TODO: handle the results
+            } catch( \Exception $e ) {
+               $error = $e->getMessage();
+            }
+
+         }
+
+         if( isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
+            if( $error !== false ) {
+               print( '<div class="error-message">' . __( 'There was a problem running this service', 'wordpress-bimserver' ) . ': ' . $error . '</div>' );
+            }
+            ?>
+             <form method="post" enctype="multipart/form-data" action="">
+                <label for="ifc-file"><?php _e( 'IFC', 'wordpress-bimserver' ); ?></label><br />
+                <input type="file" name="ifc" id="ifc-file" accept=".ifc" /><br />
+                <label for="checkin-comment"><?php _e( 'Comment', 'wordpress-bimserver' ); ?></label><br />
+                <textarea name="comment" id="checkin-comment" placeholder="<?php _e( 'Comment', 'wordpress-bimserver' ); ?>"><?php print( isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '' ); ?></textarea><br />
+                <br />
+                <input type="submit" name="submit" value="<?php _e( 'Upload', 'wordpress-bimserver' ); ?>" />
+             </form>
+            <?php
+         }
+      }
+   }
+
+   public function showReports() {
+      if( is_user_logged_in() ) {
+         // TODO: show a report list or something...
       }
    }
 }

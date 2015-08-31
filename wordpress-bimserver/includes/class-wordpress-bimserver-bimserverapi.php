@@ -338,9 +338,9 @@ class BimServerApi {
    }
 
    /**
-    * @param       $interface
-    * @param       $method
-    * @param array $parameters
+    * @param string  $interface
+    * @param string  $method
+    * @param array   $parameters
     *
     * @return array|mixed|object
     * @throws \Exception

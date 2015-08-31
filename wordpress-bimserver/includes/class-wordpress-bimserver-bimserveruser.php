@@ -8,7 +8,7 @@ class BimserverUser {
    private $bimserverPassword;
    private $isBimserverUser = false;
    private $bimserver;
-
+   private $bimserverUserSettings = false;
 
    /**
     * @param int $userId
@@ -28,6 +28,13 @@ class BimserverUser {
             $options = WordPressBimserver::getOptions();
             $this->bimserver = new BimServerApi( $options['url'] );
             $this->authenticateWithBimServer();
+            $settings = get_user_meta( $this->user->ID, '_bimserver_settings', true );
+            if( $settings != '' ) {
+               $this->bimserverUserSettings = $settings;
+            } else {
+               // TODO: retrieve the settings and store them
+
+            }
          } else {
             $this->isBimserverUser = false;
          }
@@ -52,6 +59,21 @@ class BimserverUser {
    }
 
    /**
+    * @param string     $interface
+    * @param string     $method
+    * @param array      $parameters
+    *
+    * @return array|bool|mixed|object
+    */
+   public function apiCall( $interface, $method, $parameters = Array() ) {
+      if( isset( $this->bimserver ) ) {
+         return $this->bimserver->apiCall( $interface, $method, $parameters );
+      } else {
+         return false;
+      }
+   }
+
+   /**
     * @return false|\WP_User
     */
    public function getUser() {
@@ -70,5 +92,19 @@ class BimserverUser {
     */
    public function isBimserverUser() {
       return $this->isBimserverUser;
+   }
+
+   /**
+    * @return bool|mixed
+    */
+   public function getBimserverUserSettings() {
+      return $this->bimserverUserSettings;
+   }
+
+   /**
+    * @param bool|mixed $bimserverUserSettings
+    */
+   public function setBimserverUserSettings( $bimserverUserSettings ) {
+      $this->bimserverUserSettings = $bimserverUserSettings;
    }
 }
