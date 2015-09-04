@@ -32,7 +32,10 @@ class WordPressBimserver {
       
       // Add post types etc at the WordPress init action
       add_action( 'init', Array( '\WordPressBimserver\WordPressBimserver', 'wordPressInit' ) );
-      
+
+      add_action( 'wp_ajax_wpbimserver_ajax', Array( '\WordPressBimserver\WordPressBimserver', 'ajaxCallback' ) );
+      add_action( 'wp_ajax_nopriv_wpbimserver_ajax', Array( '\WordPressBimserver\WordPressBimserver', 'ajaxCallback' ) );
+
       // --- Shortcodes ---
       add_shortcode( 'showBimserverSettings', Array( '\WordPressBimserver\WordPressBimserver', 'showBimserverSettings' ) );
       add_shortcode( 'showIfcForm', Array( '\WordPressBimserver\WordPressBimserver', 'showIfcForm' ) );
@@ -57,18 +60,22 @@ class WordPressBimserver {
    }
    
    public static function optionsMenu() {
-      add_options_page( __( 'WordPress and Bimserver Options', 'wordpress-bimserver' ), __( 'WordPress and Bimserver Options', 'wordpress-bimserver' ),
-          'activate_plugins', basename( dirname( __FILE__ ) ) . '/wordpress-bimserver-options.php' );
+      add_options_page(
+          __( 'WordPress and Bimserver Options', 'wordpress-bimserver' ),
+          __( 'WordPress and Bimserver Options', 'wordpress-bimserver' ),
+          'activate_plugins',
+          basename( dirname( __FILE__ ) ) . '/wordpress-bimserver-options.php'
+      );
    }
    
    public static function adminEnqueueScripts() {
-      wp_enqueue_script( 'jquery' );
-      wp_enqueue_style( 'wordpress-bimserver', plugins_url( 'wordpress-bimserver.css', __FILE__ ) );
+      //wp_enqueue_script( 'jquery' );
+      //wp_enqueue_style( 'wordpress-bimserver', plugins_url( 'wordpress-bimserver.css', __FILE__ ) );
    }
    
    public static function wpEnqueueScripts() {
       wp_enqueue_script( 'jquery' );
-      wp_enqueue_script( 'json-fallback', plugins_url( 'libraries/json.js', __FILE__ ), Array(), "1.0", true );
+      //wp_enqueue_script( 'json-fallback', plugins_url( 'libraries/json.js', __FILE__ ), Array(), "1.0", true );
       wp_enqueue_script( 'wordpress-bimserver', plugins_url( 'wordpress-bimserver.js', __FILE__ ), Array( 'jquery' ), "1.0", true );
       wp_enqueue_style( 'wordpress-bimserver', plugins_url( 'wordpress-bimserver.css', __FILE__ ) );
    }
@@ -192,11 +199,11 @@ class WordPressBimserver {
       if( is_user_logged_in() ) {
          $options = WordPressBimserver::getOptions();
          $error = false;
-         if( isset( $_POST['submit'], $_FILES['ifc'] ) ) {
+         if( isset( $_POST['submit'], $_FILES['ifc'], $_FILES['ifc']['tmp_name'] ) ) {
             // upload the IFC to the bimserver and start the service
             $comment = isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
             $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
-            $size = strlen( $data );
+            $size = $_FILES['ifc']['size'];
             $filename = $_FILES['ifc']['name'];
             $poid = get_user_meta( get_current_user_id(), '_bimserver_poid', true );
             $deserializer = ''; // TODO: figure out what value to use for this
@@ -215,6 +222,15 @@ class WordPressBimserver {
             try {
                $user = new BimserverUser( get_current_user_id() );
                $result = $user->apiCall( 'ServiceInterface', 'checkin', $parameters );
+               if( $result === false ) {
+                  $error = __( 'Could not checkin this file, make sure it is a valid ifc file', 'wordpress-bimserver' );
+               } else {
+                  print( 'uploadedededed!' );
+
+                  print( '<script type="text-/javascript>var wpBimserverSettings = ' . json_encode( Array(
+                         'ajaxUrl' => add_query_arg( Array( 'action' => 'wpbimserver_ajax' ), admin_url( 'admin-ajax.php' ) )
+                      ) ) . ';</script>"' );
+               }
 
                // TODO: make this async
 
@@ -222,7 +238,6 @@ class WordPressBimserver {
             } catch( \Exception $e ) {
                $error = $e->getMessage();
             }
-
          }
 
          if( isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
@@ -247,6 +262,10 @@ class WordPressBimserver {
       if( is_user_logged_in() ) {
          // TODO: show a report list or something...
       }
+   }
+
+   public static function ajaxCallback() {
+      // TODO: do the things we need to do!
    }
 }
 
