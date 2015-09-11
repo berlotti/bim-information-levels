@@ -26,7 +26,25 @@ if( isset( $_POST['import'] ) ) {
    fclose( $handle );
 }
 
+
 $wordPressBimserverOptions = WordPressBimserver::getOptions( true );
+
+// ServiceInterface.getAllLocalServiceDescriptors
+// TODO: create an admin user and gather all service descriptors
+
+if( isset( $wordPressBimserverOptions['url'] ) && $wordPressBimserverOptions['url'] != '' ) {
+   try {
+      $bimserver = new \WordPressBimserver\BimServerApi( $wordPressBimserverOptions['url'] );
+      $bimserverServices = $bimserver->apiCall( 'ServiceInterface', 'getAllLocalServiceDescriptors' );
+   } catch( \Exception $e ) {
+      print( '<div class="error">' . __( 'Could not retrieve services from Bimserver, check the configured URL. Message', 'wordpress-bimserver' ) . ': ' . $e->getMessage() . '</div>' );
+      $bimserverServices = Array();
+   }
+   var_dump( $bimserverServices );
+} else {
+   $bimserverServices = Array();
+}
+
 $postTypes = get_post_types( Array(), 'objects' );
 $taxonomies = get_taxonomies();
 $pages = get_posts( Array(

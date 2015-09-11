@@ -208,6 +208,9 @@ class WordPressBimserver {
             $poid = get_user_meta( get_current_user_id(), '_bimserver_poid', true );
             $deserializer = ''; // TODO: figure out what value to use for this
 
+            // TODO: ServiceInterface.getUserSettings
+            // Retrieves the user settings including deserializer ids and services
+
             $parameters = Array(
                'poid' => $poid,
                'comment' => $comment,
@@ -240,7 +243,7 @@ class WordPressBimserver {
             }
          }
 
-         if( isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
+         if( !isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
             if( $error !== false ) {
                print( '<div class="error-message">' . __( 'There was a problem running this service', 'wordpress-bimserver' ) . ': ' . $error . '</div>' );
             }

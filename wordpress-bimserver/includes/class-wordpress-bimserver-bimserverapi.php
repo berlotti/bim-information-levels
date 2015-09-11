@@ -58,7 +58,8 @@ class BimServerApi {
    }
 
    private function call($request) {
-      $data = json_encode($request);
+      $data = json_encode( $request );
+      var_dump( $data );
       $resultText = $this->do_post_request($this->baseUrl . "/json", $data);
       $response = json_decode($resultText, true);
       if ($response == NULL) {
@@ -91,14 +92,17 @@ class BimServerApi {
 
    private function buildRequest($interface, $method, $parameters) {
       $request = array(
-          "requests" => array(
-              array(
-                  "interface" => $interface,
-                  "method" => $method,
-                  "parameters" => $parameters
-              )
+          "request" => array(
+              //array(
+                  'interface' => $interface,
+                  'method' => $method,
+                  'parameters' => $parameters
+              //)
           )
       );
+      if( is_array( $parameters ) && count( $parameters ) > 0 ) {
+         $request['requests'][0]['parameters'] = $parameters;
+      }
       if( $this->token != '' ) {
          $request['token'] = $this->token;
       }
