@@ -663,10 +663,10 @@ class BIMProtocolGenerator {
 		<?php _e( 'Phase', 'bim-protocol-generator' ); ?>: <?php print( get_post_meta( $questions[ 'postId' ], 'phase', true ) ); ?><br />
 		<br />
 <?php
-      	if( isset( $reportStatus ) && $reportStatus == 'complete' ) {
-			// DEBUG:
-			BIMProtocolGenerator::generateReport( $codes, $questions );
-			print( '<a href="' . plugins_url( 'download.php', __FILE__ ) . '?code=' . $code . '">' );
+         if( isset( $reportStatus ) && $reportStatus == 'complete' ) {
+			   // DEBUG:
+			   //BIMProtocolGenerator::generateReport( $codes, $questions );
+			   print( '<a href="' . plugins_url( 'download.php', __FILE__ ) . '?code=' . $code . '">' );
        		_e( 'Download the report', 'bim-protocol-generator' );
        		print( '</a>' );
       	} else {
