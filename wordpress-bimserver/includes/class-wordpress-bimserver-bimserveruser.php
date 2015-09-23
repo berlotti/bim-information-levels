@@ -107,4 +107,26 @@ class BimserverUser {
    public function setBimserverUserSettings( $bimserverUserSettings ) {
       $this->bimserverUserSettings = $bimserverUserSettings;
    }
+
+   public function addProject( $name ) {
+      if( $this->isBimserverUser() ) {
+         $options = WordPressBimserver::getOptions();
+         try {
+            $poid = $this->apiCall( 'Bimsie1ServiceInterface', 'addProject', Array(
+                'projectName' => sanitize_title( $name ),
+                'schema' => $options['project_scheme']
+            ) );
+            // Add the configured service to this project
+            $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
+                'poid' => $poid,
+                'internalServiceOid' => $options['service_id']
+            ) );
+         } catch( \Exception $e ) {
+            $poid = false;
+         }
+         return $poid;
+      } else {
+         return false;
+      }
+   }
 }

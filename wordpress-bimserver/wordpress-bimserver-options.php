@@ -26,10 +26,9 @@ if( isset( $_POST['import'] ) ) {
    fclose( $handle );
 }
 
-
 $wordPressBimserverOptions = WordPressBimserver::getOptions( true );
 
-// ServiceInterface.getAllLocalServiceDescriptors
+/* ServiceInterface.getAllLocalServiceDescriptors
 // TODO: create an admin user and gather all service descriptors
 
 if( isset( $wordPressBimserverOptions['url'] ) && $wordPressBimserverOptions['url'] != '' ) {
@@ -40,10 +39,9 @@ if( isset( $wordPressBimserverOptions['url'] ) && $wordPressBimserverOptions['ur
       print( '<div class="error">' . __( 'Could not retrieve services from Bimserver, check the configured URL. Message', 'wordpress-bimserver' ) . ': ' . $e->getMessage() . '</div>' );
       $bimserverServices = Array();
    }
-   var_dump( $bimserverServices );
 } else {
    $bimserverServices = Array();
-}
+}*/
 
 $postTypes = get_post_types( Array(), 'objects' );
 $taxonomies = get_taxonomies();
@@ -98,6 +96,13 @@ if( is_array( $postTypes ) ) {
             <td>
                <input type="text" name="wordpress_bimserver_options[service_id]" id="wordpress-bimserver-service-id" value="<?php print( isset( $wordPressBimserverOptions['service_id'] ) ? $wordPressBimserverOptions['service_id'] : '' ); ?>" />
                <p class="description"><?php _e( 'The service ID of the service of the service on the Bimserver which we need to trigger', 'wordpress-bimserver' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="wordpress-bimserver-project-scheme"><?php _e( 'Bimserver project scheme', 'wordpress-bimserver' ); ?></label></td>
+            <td>
+               <input type="text" name="wordpress_bimserver_options[project_scheme]" id="wordpress-bimserver-project-scheme" value="<?php print( isset( $wordPressBimserverOptions['project_scheme'] ) ? $wordPressBimserverOptions['project_scheme'] : 'ifc2x3tc1' ); ?>" />
+               <p class="description"><?php _e( 'The scheme used for projects on this Bimserver', 'wordpress-bimserver' ); ?></p>
             </td>
          </tr>
          <tr valign="top">

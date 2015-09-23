@@ -16,15 +16,14 @@ class BimServerApi {
       $ch = curl_init($url);
 
       curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data );
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array(
               'Content-Type: application/json',
               'Content-Length: ' . strlen($data))
       );
-
       $response = curl_exec($ch);
-      if ($response == FALSE) {
+      if ($response === false) {
          throw new \Exception(curl_error($ch));
       }
       curl_close($ch);
@@ -59,7 +58,6 @@ class BimServerApi {
 
    private function call($request) {
       $data = json_encode( $request );
-      var_dump( $data );
       $resultText = $this->do_post_request($this->baseUrl . "/json", $data);
       $response = json_decode($resultText, true);
       if ($response == NULL) {
@@ -86,6 +84,8 @@ class BimServerApi {
          } else {
             throw new \Exception("No response");
          }
+      } elseif( isset( $response, $response['response'], $response['response']['exception'], $response['response']['exception']['message'] ) ) {
+         throw new \Exception( $response['response']['exception']['message'] );
       }
       return isset( $response['result'] ) ? $response['result'] : $response;
    }
@@ -100,8 +100,10 @@ class BimServerApi {
               //)
           )
       );
-      if( is_array( $parameters ) && count( $parameters ) > 0 ) {
-         $request['requests'][0]['parameters'] = $parameters;
+      if( is_array( $parameters ) && count( $parameters ) == 0 ) {
+         $request['request']['parameters'] = new \stdClass();
+      } else {
+         $request['request']['parameters'] = $parameters;
       }
       if( $this->token != '' ) {
          $request['token'] = $this->token;
