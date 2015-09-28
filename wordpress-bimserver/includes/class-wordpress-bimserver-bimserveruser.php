@@ -53,8 +53,12 @@ class BimserverUser {
       }
       if( $invalidToken ) {
          $token = $this->bimserver->apiCall( 'Bimsie1AuthInterface', 'login', Array( 'username' => $this->user->user_email, 'password' => $this->bimserverPassword ) );
-         $this->bimserver->setToken( $token );
-         update_user_meta( $this->user->ID, '_bimserver_token', $token );
+         if( isset( $token['response'], $token['response']['result'] ) ) {
+            $this->bimserver->setToken( $token['response']['result'] );
+            update_user_meta( $this->user->ID, '_bimserver_token', $token['response']['result'] );
+         } else {
+            throw new \Exception( 'Could not authenticate with Bimserver' );
+         }
       }
    }
 
@@ -111,17 +115,43 @@ class BimserverUser {
    public function addProject( $name ) {
       if( $this->isBimserverUser() ) {
          $options = WordPressBimserver::getOptions();
+         $sanitizedName = sanitize_title( $name );
          try {
+            $existingProjects = $this->apiCall( 'Bimsie1ServiceInterface', 'getAllProjects', Array( 'onlyTopLevel' => true, 'onlyActive' => true ) );
+            $number = 1;
+            $numberText = '';
+            $unique = false;
+            while( !$unique ) {
+               if( $number > 1 ) {
+                  $numberText = '-' . $number;
+               }
+               $unique = true;
+               foreach( $existingProjects['response']['result'] as $project ) {
+                  if( $sanitizedName . $numberText == $project['name'] ) {
+                     $unique = false;
+                     break 1;
+                  }
+               }
+               $number ++;
+            }
             $poid = $this->apiCall( 'Bimsie1ServiceInterface', 'addProject', Array(
-                'projectName' => sanitize_title( $name ),
+                'projectName' => $sanitizedName . $numberText,
                 'schema' => $options['project_scheme']
             ) );
-            // Add the configured service to this project
-            $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
-                'poid' => $poid,
-                'internalServiceOid' => $options['service_id']
-            ) );
+            if( isset( $poid['response'], $poid['response']['result'], $poid['response']['result']['oid'] ) ) {
+               // Add the configured service to this project
+               // TODO: figure the sservice out...
+               $sService = Array();
+               $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
+                   'poid' => $poid['response']['result']['oid'],
+                   'internalServiceOid' => $options['service_id'],
+                   'sService' => $sService
+               ) );
+            } else {
+               return false;
+            }
          } catch( \Exception $e ) {
+            var_dump( $e );
             $poid = false;
          }
          return $poid;

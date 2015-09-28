@@ -92,12 +92,10 @@ class BimServerApi {
 
    private function buildRequest($interface, $method, $parameters) {
       $request = array(
-          "request" => array(
-              //array(
-                  'interface' => $interface,
-                  'method' => $method,
-                  'parameters' => $parameters
-              //)
+          'request' => array(
+            'interface' => $interface,
+            'method' => $method,
+            'parameters' => $parameters
           )
       );
       if( is_array( $parameters ) && count( $parameters ) == 0 ) {

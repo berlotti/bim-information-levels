@@ -209,9 +209,9 @@ class WordPressBimserver {
                $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
                $size = $_FILES['ifc']['size'];
                $filename = $_FILES['ifc']['name'];
-               $deserializer = ''; // TODO: figure out what value to use for this
-
-               // TODO: ServiceInterface.getUserSettings
+               // TODO: figure out what value to use for this
+               $deserializer = '';
+               // TODO: maybe something from: ServiceInterface.getUserSettings
                // Retrieves the user settings including deserializer ids and services
 
                $parameters = Array(
@@ -224,6 +224,7 @@ class WordPressBimserver {
                   'merge' => false,
                   'sync' => true
                );
+               var_dump( $parameters );
 
                $result = $bimserverUser->apiCall( 'ServiceInterface', 'checkin', $parameters );
                if( $result === false ) {
@@ -252,7 +253,7 @@ class WordPressBimserver {
                   $projects = Array();
                   $notice = __( 'Could not retrieve a list of projects', 'wordpress-bimserver' );
                } else {
-                  $projects = $result;
+                  $projects = $result['response']['result'];
                }
             } catch( \Exception $e ) {
                $notice = $e->getMessage();
@@ -273,7 +274,7 @@ class WordPressBimserver {
                    <option value=""><?php _e( 'New project', 'wordpress-bimserver' ); ?></option>
                    <?php
                    foreach( $projects as $project ) {
-                      print( '<option value="' . $project->id . '"' . ( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] == $project->id ? ' selected' : '' ) . '>' . $project->name . '</option>' );
+                      print( '<option value="' . $project['id'] . '"' . ( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] == $project['id'] ? ' selected' : '' ) . '>' . $project['name'] . '</option>' );
                    }
                    ?>
                 </select><br />
