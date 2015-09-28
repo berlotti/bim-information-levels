@@ -45,6 +45,9 @@ class BIMQualityBlocks {
       add_action( 'wp_ajax_bqb_download_report', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'downloadReport' ) );
       add_action( 'wp_ajax_bqb_download_xml', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'showReportXml' ) );
 
+      add_action( 'wp_ajax_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
+      add_action( 'wp_ajax_nopriv_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
+
       BIMQualityBlocks::$layers = Array(
          'building_type' => __( 'Gebouwtype', 'bim-quality-blocks' ),
          'bim_usage' => __( 'Primaire interesse in BIM', 'bim-quality-blocks' ),
@@ -53,9 +56,6 @@ class BIMQualityBlocks {
          'applications' => __( 'Toepassingen', 'bim-quality-blocks' ),
          'attachments' => __( 'Bijlagen', 'bim-quality-blocks' )
       );
-
-      add_action( 'wp_ajax_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
-      add_action( 'wp_ajax_nopriv_bimqbcallback', Array( '\BIMQualityBlocks\BIMQualityBlocks', 'ajaxCallback' ) );
    }
 
    /**
