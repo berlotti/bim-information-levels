@@ -47,7 +47,16 @@ class BimserverUser {
       $currentToken = get_user_meta( $this->user->ID, '_bimserver_token', true );
       if( $currentToken != '' ) {
          $this->bimserver->setToken( $currentToken );
-         $invalidToken = $this->bimserver->apiCall( 'Bimsie1AuthInterface', 'isLoggedIn' ) ? false : true;
+         try {
+            $isLoggedIn = $this->bimserver->apiCall( 'Bimsie1AuthInterface', 'isLoggedIn' );
+            if( isset( $isLoggedIn['response'], $isLoggedIn['response']['result'] ) ) {
+               $invalidToken = !$isLoggedIn['response']['result'];
+            } else {
+               $invalidToken = true;
+            }
+         } catch( \Exception $e ) {
+            $invalidToken = true;
+         }
       } else {
          $invalidToken = true;
       }
@@ -140,8 +149,7 @@ class BimserverUser {
             ) );
             if( isset( $poid['response'], $poid['response']['result'], $poid['response']['result']['oid'] ) ) {
                // Add the configured service to this project
-               // TODO: figure the sservice out...
-               $sService = Array();
+               $sService = $this->getSServiceObject( $poid['response']['result']['oid'] );
                $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
                    'poid' => $poid['response']['result']['oid'],
                    'internalServiceOid' => $options['service_id'],
@@ -158,5 +166,59 @@ class BimserverUser {
       } else {
          return false;
       }
+   }
+
+   public function getSServiceObject( $poid ) {
+      $service = $this->getServiceInformation();
+      if( $service !== false ) {
+         $options = WordPressBimserver::getOptions();
+         $sService = Array(
+            '__type' => 'SService',
+            'description' => $service['description'],
+            'internalServiceId' => $options['service_id'],
+            'serviceIdentifier' => $options['service_id'],
+            'name' => $service['name'],
+            'serviceName' => $service['name'],
+            'notificationProtocol' => $service['notificationProtocol'],
+            'providerName' => $service['providerName'],
+            'profileDescription' => $service['description'],
+            'profileIdentifier' => $service['identifier'],
+            'profileName' => $service['name'],
+            'profilePublic' => false,
+            'projectId' => $poid,
+            'readExtendedDataId' => $service['readExtendedData'],
+            'readRevisionId' => $service['readRevision'],
+            'writeExtendedDataId' => $service['writeExtendedData'],
+            'writeRevisionId' => $service['writeRevision'],
+            'token' => $service['token'],
+            'trigger' => $service['trigger'],
+            'url' => $service['url'],
+
+            'userId' => -1, // TODO: the user id?
+            'rid' => '', // TODO: unknown
+         );
+         return $sService;
+      } else {
+         return false;
+      }
+   }
+
+   public function getServiceInformation() {
+      $service = get_option( '_wordpress_bimserver_service' );
+      if( $service == '' ) {
+         $options = WordPressBimserver::getOptions();
+         $services = $this->apiCall( 'ServiceInterface', 'getAllLocalServiceDescriptors' );
+         $service = false;
+         foreach( $services['response']['result'] as $checkService ) {
+            if( $checkService['identifier'] == $options['service_id'] ) {
+               $service = $checkService;
+               break;
+            }
+         }
+         if( $service !== false ) {
+            update_option( '_wordpress_bimserver_service', $service );
+         }
+      }
+      return $service;
    }
 }

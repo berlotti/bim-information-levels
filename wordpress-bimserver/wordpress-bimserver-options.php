@@ -13,6 +13,7 @@ if( isset( $_POST['action'] ) && $_POST[ 'action' ] == 'update' ) {
 	}
 	 
 	update_option( 'wordpress_bimserver_options', $options );
+   delete_option( '_wordpress_bimserver_service' );
 }
 if( isset( $_POST['delete_confirm'], $_POST['delete'] ) && $_POST['delete_confirm'] == 'confirmed' ) {
    print( '<div class="status">' . __( 'All blocks deleted', 'wordpress-bimserver' ) . '</div>' );

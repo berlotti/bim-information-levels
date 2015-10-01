@@ -167,7 +167,7 @@ class WordPressBimserver {
       }
    }
 
-   public function showBimserverSettings() {
+   public static function showBimserverSettings() {
       if( is_user_logged_in() ) {
          $bimserverUser = new BimserverUser( get_current_user_id() );
          if( $bimserverUser->isBimserverUser() ) {
@@ -177,22 +177,33 @@ class WordPressBimserver {
 
             }
             // TODO: generate a form based on the settings
-            ?>
-             <form method="post" action="">
-                <?php
+            $bimserverService = $bimserverUser->getServiceInformation();
+            if( $bimserverService === false ) {
+               _e( 'No correct bimserver service configured, contact a website administrator to have this resolved', 'wordpress-bimserver' );
+            } else {
+               var_dump( $bimserverService );
+               ?>
+               <h3><?php print( $bimserverService['name'] ); ?></h3>
+               <?php _e( 'Description', 'wordpress-bimserver' ); ?>: <p><?php print( $bimserverService['description'] ); ?></p>
+               <form method="post" action="">
+                  <?php
 
-                ?>
-                <input type="submit" name="submit" value="<?php _e( '', 'wordpress-bimserver' ); ?>" />
-             </form>
-             <?php
+                  ?>
+                  <input type="submit" name="submit" value="<?php _e( 'Update settings', 'wordpress-bimserver' ); ?>"/>
+               </form>
+            <?php
+            }
          } else {
             _e( 'This is not a valid Bimserver user',  'wordpress-bimserver' );
          }
+      } else {
+         _e( 'Log in to use this service', 'wordpress-bimserver' );
       }
    }
 
-   public function showIfcForm() {
+   public static function showIfcForm() {
       if( is_user_logged_in() ) {
+         // TODO: check if configuration for this service/user is set, if not only allow link to settings page
          $options = WordPressBimserver::getOptions();
          $error = false;
          if( isset( $_POST['submit'], $_FILES['ifc'], $_FILES['ifc']['tmp_name'] ) ) {
