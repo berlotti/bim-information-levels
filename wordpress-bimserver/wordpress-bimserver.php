@@ -203,113 +203,121 @@ class WordPressBimserver {
 
    public static function showIfcForm() {
       if( is_user_logged_in() ) {
-         // TODO: check if configuration for this service/user is set, if not only allow link to settings page
-         $error = false;
-         if( isset( $_POST['submit'], $_FILES['ifc'], $_FILES['ifc']['tmp_name'] ) ) {
-            // upload the IFC to the bimserver and start the service
-            try {
-               $bimserverUser = new BimserverUser( get_current_user_id() );
+         $topicId = get_user_meta( get_current_user_id(), '_bimserver_checkin_id', true );
+         if( $topicId != '' ) {
+            WordPressBimserver::showCheckinProgress( $topicId );
+         } else {
+            // TODO: check if configuration for this service/user is set/needed, if not only allow link to settings page
+            $error = false;
+            if( isset( $_POST['submit'], $_FILES['ifc'], $_FILES['ifc']['tmp_name'] ) ) {
+               // upload the IFC to the bimserver and start the service
+               try {
+                  $bimserverUser = new BimserverUser( get_current_user_id() );
 
-               $comment = isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
-               if( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] != '' ) {
-                  $poid = filter_input( INPUT_POST, 'bimserver_project', FILTER_SANITIZE_NUMBER_INT );
-               } else {
-                  $poid = $bimserverUser->addProject( $_FILES['ifc']['name'] );
+                  $comment = isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
+                  if( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] != '' ) {
+                     $poid = filter_input( INPUT_POST, 'bimserver_project', FILTER_SANITIZE_NUMBER_INT );
+                  } else {
+                     $poid = $bimserverUser->addProject( $_FILES['ifc']['name'] );
+                  }
+                  $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
+                  $size = $_FILES['ifc']['size'];
+                  $filename = $_FILES['ifc']['name'];
+                  $deserializer = isset( $_POST['bimserver_deserializer'] ) ? $_POST['bimserver_deserializer'] : - 1;
+                  $parameters = Array(
+                      'poid'            => $poid,
+                      'comment'         => $comment,
+                      'deserializerOid' => $deserializer,
+                      'fileSize'        => $size,
+                      'fileName'        => $filename,
+                      'data'            => base64_encode( $data ),
+                      'merge'           => false,
+                      'sync'            => false
+                  );
+                  $result = $bimserverUser->apiCall( 'ServiceInterface', 'checkin', $parameters );
+                  if( $result === false ) {
+                     $error = __( 'Could not check in this file, make sure it is a valid ifc file', 'wordpress-bimserver' );
+                  } else {
+                     $checkinId = $result['response']['result'];
+                     update_user_meta( get_current_user_id(), '_bimserver_checkin_id', $checkinId );
+                     WordPressBimserver::showCheckinProgress( $checkinId );
+                  }
+               } catch ( \Exception $e ) {
+                  $error = $e->getMessage();
                }
-               $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
-               $size = $_FILES['ifc']['size'];
-               $filename = $_FILES['ifc']['name'];
-               $deserializer = isset( $_POST['bimserver_deserializer'] ) ? $_POST['bimserver_deserializer'] : -1;
-               $parameters = Array(
-                  'poid' => $poid,
-                  'comment' => $comment,
-                  'deserializerOid' => $deserializer,
-                  'fileSize' => $size,
-                  'fileName' => $filename,
-                  'data' => base64_encode( $data ),
-                  'merge' => false,
-                  'sync' => true
-               );
-               $result = $bimserverUser->apiCall( 'ServiceInterface', 'checkin', $parameters );
-               if( $result === false ) {
-                  $error = __( 'Could not check in this file, make sure it is a valid ifc file', 'wordpress-bimserver' );
-               } else {
-                  $checkinId = $result['response']['result'];
-                  update_user_meta( get_current_user_id(), '_bimserver_checkin_id', $checkinId );
-                  print( '<script type="text/javascript">var wpBimserverSettings = ' . json_encode( Array(
-                         'ajaxUrl' => add_query_arg( Array( 'action' => 'wpbimserver_ajax' ), admin_url( 'admin-ajax.php' ) )
-                      ) ) . ';</script>' );
-               }
-               // TODO: make this async
-
-               // TODO: handle the results
-            } catch( \Exception $e ) {
-               $error = $e->getMessage();
             }
-         }
 
-         if( !isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
-            $notice = false;
-            try {
-               $user = new BimserverUser( get_current_user_id() );
-               $result = $user->apiCall( 'Bimsie1ServiceInterface', 'getAllProjects', Array( 'onlyTopLevel' => true, 'onlyActive' => true ) );
-               if( $result === false ) {
+            if( !isset( $_POST['submit'], $_FILES['ifc'] ) || $error !== false ) {
+               $notice = false;
+               try {
+                  $user = new BimserverUser( get_current_user_id() );
+                  $result = $user->apiCall( 'Bimsie1ServiceInterface', 'getAllProjects', Array( 'onlyTopLevel' => true, 'onlyActive' => true ) );
+                  if( $result === false ) {
+                     $projects = Array();
+                     $notice = __( 'Could not retrieve a list of projects', 'wordpress-bimserver' );
+                  } else {
+                     $projects = $result['response']['result'];
+                  }
+                  $result = $user->apiCall( 'PluginInterface', 'getAllDeserializers', Array( 'onlyEnabled' => true ) );
+                  if( $result === false ) {
+                     $deserializers = Array();
+                     $notice = __( 'Could not retrieve a list of deserializers', 'wordpress-bimserver' );
+                  } else {
+                     $deserializers = $result['response']['result'];
+                  }
+               } catch ( \Exception $e ) {
+                  $notice = $e->getMessage();
                   $projects = Array();
-                  $notice = __( 'Could not retrieve a list of projects', 'wordpress-bimserver' );
-               } else {
-                  $projects = $result['response']['result'];
-               }
-               $result = $user->apiCall( 'PluginInterface', 'getAllDeserializers', Array( 'onlyEnabled' => true ) );
-               if( $result === false ) {
                   $deserializers = Array();
-                  $notice = __( 'Could not retrieve a list of deserializers', 'wordpress-bimserver' );
-               } else {
-                  $deserializers = $result['response']['result'];
                }
-            } catch( \Exception $e ) {
-               $notice = $e->getMessage();
-               $projects = Array();
-               $deserializers = Array();
-            }
-            if( $notice !== false ) {
-               print( '<div class="error-message">' . __( 'Notice', 'wordpress-bimserver' ) . ': ' . $notice . '</div>' );
-            }
-            if( $error !== false ) {
-               print( '<div class="error-message">' . __( 'There was a problem running this service', 'wordpress-bimserver' ) . ': ' . $error . '</div>' );
-            }
-            ?>
-             <form method="post" enctype="multipart/form-data" action="">
-                <label for="ifc-file"><?php _e( 'IFC', 'wordpress-bimserver' ); ?></label><br />
-                <input type="file" name="ifc" id="ifc-file" accept=".ifc" /><br />
-                <label for="bimserver-deserializer"><?php _e( 'Deserializer', 'wordpress-bimserver' ); ?></label><br />
-                <select name="bimserver_deserializer" id="bimserver-deserializer">
-                   <?php
-                   foreach( $deserializers as $deserializer ) {
-                      print( '<option value="' . $deserializer['oid'] . '"' . ( isset( $_POST['bimserver_deserializer'] ) && $_POST['bimserver_deserializer'] == $deserializer['oid'] ? ' selected' : '' ) . '>' . $deserializer['name'] . '</option>' );
-                   }
-                   ?>
-                </select><br />
-                <label for="bimserver-project"><?php _e( 'Project', 'wordpress-bimserver' ); ?></label><br />
-                <select name="bimserver_project" id="bimserver-project">
-                   <option value=""><?php _e( 'New project', 'wordpress-bimserver' ); ?></option>
-                   <?php
-                   foreach( $projects as $project ) {
-                      print( '<option value="' . $project['id'] . '"' . ( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] == $project['id'] ? ' selected' : '' ) . '>' . $project['name'] . '</option>' );
-                   }
-                   ?>
-                </select><br />
-                <label for="checkin-comment"><?php _e( 'Comment', 'wordpress-bimserver' ); ?></label><br />
-                <textarea name="comment" id="checkin-comment" placeholder="<?php _e( 'Comment', 'wordpress-bimserver' ); ?>"><?php print( isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '' ); ?></textarea><br />
-                <br />
-                <input type="submit" name="submit" value="<?php _e( 'Upload', 'wordpress-bimserver' ); ?>" />
-             </form>
+               if( $notice !== false ) {
+                  print( '<div class="error-message">' . __( 'Notice', 'wordpress-bimserver' ) . ': ' . $notice . '</div>' );
+               }
+               if( $error !== false ) {
+                  print( '<div class="error-message">' . __( 'There was a problem running this service', 'wordpress-bimserver' ) . ': ' . $error . '</div>' );
+               }
+               ?>
+               <form method="post" enctype="multipart/form-data" action="">
+                  <label for="ifc-file"><?php _e( 'IFC', 'wordpress-bimserver' ); ?></label><br/>
+                  <input type="file" name="ifc" id="ifc-file" accept=".ifc"/><br/>
+                  <label for="bimserver-deserializer"><?php _e( 'Deserializer', 'wordpress-bimserver' ); ?></label><br/>
+                  <select name="bimserver_deserializer" id="bimserver-deserializer">
+                     <?php
+                     foreach( $deserializers as $deserializer ) {
+                        print( '<option value="' . $deserializer['oid'] . '"' . ( isset( $_POST['bimserver_deserializer'] ) && $_POST['bimserver_deserializer'] == $deserializer['oid'] ? ' selected' : '' ) . '>' . $deserializer['name'] . '</option>' );
+                     }
+                     ?>
+                  </select><br/>
+                  <label for="bimserver-project"><?php _e( 'Project', 'wordpress-bimserver' ); ?></label><br/>
+                  <select name="bimserver_project" id="bimserver-project">
+                     <option value=""><?php _e( 'New project', 'wordpress-bimserver' ); ?></option>
+                     <?php
+                     foreach( $projects as $project ) {
+                        print( '<option value="' . $project['id'] . '"' . ( isset( $_POST['bimserver_project'] ) && $_POST['bimserver_project'] == $project['id'] ? ' selected' : '' ) . '>' . $project['name'] . '</option>' );
+                     }
+                     ?>
+                  </select><br/>
+                  <label for="checkin-comment"><?php _e( 'Comment', 'wordpress-bimserver' ); ?></label><br/>
+                  <textarea name="comment" id="checkin-comment" placeholder="<?php _e( 'Comment', 'wordpress-bimserver' ); ?>">
+                     <?php print( isset( $_POST['comment'] ) ? filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS ) : '' ); ?>
+                  </textarea><br/>
+                  <br/>
+                  <input type="submit" name="submit" value="<?php _e( 'Upload', 'wordpress-bimserver' ); ?>"/>
+               </form>
             <?php
+            }
          }
       }
    }
 
    private static function showCheckinProgress( $topicId ) {
-      // TODO: display a progress bar and progress when done
+      $bimserverUser = new BimserverUser( get_current_user_id() );
+      $progress = $bimserverUser->getProgress( $topicId );
+      print( '<div id="bimserver-progress-bar"><div class="filled"></div><div class="text"></div></div>' );
+      print( '<script type="text/javascript">var wpBimserverSettings = ' . json_encode( Array(
+              'ajaxUrl' => add_query_arg( Array( 'action' => 'wpbimserver_ajax' ), admin_url( 'admin-ajax.php' ) ),
+              'initialProgress' => $progress
+          ) ) . ';</script>' );
    }
 
    public function showReports() {
@@ -319,7 +327,25 @@ class WordPressBimserver {
    }
 
    public static function ajaxCallback() {
-      // TODO: do the things we need to do!
+      if( isset( $_GET['type'] ) ) {
+         if( $_GET['type'] == 'progress' ) {
+            // Do the progress update if logged in
+            if( is_user_logged_in() ) {
+               $bimserverUser = new BimserverUser( get_current_user_id() );
+               $topicId = get_user_meta( get_current_user_id(), '_bimserver_checkin_id', true );
+               if( $topicId != '' ) {
+                  $progress = $bimserverUser->getProgress( $topicId );
+               } else {
+                  $progress = 1;
+               }
+               if( $progress >= 1 ) {
+                  // TODO: update status... Remove
+               }
+               print( $progress );
+            }
+         }
+      }
+      exit();
    }
 }
 

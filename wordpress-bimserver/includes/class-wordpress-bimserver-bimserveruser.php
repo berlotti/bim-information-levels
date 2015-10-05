@@ -223,4 +223,19 @@ class BimserverUser {
       }
       return $service;
    }
+
+   public function getProgress( $topicId ) {
+      try {
+         $progress = $this->apiCall( 'Bimsie1NotificationRegistryInterface', 'getProgress', Array(
+             'topicId' => $topicId
+         ) );
+      } catch( \Exception $e ) {
+         $progress = null;
+      }
+      if( isset( $progress, $progress['response'], $progress['response']['result'], $progress['response']['result']['progress'] ) ) {
+         return $progress['response']['result']['progress'] * 0.01;
+      } else {
+         return 1;
+      }
+   }
 }
