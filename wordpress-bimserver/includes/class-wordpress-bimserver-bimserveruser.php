@@ -148,10 +148,11 @@ class BimserverUser {
                 'schema' => $options['project_scheme']
             ) );
             if( isset( $poid['response'], $poid['response']['result'], $poid['response']['result']['oid'] ) ) {
+               $poid = $poid['response']['result']['oid'];
                // Add the configured service to this project
-               $sService = $this->getSServiceObject( $poid['response']['result']['oid'] );
+               $sService = $this->getSServiceObject( $poid );
                $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
-                   'poid' => $poid['response']['result']['oid'],
+                   'poid' => $poid,
                    'internalServiceOid' => $options['service_id'],
                    'sService' => $sService
                ) );
@@ -174,28 +175,29 @@ class BimserverUser {
          $options = WordPressBimserver::getOptions();
          $sService = Array(
             '__type' => 'SService',
-            'description' => $service['description'],
-            'internalServiceId' => $options['service_id'],
-            'serviceIdentifier' => $options['service_id'],
             'name' => $service['name'],
-            'serviceName' => $service['name'],
-            'notificationProtocol' => $service['notificationProtocol'],
             'providerName' => $service['providerName'],
-            'profileDescription' => $service['description'],
-            'profileIdentifier' => $service['identifier'],
-            'profileName' => $service['name'],
-            'profilePublic' => false,
-            'projectId' => $poid,
-            'readExtendedDataId' => $service['readExtendedData'],
-            'readRevisionId' => $service['readRevision'],
-            'writeExtendedDataId' => $service['writeExtendedData'],
-            'writeRevisionId' => $service['writeRevision'],
-            'token' => $service['token'],
-            'trigger' => $service['trigger'],
+            'serviceIdentifier' => $options['service_id'],
+            'serviceName' => $service['name'],
             'url' => $service['url'],
-
-            'userId' => -1, // TODO: the user id?
-            'rid' => '', // TODO: unknown
+            'token' => $service['token'],
+            'notificationProtocol' => $service['notificationProtocol'],
+            'description' => $service['description'],
+            'trigger' => $service['trigger'],
+            'profileIdentifier' => $options['service_id'],
+            'profileName' => $service['name'],
+            'profileDescription' => $service['description'],
+            'profilePublic' => false,
+            'readRevision' => $service['readRevision'],
+            'readExtendedDataId' => isset( $service['readExtendedDataId'] ) ? $service['readExtendedDataId'] : -1,
+            'writeRevisionId' => $poid,
+            'writeExtendedDataId' => -1,
+            'modelCheckers' => Array(), // TODO: Array of modelchecker ids?
+            /*'internalServiceId' => $options['service_id'],
+            'oid' => $options['service_id'],
+            'projectId' => $poid,
+            'userId' => get_user_meta( $this->user->ID, '_bimserver_uoid', true ),
+            'rid' => -1, // TODO: unknown*/
          );
          return $sService;
       } else {

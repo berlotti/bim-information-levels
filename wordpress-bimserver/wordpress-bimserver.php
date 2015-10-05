@@ -158,7 +158,7 @@ class WordPressBimserver {
       try {
          $response = $bimserver->apiCall( 'ServiceInterface', 'addUserWithPassword', $parameters );
          update_user_meta( $userId, '_bimserver_password', $password );
-         update_user_meta( $userId, '_bimserver_uoid', $response );
+         update_user_meta( $userId, '_bimserver_uoid', $response['response']['result'] );
          $bimserverUser = new BimserverUser( get_current_user_id() );
          $poid = $bimserverUser->addProject( 'WordPressBimserver' );
          update_user_meta( $userId, '_bimserver_poid', $poid );
@@ -204,7 +204,6 @@ class WordPressBimserver {
    public static function showIfcForm() {
       if( is_user_logged_in() ) {
          // TODO: check if configuration for this service/user is set, if not only allow link to settings page
-         $options = WordPressBimserver::getOptions();
          $error = false;
          if( isset( $_POST['submit'], $_FILES['ifc'], $_FILES['ifc']['tmp_name'] ) ) {
             // upload the IFC to the bimserver and start the service
@@ -220,11 +219,7 @@ class WordPressBimserver {
                $data = file_get_contents( $_FILES['ifc']['tmp_name'] );
                $size = $_FILES['ifc']['size'];
                $filename = $_FILES['ifc']['name'];
-               // TODO: figure out what value to use for this
-               $deserializer = '';
-               // TODO: maybe something from: ServiceInterface.getUserSettings
-               // Retrieves the user settings including deserializer ids and services
-
+               $deserializer = isset( $_POST['bimserver_deserializer'] ) ? $_POST['bimserver_deserializer'] : -1;
                $parameters = Array(
                   'poid' => $poid,
                   'comment' => $comment,
@@ -235,17 +230,15 @@ class WordPressBimserver {
                   'merge' => false,
                   'sync' => true
                );
-               var_dump( $parameters );
-
                $result = $bimserverUser->apiCall( 'ServiceInterface', 'checkin', $parameters );
                if( $result === false ) {
                   $error = __( 'Could not check in this file, make sure it is a valid ifc file', 'wordpress-bimserver' );
                } else {
-                  var_dump( $result );
-
+                  $checkinId = $result['response']['result'];
+                  update_user_meta( get_current_user_id(), '_bimserver_checkin_id', $checkinId );
                   print( '<script type="text/javascript">var wpBimserverSettings = ' . json_encode( Array(
                          'ajaxUrl' => add_query_arg( Array( 'action' => 'wpbimserver_ajax' ), admin_url( 'admin-ajax.php' ) )
-                      ) ) . ';</script>"' );
+                      ) ) . ';</script>' );
                }
                // TODO: make this async
 
@@ -266,9 +259,17 @@ class WordPressBimserver {
                } else {
                   $projects = $result['response']['result'];
                }
+               $result = $user->apiCall( 'PluginInterface', 'getAllDeserializers', Array( 'onlyEnabled' => true ) );
+               if( $result === false ) {
+                  $deserializers = Array();
+                  $notice = __( 'Could not retrieve a list of deserializers', 'wordpress-bimserver' );
+               } else {
+                  $deserializers = $result['response']['result'];
+               }
             } catch( \Exception $e ) {
                $notice = $e->getMessage();
                $projects = Array();
+               $deserializers = Array();
             }
             if( $notice !== false ) {
                print( '<div class="error-message">' . __( 'Notice', 'wordpress-bimserver' ) . ': ' . $notice . '</div>' );
@@ -280,6 +281,14 @@ class WordPressBimserver {
              <form method="post" enctype="multipart/form-data" action="">
                 <label for="ifc-file"><?php _e( 'IFC', 'wordpress-bimserver' ); ?></label><br />
                 <input type="file" name="ifc" id="ifc-file" accept=".ifc" /><br />
+                <label for="bimserver-deserializer"><?php _e( 'Deserializer', 'wordpress-bimserver' ); ?></label><br />
+                <select name="bimserver_deserializer" id="bimserver-deserializer">
+                   <?php
+                   foreach( $deserializers as $deserializer ) {
+                      print( '<option value="' . $deserializer['oid'] . '"' . ( isset( $_POST['bimserver_deserializer'] ) && $_POST['bimserver_deserializer'] == $deserializer['oid'] ? ' selected' : '' ) . '>' . $deserializer['name'] . '</option>' );
+                   }
+                   ?>
+                </select><br />
                 <label for="bimserver-project"><?php _e( 'Project', 'wordpress-bimserver' ); ?></label><br />
                 <select name="bimserver_project" id="bimserver-project">
                    <option value=""><?php _e( 'New project', 'wordpress-bimserver' ); ?></option>
@@ -297,6 +306,10 @@ class WordPressBimserver {
             <?php
          }
       }
+   }
+
+   private static function showCheckinProgress( $topicId ) {
+      // TODO: display a progress bar and progress when done
    }
 
    public function showReports() {
