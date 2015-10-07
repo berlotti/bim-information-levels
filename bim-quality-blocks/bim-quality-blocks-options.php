@@ -5,7 +5,7 @@ use BIMQualityBlocks\BIMQualityBlocks;
 
 $message = '';
 
-if( isset( $_POST['action'] ) && $_POST[ 'action' ] == 'update' ) {
+if( isset( $_POST['action'] ) && $_POST[ 'update' ] == 'update' ) {
 	$options = BIMQualityBlocks::getOptions();
 
 	foreach( $_POST[ 'bim_quality_blocks_options' ] AS $key => $newOption ) {
@@ -19,15 +19,10 @@ if( isset( $_POST['delete_confirm'], $_POST['delete'] ) && $_POST['delete_confir
    foreach( $blocks as $block ) {
       wp_delete_post( $block->post->ID );
    }
-   print( '<div class="status">' . __( 'All blocks deleted', 'bim-quality-blocks' ) . '</div>' );
+   print( '<div class="notice">' . __( 'All blocks deleted', 'bim-quality-blocks' ) . '</div>' );
 }
-if( isset( $_POST['import'] ) ) {
-   $importStats = Array();
-   $file = fopen( $_FILES['csv'], 'r' );
-   while( ( $data = fgetcsv( $file ) ) !== false ) {
-      // TODO: import stuff from CSV
-   }
-   fclose( $handle );
+if( isset( $_POST['import'], $_FILES['csv'], $_FILES['csv']['tmp_name'] ) && $_FILES['csv']['tmp_name'] != '' ) {
+   $importStats = BIMQualityBlocks::import( $_FILES['csv']['tmp_name'] );
 }
 
 $bimQualityBlocksOptions = BIMQualityBlocks::getOptions( true );
@@ -43,10 +38,10 @@ $pages = get_posts( Array(
 	<h2><?php _e( 'BIM Quality Blocks Levels Options', 'bim-quality-blocks' ); ?></h2>
    <?php
    if( isset( $importStats ) ) {
-      // TODO: show
+      print( '<div class="notice">' . __( 'Blocks imported', 'bim-quality-blocks' ) . ': ' . number_format( $importStats['blocks'] ) . '</div>' );
    }
    ?>
-	<form method="post" enctype="multipart/form-data">
+	<form method="post" enctype="multipart/form-data" action="">
 		<table class="form-table">
 			<tr valign="top">
 				<td><label for="bim-quality-blocks-post-type"><?php _e( 'BIM Quality Blocks post type', 'bim-quality-blocks' ); ?></label></td>
@@ -134,13 +129,27 @@ if( is_array( $postTypes ) ) {
                <p class="description"><?php _e( 'The generated report can include an XML file, this is the footer of that XML file', 'bim-quality-blocks' ); ?></p>
             </td>
          </tr>
-			<tr valign="top">
-				<td colspan="2">
-					<p class="submit">
-						<input class="button-primary" type="submit" name="action" value="update" />
-					</p>
-				</td>
-			</tr>
+         <tr valign="top">
+            <td colspan="2">
+               <p class="submit">
+                  <input class="button-primary" type="submit" name="update" value="<?php _e( 'Update', 'bim-quality-blocks' ); ?>" />
+               </p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="import-csv"><?php _e( 'BIM Quality Blocks XML footer', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <input type="file" name="csv" id="import-csv" />
+               <p class="description"><?php _e( 'Import a CSV file containing blocks, delimiter=, and enclosure="', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td colspan="2">
+               <p class="submit">
+                  <input class="button-primary" type="submit" name="import" value="<?php _e( 'Import CSV', 'bim-quality-blocks' ); ?>" />
+               </p>
+            </td>
+         </tr>
          <tr valign="top">
             <td colspan="2">
                <p class="submit">

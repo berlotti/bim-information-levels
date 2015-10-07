@@ -719,6 +719,70 @@ class BIMQualityBlocks {
       }
       exit(); // When we are done we do not allow anything else to be done
    }
+
+   public static function import( $filename ) {
+      require_once( plugin_dir_path( __FILE__ ) . 'libraries/parsecsv.lib.php' );
+      $csv = new \parseCSV();
+      $csv->auto( $filename );
+      $status = Array();
+      $blocks = Array();
+      $options = BIMQualityBlocks::getOptions();
+      foreach( $csv->data as $line ) {
+         $layer = $line['layer'];
+         if( $layer == 'basis' ) {
+            $layer = 'basic_model';
+         } elseif( $layer == 'toepassing' ) {
+            $layer = 'applications';
+         }
+         $postData = Array(
+            'post_type' => $options['bim_quality_blocks_post_type'],
+            'post_status' => 'publish',
+            'post_title' => $line['title'],
+            'post_content' => $line['content']
+         );
+         $blocks[] = Array(
+             'name' => $postData['post_title'],
+             'behaviour' => $line['behaviour'],
+             'layer' => $layer,
+             'categories' => explode( ',', $line['categories'] ),
+             'postId' => wp_insert_post( $postData ),
+             'report_text' => $line['report_text'],
+             'image_url' => $line['image_url'],
+             'deselects' => explode( ',', $line['deselects'] ),
+             'excludes' => explode( ',', $line['excludes'] ),
+             'report_xml' => $line['report_xml'],
+         );
+      }
+
+      foreach( $blocks as $block ) {
+         update_post_meta( $block['postId'], '_special_behaviour', $block['behaviour'] );
+         update_post_meta( $block['postId'], '_block_layer', $block['layer'] );
+         update_post_meta( $block['postId'], '_report_text', $block['report_text'] );
+         update_post_meta( $block['postId'], '_report_xml', $block['report_xml'] );
+
+         $excludes = Array();
+         foreach( $block['excludes'] as $exclude ) {
+            foreach( $blocks as $block2 ) {
+               if( $block['name'] == $exclude ) {
+                  $excludes[] = $block['postId'];
+               }
+            }
+         }
+         update_post_meta( $block['postId'], '_relations', $excludes );
+
+         $deselects = Array();
+         foreach( $block['deselects'] as $deselect ) {
+            foreach( $blocks as $block2 ) {
+               if( $block['name'] == $deselect ) {
+                  $deselects[] = $block['postId'];
+               }
+            }
+         }
+         update_post_meta( $block['postId'], '_deselects', $deselects );
+      }
+      $status['blocks'] = count( $blocks );
+      return $status;
+   }
 }
 
 $bimQualityBlocks = new BIMQualityBlocks();
