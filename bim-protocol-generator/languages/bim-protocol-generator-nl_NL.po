@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BIM Protocol Generator\n"
 "POT-Creation-Date: 2015-08-14 16:13+0100\n"
-"PO-Revision-Date: 2015-08-14 16:13+0100\n"
+"PO-Revision-Date: 2015-10-08 10:49+0100\n"
 "Last-Translator: Leon <poedit@berlotti.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -87,7 +87,7 @@ msgstr "Leading partner"
 
 #: bim-protocol-generator.php:126
 msgid "Thank you."
-msgstr ""
+msgstr "Bedankt."
 
 #: bim-protocol-generator.php:131
 msgid "Question settings"

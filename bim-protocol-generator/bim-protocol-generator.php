@@ -184,18 +184,20 @@ class BIMProtocolGenerator {
    }
 
    public static function updatePostMeta( $postId, $metaKey ) {
-      $currentData = get_post_meta( $postId, $metaKey, true );
+      if( isset( $_POST[ $metaKey ] ) ) {
+         $currentData = get_post_meta( $postId, $metaKey, true );
 
-      $newData = $_POST[$metaKey];
+         $newData = $_POST[$metaKey];
 
-      if( isset( $currentData ) ) {
-         if( is_null( $newData ) ) {
-            delete_post_meta( $postId, $metaKey );
-         } else {
-            update_post_meta( $postId, $metaKey, $newData );
+         if( isset( $currentData ) ) {
+            if( is_null( $newData ) ) {
+               delete_post_meta( $postId, $metaKey );
+            } else {
+               update_post_meta( $postId, $metaKey, $newData );
+            }
+         } elseif ( !is_null( $newData ) ) {
+            add_post_meta( $postId, $metaKey, $newData, true );
          }
-      } elseif ( !is_null( $newData ) ) {
-         add_post_meta( $postId, $metaKey, $newData, true );
       }
    }
 
@@ -355,7 +357,8 @@ class BIMProtocolGenerator {
             	$information = get_post_meta( $questions[ 'postId' ], 'information', true );
             	$statuses = get_post_meta( $questions[ 'postId' ], 'statuses', true );
             	$participants = get_post_meta( $questions[ 'postId' ], 'participant' );
-            	$formats = BIMProtocolGenerator::getQuestionFormats( $questions );
+            	$formats = BIMProtocolGenerator::getQuestionFormats( $questions, $previousAnswers );
+              // TODO: get a list of formats that were answers in previous questsions
             	$modelingTemplates = get_post_meta( $questions[ 'postId' ], 'modelingTemplates', true );
             	/*foreach( $modelingTemplates as $modelingTemplate ) {
             		$html .= '<input type="radio" ' . ( $answers == $modelingTemplate[0] ? 'checked="checked" ' : '' ) . 'name="answer_' . $currentPage . '_' . $questionNumber . '" value="' . $modelingTemplate[0] . '" class="answer-radio-input" id="answer-' .  $questionNumber . '-' . $answerNumber . '" />';
@@ -397,49 +400,54 @@ class BIMProtocolGenerator {
 	            	}
 	            	$html .= '</select>';
 	            	$html .= '</td></tr>';
-				}
-				$key ++;
-				$extraFields = 1;
-				if( $answers && isset( $answers[ 'information' ] ) ) {
-					$extraFields = count( $answers[ 'information' ] );
-					if( $extraFields == 0 ) {
-						$extraFields = 1;
-					}
-				}
-				for( $i = 0; $i < $extraFields; $i ++ ) {
-					$html .= '<tr class="' . ( ( $key + $i ) % 2 == 0 ? 'even' : 'odd' ) . '" id="row-' . ( $key + $i ) . '"><td><input type="text" placeholder="' . __( 'Required information', 'bim-protocol-generator' ) . '" name="answer_' . $currentPage . '_' . $questionNumber . '[information][]" value="' . ( ( $answers && isset( $answers[ 'information' ] ) && isset( $answers[ 'information' ][$i] ) ) ? $answers[ 'information' ][$i] : '' ) . '" /></td>';
-					$html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[participant][]">';
-					foreach( $participants as $participant ) {
-						$html .= '<option value="' . $participant[0] . '"' . ( ( $answers && isset( $answers[ 'participant' ] ) && isset( $answers[ 'participant' ][$key] ) && $answers[ 'participant' ][$key] == $participant[0] ) ? ' selected': '' ) . '>' . $participant[0] . '</option>';
-					}
-					$html .= '</select></td>';
-					$html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[informationlevel][]">';
-					foreach( $informationLevels as $informationLevel ) {
-	            		$html .= '<option value="' . $informationLevel . '"' . ( ( $answers && isset( $answers[ 'informationlevel' ] ) && isset( $answers[ 'informationlevel' ][$key] ) && $answers[ 'informationlevel' ][$key] == $informationLevel ) ? ' selected': '' ) . '>' . $informationLevel . '</option>';
-	            	}
-					$html .= '</select></td>';
-					$html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[status][]">';
-					foreach( $statuses as $status ) {
-	            		$html .= '<option value="' . $status . '"' . ( ( $answers && isset( $answers[ 'status' ] ) && isset( $answers[ 'status' ][$key] ) && $answers[ 'status' ][$key] == $status ) ? ' selected': '' ) . '>' . $status . '</option>';
-					}
-					$html .= '</select></td>';
-					$html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[format][]">';
-					foreach( $formats as $format ) {
-						$html .= '<option value="' . $format . '"' . ( ( $answers && isset( $answers[ 'format' ] ) && isset( $answers[ 'format' ][$key] ) && $answers[ 'format' ][$key] == $format ) ? ' selected': '' ) . '>' . $format . '</option>';
+               }
+               $key ++;
+               $extraFields = 1;
+               if( $answers && isset( $answers[ 'information' ] ) ) {
+                  $extraFields = count( $answers[ 'information' ] );
+                  if( $extraFields == 0 ) {
+                     $extraFields = 1;
+                  }
+               }
+               for( $i = 0; $i < $extraFields; $i ++ ) {
+                  $html .= '<tr class="' . ( ( $key + $i ) % 2 == 0 ? 'even' : 'odd' ) . '" id="row-' . ( $key + $i ) . '"><td><input type="text" placeholder="' . __( 'Required information', 'bim-protocol-generator' ) . '" name="answer_' . $currentPage . '_' . $questionNumber . '[information][]" value="' . ( ( $answers && isset( $answers[ 'information' ] ) && isset( $answers[ 'information' ][$i] ) ) ? $answers[ 'information' ][$i] : '' ) . '" /></td>';
+                  $html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[participant][]">';
+                  foreach( $participants as $participant ) {
+                     $html .= '<option value="' . $participant[0] . '"' . ( ( $answers && isset( $answers[ 'participant' ] ) && isset( $answers[ 'participant' ][$key] ) && $answers[ 'participant' ][$key] == $participant[0] ) ? ' selected': '' ) . '>' . $participant[0] . '</option>';
+                  }
+                  $html .= '</select></td>';
+                  $html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[informationlevel][]">';
+                  foreach( $informationLevels as $informationLevel ) {
+                        $html .= '<option value="' . $informationLevel . '"' . ( ( $answers && isset( $answers[ 'informationlevel' ] ) && isset( $answers[ 'informationlevel' ][$key] ) && $answers[ 'informationlevel' ][$key] == $informationLevel ) ? ' selected': '' ) . '>' . $informationLevel . '</option>';
+                     }
+                  $html .= '</select></td>';
+                  $html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[status][]">';
+                  foreach( $statuses as $status ) {
+                        $html .= '<option value="' . $status . '"' . ( ( $answers && isset( $answers[ 'status' ] ) && isset( $answers[ 'status' ][$key] ) && $answers[ 'status' ][$key] == $status ) ? ' selected': '' ) . '>' . $status . '</option>';
+                  }
+                  $html .= '</select></td>';
+                  $html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[format][]">';
+                  foreach( $formats as $format ) {
+                     $html .= '<option value="' . $format . '"' . ( ( $answers && isset( $answers[ 'format' ] ) && isset( $answers[ 'format' ][$key] ) && $answers[ 'format' ][$key] == $format ) ? ' selected': '' ) . '>' . $format . '</option>';
 
-					}
-					$html .= '</select></td>';
-					$html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[modelingagreement][]">';
-					foreach( $modelingTemplates as $modelingTemplate ) {
-						$html .= '<option value="' . $modelingTemplate[0] . '"' . ( ( $answers && isset( $answers[ 'modelingagreement' ] ) && isset( $answers[ 'modelingagreement' ][$key] ) && $answers[ 'modelingagreement' ][$key] == $modelingTemplate[0] ) ? ' selected': '' ) . '>' . $modelingTemplate[0] . '</option>';
-					}
-					$html .= '</select>';
-					$html .= '</td></tr>';
-					$key ++;
-				}
+                  }
+                  $html .= '</select></td>';
+                  $html .= '<td><select name="answer_' . $currentPage . '_' . $questionNumber . '[modelingagreement][]">';
+                  foreach( $modelingTemplates as $modelingTemplate ) {
+                     $html .= '<option value="' . $modelingTemplate[0] . '"' . ( ( $answers && isset( $answers[ 'modelingagreement' ] ) && isset( $answers[ 'modelingagreement' ][$key] ) && $answers[ 'modelingagreement' ][$key] == $modelingTemplate[0] ) ? ' selected': '' ) . '>' . $modelingTemplate[0] . '</option>';
+                  }
+                  $html .= '</select>';
+                  $html .= '</td></tr>';
+                  $key ++;
+               }
             	$html .= '</table>';
-            	$html .= '<a href="javascript:void( null );" onclick="BIMProtocolGenerator.addTableRow( \'required-information\' )">' . __( 'Add row', 'bim-protocol-generator' ) . '</a><br />';
-	         }
+            	$html .= '<a href="javascript:void( null );" onclick="BIMProtocolGenerator.addTableRow( \'required-information\' );">' . __( 'Add row', 'bim-protocol-generator' ) . '</a><br />';
+	         } elseif( $question->questionType == 'end' ) {
+				  $html .= '<label class="question-label" for="question-' .  $questionNumber . '">' . __( 'BIM Execution Plan Generator feedback', 'bim-protocol-generator' ) . '</label>';
+              $html .= '<div class="clear"></div>';
+				  $html .= '<textarea name="feedback" placeholder="' . __( 'BIM Execution Plan Generator feedback', 'bim-protocol-generator' ) . '" class="answer-textarea-input" id="question-' .  $questionNumber . '"></textarea>';
+				  $html .= '<div class="clear"></div>';
+			  }
 	      }
    		$html .= '<div class="button-container">';
    		if( $currentPage > 1 ) {
@@ -614,6 +622,18 @@ class BIMProtocolGenerator {
             	if( $allValid ) {
             		$page ++;
             	}
+            }
+         }
+
+         // Deal with feedback
+         if( isset( $_POST['feedback'] ) ) {
+            $message = trim( filter_input( INPUT_POST, 'feedback', FILTER_SANITIZE_SPECIAL_CHARS ) );
+            if( isset( $message ) & $message !== false && $message != '' ) {
+               $to = get_option( 'admin_email' );
+               // TODO: add user email
+               if( !wp_mail( $to, __( 'BIM Executionplan Generator Feedback', 'bim-protocol-generator' ), $message ) ) {
+                  var_dump( $to, __( 'BIM Executionplan Generator Feedback', 'bim-protocol-generator' ), $message );
+               }
             }
          }
 
@@ -1297,7 +1317,17 @@ class BIMProtocolGenerator {
 			$currentUser = wp_get_current_user();
          $message = Array();
          $valid = false;
+         $isPremiumUser = BIMProtocolGenerator::isCurrentUserPremium();
+         $defaults = Array(
+            'goals' => Array(
+               __( 'Samenwerken', ' bim-protocol-generator' ),
+               __( 'Winstmaken', ' bim-protocol-generator' ),
+               __( 'Succes', ' bim-protocol-generator' ),
+            )
+         );
+
 			if( isset( $_POST[ 'submit' ] ) ) {
+            // TODO: Check if extra options are allowed or only defaults (premium/non premium)
             $options = BIMProtocolGenerator::getOptions();
             $initiator = $currentUser->ID;
             $projectName = filter_input( INPUT_POST, 'project_name', FILTER_SANITIZE_STRING );
@@ -1310,13 +1340,17 @@ class BIMProtocolGenerator {
                }
                $index ++;
             }
-            $index = 1;
-            $goals = Array();
-            while( isset( $_POST[ 'goal_' . $index ] ) ) {
-               if( $_POST[ 'goal_' . $index ] != '' ) {
-                  $goals[] = filter_input( INPUT_POST, 'goal_' . $index, FILTER_SANITIZE_STRING );
+            if( $isPremiumUser ) {
+               $index = 1;
+               $goals = Array();
+               while( isset( $_POST[ 'goal_' . $index ] ) ) {
+                  if( $_POST[ 'goal_' . $index ] != '' ) {
+                     $goals[] = filter_input( INPUT_POST, 'goal_' . $index, FILTER_SANITIZE_STRING );
+                  }
+                  $index ++;
                }
-               $index ++;
+            } else {
+               $goals = $defaults['goals'];
             }
             $zeroPoints = Array();
             $index = 1;
@@ -1503,8 +1537,11 @@ class BIMProtocolGenerator {
 
             $participants = isset( $participants ) ? array_slice( $participants, 1 ) : Array();
             $participants[] = Array( '', '' );
-            $goals = isset( $goals ) ? $goals : Array();
-            $goals[] = '';
+            $goals = $defaults['goals'];
+            if( $isPremiumUser ) {
+               $goals = isset( $goals ) ? $goals : Array();
+               $goals[] = '';
+            }
             $zeroPoints = isset( $zeroPoints ) ? $zeroPoints : Array();
             $zeroPoints[] = Array( '', '' );
             $modelingTemplates = isset( $modelingTemplates ) ? $modelingTemplates : Array();
@@ -1530,7 +1567,7 @@ class BIMProtocolGenerator {
 					</tr>
 				</table>
 				<h3>2. <?php _e( 'Participants', 'bim-protocol-generator' ); ?></h3>
-				<p><?php _e( 'Please list the participants in this phase. After initiating the protocol generator, all participants will get an invitation. This list is also used to answer some questions.)', 'bim-protocol-generator' ); ?></p>
+				<p><?php _e( 'Please list the participants in this phase. After initiating the execution plan generator, all participants will get an invitation. This list is also used to answer some questions.)', 'bim-protocol-generator' ); ?></p>
 				<table class="bim-protocol-generator-table">
                <tr>
 						<th></th>
@@ -1575,15 +1612,23 @@ class BIMProtocolGenerator {
                ?>
 					<tr class="goal-row">
 						<td class="row-number"><span class="row-number"><?php print( $number ); ?>) </span></td>
-						<td><input type="text" name="goal_<?php print( $number ); ?>" placeholder="<?php _e( 'Goal', 'bim-protocol-generator' ); ?>" value="<?php print( $goal ); ?>" /></td>
+						<td><input type="text" name="goal_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'Goal', 'bim-protocol-generator' ); ?>" value="<?php print( $goal ); ?>" /></td>
 					</tr>
                <?php
                $number ++;
             }
-            ?>
-					<tr>
-						<td colspan="2"><a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( 'goal', [ '<?php _e( 'Goal', 'bim-protocol-generator' ); ?>' ] );"><?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?></a></td>
-					</tr>
+            if( $isPremiumUser ) {
+               ?>
+               <tr>
+                  <td colspan="2">
+                     <a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( 'goal', [ '<?php _e( 'Goal', 'bim-protocol-generator' ); ?>' ] );">
+                        <?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?>
+                     </a>
+                  </td>
+               </tr>
+               <?php
+            }
+               ?>
 				</table>
 				<h3>4. <?php _e( 'Origin templates', 'bim-protocol-generator' ); ?></h3>
 				<p><?php _e( 'There are several methods to match the origin of different discipline models (aspect models). The participants are being asked which methodology has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the concept and an URL with more information about it. Examples can be ‘the block’ at <a href="http://nationalbimguidelines.nl/origintemplates/block" target="_blank">http://nationalbimguidelines.nl/origintemplates/block</a> or ‘CoBIM’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimexecutionplangenerator.com/initiate/origintemplates/" target="_blank">http://bimexecutionplangenerator.com/initiate/origintemplates/</a>', 'bim-protocol-generator' ); ?></p>
@@ -1690,14 +1735,27 @@ class BIMProtocolGenerator {
 		}
 	}
 
-	public static function getQuestionFormats( $questions ) {
+	public static function getQuestionFormats( $questions, $previousAnswers = false ) {
 		$formatTypes = Array();
-		foreach( $questions[ 'pages' ] as $page ) {
-			foreach( $page->questions as $question ) {
+		foreach( $questions[ 'pages' ] as $pageKey => $page ) {
+			foreach( $page->questions as $questionNumber => $question ) {
 				if( isset( $question->formatTypesRead ) && $question->formatTypesRead != '' ) {
-					foreach( $question->answers as $answer ) {
-						$formatTypes[] = $answer[ 'text' ];
-					}
+               if( $previousAnswers === false ) {
+                  foreach( $question->answers as $answer ) {
+                     $formatTypes[] = $answer[ 'text' ];
+                  }
+               } else {
+                  if( isset( $previousAnswers['answers'], $previousAnswers['answers'][ $pageKey ], $previousAnswers['answers'][ $pageKey ][ $questionNumber ] ) ) {
+                     // only gather the answers which are selected in previous questions
+                     if( is_array( $previousAnswers['answers'][ $pageKey ][ $questionNumber ] ) ) {
+                        foreach( $previousAnswers['answers'][ $pageKey ][ $questionNumber ] as $answer ) {
+                           $formatTypes[] = $answer;
+                        }
+                     } else {
+                        $formatTypes[] = $previousAnswers['answers'][ $pageKey ][ $questionNumber ];
+                     }
+                  }
+               }
 				}
 			}
 		}
@@ -1844,7 +1902,7 @@ class BIMProtocolGenerator {
 ?>
 <?php
 		} else {
-			_e( 'Please log in to see your initiated protocols.', 'bim-protocol-generator' );
+			_e( 'Please log in to see your initiated execution plans.', 'bim-protocol-generator' );
 		}
 	}
 
@@ -1854,6 +1912,16 @@ class BIMProtocolGenerator {
 			$suffix = '_' . $language;
 		}
 		return $suffix;
+	}
+
+	public static function isCurrentUserPremium() {
+		if( is_user_logged_in() && class_exists( 'MS_Model_Member' ) ) {
+			$options = BIMProtocolGenerator::getOptions();
+			$member = MS_Model_Member::get_current_member();
+			return $member->has_membership( $options['premium_membership'] );
+		} else {
+			return false;
+		}
 	}
 }
 

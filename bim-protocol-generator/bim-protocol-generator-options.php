@@ -7,6 +7,12 @@ if( isset( $sitepress ) ) {
 	$availableLanguages = Array();
 	$defaultLanguage = '';
 }
+if( class_exists( 'MS_Model_Membership' ) ) {
+	$memberships = MS_Model_Membership::get_memberships( Array( 'include_base' => 1 ) );
+} else {
+	$memberships = Array();
+}
+
 if( isset( $_POST['action'] ) ) {
    $options = BIMProtocolGenerator::getOptions();
 
@@ -84,7 +90,6 @@ if( is_array( $postTypes ) ) {
 ?>
 					<p class="description"><?php _e( 'The post type in which questionnaire information is stored', 'bim-protocol-generator' ); ?></p>
 				</td>
-				
 			</tr>
 			<tr valign="top">
 				<td><label for="question-post-type"><?php _e( 'Question post type', 'bim-protocol-generator' ); ?></label></td>
@@ -132,6 +137,29 @@ if( is_array( $postTypes ) ) {
 					<p class="description"><?php _e( 'The post type in which answers are stored', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
+         <tr valign="top">
+            <td><label for="premium-membership"><?php _e( 'Premium membership', 'bim-protocol-generator' ); ?></label></td>
+            <td>
+               <?php
+               if( is_array( $memberships ) ) {
+                  ?>
+                  <select name="bim_protocol_generator_options[premium_membership]" id="premium-membership">
+                     <?php
+                     foreach( $memberships AS $key => $membership ) {
+                        ?>
+                        <option value="<?php print( $membership->__get( 'id' ) ); ?>" <?php print( ( ( isset( $bimProtocolGeneratorOptions[ 'premium_membership' ] ) && $membership->__get( 'id' ) == $bimProtocolGeneratorOptions[ 'premium_membership' ] ) ? ' selected="selected"' : '' ) ); ?>>
+                           <?php print( $membership->__get( 'name' ) ); ?>
+                        </option>
+                        <?php
+                     }
+                     ?>
+                  </select>
+                  <?php
+               }
+               ?>
+               <p class="description"><?php _e( 'Premium membership', 'bim-protocol-generator' ); ?></p>
+            </td>
+         </tr>
 			<tr valign="top">
 				<td><label for="question-page"><?php _e( 'Question page', 'bim-protocol-generator' ); ?></label>
 				</td>
@@ -208,7 +236,7 @@ if( count( $availableLanguages ) == 0 ) {
 				<td><label for="disclaimer-text"><?php _e( 'Disclaimer text', 'bim-protocol-generator' ); ?> (<?php print( $language[ 'display_name' ] ); ?>)</label></td>
 				<td>
 					<textarea cols="30" rows="4" id="disclaimer-text" name="bim_protocol_generator_options[disclaimer_text<?php print( $suffix ); ?>]"><?php print( isset( $bimProtocolGeneratorOptions[ 'disclaimer_text' . $suffix ] ) ? stripslashes( $bimProtocolGeneratorOptions[ 'disclaimer_text' . $suffix ] ) : '' ); ?></textarea>
-					<p class="description"><?php _e( 'This disclaimer text is included in the generated reports for the participants and initiator of a protocol.', 'bim-protocol-generator' ); ?></p>
+					<p class="description"><?php _e( 'This disclaimer text is included in the generated reports for the participants and initiator of an execution plan.', 'bim-protocol-generator' ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">

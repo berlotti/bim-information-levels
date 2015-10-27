@@ -155,3 +155,15 @@ table .number {
    padding: 3px 5px;
    border-width: 0;
 }
+
+#page-container table.cart th, #page-container #main-content table.cart th, #page-container table.cart td, #page-container #main-content table.cart td, #page-container table.cart tr, #page-container #main-content table.cart tr, #page-container #content-area table tr, #page-container #content-area table td, #page-container #content-area table th {
+   max-width: none;
+}
+
+#page-container #main-content .container::before {
+   display: none;
+}
+
+#page-container #left-area {
+   width: auto;
+}
