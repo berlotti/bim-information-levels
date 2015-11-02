@@ -12,22 +12,22 @@ class TNOBIMQuickscan {
 	public $options;
 	private $isAdvisorCache = Array();
 	public $colors = Array(
-				'fillColor' => Array( 'rgba(220,220,220,0.4)', 'rgba(151,187,205,0.5)', 'rgba(197,241,158,0.5)', 'rgba(40,100,147,0.5)', 'rgba(153,95,227,0.5)', 'rgba(254,95,87,0.5)', 'rgba(225,159,32,0.5)', 'rgba(220,225,32,0.5)', 'rgba(18,219,41,0.5)', 'rgba(18,219,206,0.5)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,0.5)' ),
-			  	'strokeColor' => Array( 'rgba(220,220,220,1)', 'rgba(151,187,205,1)', 'rgba(121,187,62,1)', 'rgba(8,69,118,1)', 'rgba(111,41,201,1)', 'rgba(254,95,87,1)', 'rgba(225,159,32,1)', 'rgba(220,225,32,1)', 'rgba(18,219,41,1)', 'rgba(18,219,206,1)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,1)' ),
-				'pointColor' => Array( 'rgba(220,220,220,1)', 'rgba(151,187,205,1)', 'rgba(121,187,62,1)', 'rgba(8,69,118,1)', 'rgba(111,41,201,1)', 'rgba(254,95,87,1)', 'rgba(225,159,32,1)', 'rgba(220,225,32,1)', 'rgba(18,219,41,1)', 'rgba(18,219,206,1)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,1)' ),
-				'pointStrokeColor' => Array( '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff' ),
-			);
+		 'fillColor' => Array( 'rgba(220,220,220,0.4)', 'rgba(151,187,205,0.5)', 'rgba(197,241,158,0.5)', 'rgba(40,100,147,0.5)', 'rgba(153,95,227,0.5)', 'rgba(254,95,87,0.5)', 'rgba(225,159,32,0.5)', 'rgba(220,225,32,0.5)', 'rgba(18,219,41,0.5)', 'rgba(18,219,206,0.5)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,0.5)' ),
+		 'strokeColor' => Array( 'rgba(220,220,220,1)', 'rgba(151,187,205,1)', 'rgba(121,187,62,1)', 'rgba(8,69,118,1)', 'rgba(111,41,201,1)', 'rgba(254,95,87,1)', 'rgba(225,159,32,1)', 'rgba(220,225,32,1)', 'rgba(18,219,41,1)', 'rgba(18,219,206,1)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,1)' ),
+		 'pointColor' => Array( 'rgba(220,220,220,1)', 'rgba(151,187,205,1)', 'rgba(121,187,62,1)', 'rgba(8,69,118,1)', 'rgba(111,41,201,1)', 'rgba(254,95,87,1)', 'rgba(225,159,32,1)', 'rgba(220,225,32,1)', 'rgba(18,219,41,1)', 'rgba(18,219,206,1)', 'rgba(18,97,219,0.5)', 'rgba(158,0,185,1)' ),
+		 'pointStrokeColor' => Array( '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#fff' ),
+	);
 	public static $coreBusinessesEnglish = Array(
-			 'aannemer' => 'contractor',
-			 'architect' => 'architect',
-			 'bouwer' => 'builder',
-			 'constructeur' => 'constructor/design engineer',
-			 'installateur' => 'installer',
-			 'installatieadvies' => 'installation adviser',
-			 'ontwikkelaar' => 'developer',
-			 'anders' => 'other',
-			 'opdrachtgever' => 'client'
-			);
+		 'aannemer' => 'contractor',
+		 'architect' => 'architect',
+		 'bouwer' => 'builder',
+		 'constructeur' => 'constructor/design engineer',
+		 'installateur' => 'installer',
+		 'installatieadvies' => 'installation adviser',
+		 'ontwikkelaar' => 'developer',
+		 'anders' => 'other',
+		 'opdrachtgever' => 'client'
+	);
 
 	public function __construct() {
 		add_action( 'admin_menu', Array( &$this, 'optionsMenu' ) );
@@ -86,88 +86,117 @@ class TNOBIMQuickscan {
 
 	public function wordPressInit() {
 		// Register custom post type and taxonomies
-	   $args = Array(
-	         'labels' => Array(
-	            'name' => _x( 'Reports', 'tno-bim-quickscan' ),
-	            'singular_name' => _x( 'Report', 'tno-bim-quickscan' ),
-	            'add_new' => _x( 'Add New', 'tno-bim-quickscan' ),
-	            'add_new_item' => __( 'Add New Report', 'tno-bim-quickscan' ),
-	            'edit_item' => __('Edit Report', 'tno-bim-quickscan' ),
-	            'new_item' => __('New Report', 'tno-bim-quickscan' ),
-	            'all_items' => __('All Reports', 'tno-bim-quickscan' ),
-	            'view_item' => __('View Report', 'tno-bim-quickscan' ),
-	            'search_items' => __('Search Reports', 'tno-bim-quickscan' ),
-	            'not_found' =>  __('No report found', 'tno-bim-quickscan' ),
-	            'not_found_in_trash' => __('No reports found in Trash', 'tno-bim-quickscan' ),
-	            'parent_item_colon' => '',
-	            'menu_name' => 'Reports' ),
-	         'public' => true,
-	         'publicly_queryable' => true,
-	         'show_ui' => true,
-	         'show_in_menu' => true,
-	         'query_var' => true,
-	         'rewrite' => true,
-	         'capability_type' => 'rapport',
-	   		 'capabilities' => Array(
-			    'publish_posts' => 'publish_rapport',
-			    'edit_posts' => 'edit_rapport',
-			    'edit_others_posts' => 'edit_others_rapport',
-			    'delete_posts' => 'delete_rapport',
-			    'delete_others_posts' => 'delete_others_rapport',
-			    'read_private_posts' => 'read_private_rapport',
-			    'edit_post' => 'edit_rapport',
-			    'delete_post' => 'delete_rapport',
-			    'read_post' => 'read_rapport'
-			 	),
-	         'map_meta_cap' => false,
-	         'has_archive' => false,
-	         'hierarchical' => false,
-	         'menu_position' => null,
-	         'supports' => array( 'title', 'thumbnail', 'author' )
-	   );
-	   register_post_type( 'rapport', $args );
+		$args = Array(
+			 'labels' => Array(
+				  'name' => _x( 'Reports', 'tno-bim-quickscan' ),
+				  'singular_name' => _x( 'Report', 'tno-bim-quickscan' ),
+				  'add_new' => _x( 'Add New', 'tno-bim-quickscan' ),
+				  'add_new_item' => __( 'Add New Report', 'tno-bim-quickscan' ),
+				  'edit_item' => __('Edit Report', 'tno-bim-quickscan' ),
+				  'new_item' => __('New Report', 'tno-bim-quickscan' ),
+				  'all_items' => __('All Reports', 'tno-bim-quickscan' ),
+				  'view_item' => __('View Report', 'tno-bim-quickscan' ),
+				  'search_items' => __('Search Reports', 'tno-bim-quickscan' ),
+				  'not_found' =>  __('No report found', 'tno-bim-quickscan' ),
+				  'not_found_in_trash' => __('No reports found in Trash', 'tno-bim-quickscan' ),
+				  'parent_item_colon' => '',
+				  'menu_name' => 'Reports' ),
+			 'public' => true,
+			 'publicly_queryable' => true,
+			 'show_ui' => true,
+			 'show_in_menu' => true,
+			 'query_var' => true,
+			 'rewrite' => true,
+			 'capability_type' => 'rapport',
+			 'capabilities' => Array(
+				  'publish_posts' => 'publish_rapport',
+				  'edit_posts' => 'edit_rapport',
+				  'edit_others_posts' => 'edit_others_rapport',
+				  'delete_posts' => 'delete_rapport',
+				  'delete_others_posts' => 'delete_others_rapport',
+				  'read_private_posts' => 'read_private_rapport',
+				  'edit_post' => 'edit_rapport',
+				  'delete_post' => 'delete_rapport',
+				  'read_post' => 'read_rapport'
+			 ),
+			 'map_meta_cap' => false,
+			 'has_archive' => false,
+			 'hierarchical' => false,
+			 'menu_position' => null,
+			 'supports' => array( 'title', 'thumbnail', 'author' )
+		);
+		register_post_type( 'rapport', $args );
+
+		$postTypeArguments = Array(
+			 'labels' => Array(
+				  'name' => _x( 'Advisors', 'post type general name' ),
+				  'singular_name' => _x( 'Advisor', 'post type singular name'),
+				  'add_new' => __( 'Add New' ),
+				  'add_new_item' => __( 'Add New Advisor' ),
+				  'edit_item' => __( 'Edit Advisor' ),
+				  'new_item' => __( 'New Advisor' ),
+				  'all_items' => __( 'All Advisors' ),
+				  'view_item' => __( 'View Advisor' ),
+				  'search_items' => __( 'Search Advisors' ),
+				  'not_found' =>  __( 'No Advisors found' ),
+				  'not_found_in_trash' => __( 'No Advisors found in Trash' ),
+				  'parent_item_colon' => '',
+				  'menu_name' => 'Advisors' ),
+			 'public' => true,
+			 'publicly_queryable' => true,
+			 'show_ui' => true,
+			 'show_in_menu' => true,
+			 'query_var' => true,
+			 'rewrite' => true,
+			 'has_archive' => true,
+			 'hierarchical' => false,
+			 'menu_position' => null,
+			 'supports' => Array( 'title', 'editor', 'thumbnail', 'custom-fields' )
+		);
+		register_post_type( 'advisor', $postTypeArguments );
+
 
 		$args = Array(
-		    'hierarchical'        => false,
-		    'labels'              => Array(
-			    'name'                => _x( 'Topics', 'tno-bim-quickscan' ),
-			    'singular_name'       => _x( 'Topic', 'tno-bim-quickscan' ),
-			    'search_items'        => __( 'Search Topics', 'tno-bim-quickscan' ),
-			    'all_items'           => __( 'All Topics', 'tno-bim-quickscan' ),
-			    'parent_item'         => __( 'Parent Topic', 'tno-bim-quickscan' ),
-			    'parent_item_colon'   => __( 'Parent Topic:', 'tno-bim-quickscan' ),
-			    'edit_item'           => __( 'Edit Topic', 'tno-bim-quickscan' ),
-			    'update_item'         => __( 'Update Topic', 'tno-bim-quickscan' ),
-			    'add_new_item'        => __( 'Add New Topic', 'tno-bim-quickscan' ),
-			    'new_item_name'       => __( 'New Topic Name', 'tno-bim-quickscan' ),
-			    'menu_name'           => __( 'Topic', 'tno-bim-quickscan' )
-			),
-		    'show_ui'             => true,
-		    'show_admin_column'   => true,
-		    'query_var'           => true,
-		    'rewrite'             => array( 'slug' => 'topic' )
+			 'hierarchical'        => false,
+			 'labels'              => Array(
+				  'name'                => _x( 'Topics', 'tno-bim-quickscan' ),
+				  'singular_name'       => _x( 'Topic', 'tno-bim-quickscan' ),
+				  'search_items'        => __( 'Search Topics', 'tno-bim-quickscan' ),
+				  'all_items'           => __( 'All Topics', 'tno-bim-quickscan' ),
+				  'parent_item'         => __( 'Parent Topic', 'tno-bim-quickscan' ),
+				  'parent_item_colon'   => __( 'Parent Topic:', 'tno-bim-quickscan' ),
+				  'edit_item'           => __( 'Edit Topic', 'tno-bim-quickscan' ),
+				  'update_item'         => __( 'Update Topic', 'tno-bim-quickscan' ),
+				  'add_new_item'        => __( 'Add New Topic', 'tno-bim-quickscan' ),
+				  'new_item_name'       => __( 'New Topic Name', 'tno-bim-quickscan' ),
+				  'menu_name'           => __( 'Topic', 'tno-bim-quickscan' )
+			 ),
+			 'show_ui'             => true,
+			 'show_admin_column'   => true,
+			 'query_var'           => true,
+			 'rewrite'             => array( 'slug' => 'topic' )
 		);
 		register_taxonomy( 'topic', 'rapport', $args );
 
 		$args = Array(
-		    'hierarchical'        => false,
-		    'labels'              => Array(
-			    'name'                => _x( 'BIM Quickscan categories', 'tno-bim-quickscan' ),
-			    'singular_name'       => _x( 'BIM Quickscan category', 'tno-bim-quickscan' ),
-			    'search_items'        => __( 'Search categories', 'tno-bim-quickscan' ),
-			    'all_items'           => __( 'All categories', 'tno-bim-quickscan' ),
-			    'parent_item'         => __( 'Parent category', 'tno-bim-quickscan' ),
-			    'parent_item_colon'   => __( 'Parent category:', 'tno-bim-quickscan' ),
-			    'edit_item'           => __( 'Edit category', 'tno-bim-quickscan' ),
-			    'update_item'         => __( 'Update category', 'tno-bim-quickscan' ),
-			    'add_new_item'        => __( 'Add new category', 'tno-bim-quickscan' ),
-			    'new_item_name'       => __( 'New category Name', 'tno-bim-quickscan' ),
-			    'menu_name'           => __( 'Category', 'tno-bim-quickscan' )
-			),
-		    'show_ui'             => true,
-		    'show_admin_column'   => true,
-		    'query_var'           => true,
-		    'rewrite'             => array( 'slug' => 'bim_category' )
+			 'hierarchical'        => false,
+			 'labels'              => Array(
+				  'name'                => _x( 'BIM Quickscan categories', 'tno-bim-quickscan' ),
+				  'singular_name'       => _x( 'BIM Quickscan category', 'tno-bim-quickscan' ),
+				  'search_items'        => __( 'Search categories', 'tno-bim-quickscan' ),
+				  'all_items'           => __( 'All categories', 'tno-bim-quickscan' ),
+				  'parent_item'         => __( 'Parent category', 'tno-bim-quickscan' ),
+				  'parent_item_colon'   => __( 'Parent category:', 'tno-bim-quickscan' ),
+				  'edit_item'           => __( 'Edit category', 'tno-bim-quickscan' ),
+				  'update_item'         => __( 'Update category', 'tno-bim-quickscan' ),
+				  'add_new_item'        => __( 'Add new category', 'tno-bim-quickscan' ),
+				  'new_item_name'       => __( 'New category Name', 'tno-bim-quickscan' ),
+				  'menu_name'           => __( 'Category', 'tno-bim-quickscan' )
+			 ),
+			 'show_ui'             => true,
+			 'show_admin_column'   => true,
+			 'query_var'           => true,
+			 'rewrite'             => array( 'slug' => 'bim_category' )
 		);
 		register_taxonomy( 'bim_category', 'rapport', $args );
 
@@ -184,37 +213,32 @@ class TNOBIMQuickscan {
 			$adminRole->add_cap( 'read_rapport' );
 		}
 
-		// Prevent users other than the administrator from accessing the backend
-	    if( is_admin() && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-        	wp_redirect( home_url() );
-        	exit;
-    	}
-    	$request = basename( $_SERVER[ 'REQUEST_URI' ] );
-    	if( $request == 'wp-login.php?action=register' ) {
-    		global $sitepress;
-    		if( isset( $sitepress ) ) {
-    			$sitepress->switch_lang( 'en', true );
-    		}
-    		wp_redirect( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $this->options[ 'register_page' ], 'page', true ) : $this->options[ 'register_page' ] ), 301 ); 
-    		exit();
+		$request = basename( $_SERVER[ 'REQUEST_URI' ] );
+		if( $request == 'wp-login.php?action=register' ) {
+			global $sitepress;
+			if( isset( $sitepress ) ) {
+				$sitepress->switch_lang( 'en', true );
+			}
+			wp_redirect( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $this->options[ 'register_page' ], 'page', true ) : $this->options[ 'register_page' ] ), 301 );
+			exit();
 		}
 	}
 
 	public function activation() {
 		add_role( 'bedrijf', 'Bedrijf', Array(
-		    'read' => true, // True allows that capability
-		    'edit_rapport' => true,
-			'edit_private_rapport' => true,
-		    'publish_rapport' => true,
+			 'read' => true, // True allows that capability
+			 'edit_rapport' => true,
+			 'edit_private_rapport' => true,
+			 'publish_rapport' => true,
 		) );
 
 		add_role( 'adviseur', 'Adviseur', Array(
-		    'read' => true, // True allows that capability
-		    'edit_rapport' => true,
-			'edit_private_rapport' => true,
-			'edit_advised_rapport' => true,
-		    'publish_rapport' => true,
-			'read_rapport' => true
+			 'read' => true, // True allows that capability
+			 'edit_rapport' => true,
+			 'edit_private_rapport' => true,
+			 'edit_advised_rapport' => true,
+			 'publish_rapport' => true,
+			 'read_rapport' => true
 		) );
 	}
 
@@ -241,11 +265,11 @@ class TNOBIMQuickscan {
 				$alsoPublished = strpos( $where, 'post_status = \'publish\'' );
 				if( $start !== false ) {
 					$start += 23;
-					$where = substr( $where, 0, $start ) . 
-						( current_user_can( 'activate_plugins' ) ? '' : " AND post_author = {$currentUserObject->ID}" ) . 
-						" ) OR ( ( post_status = 'private' " . 
-						( $alsoPublished !== false ? " OR post_status = 'publish' " : '' ) . 
-						") AND advisor_meta.meta_value = {$currentUserObject->ID} " . substr( $where, $start );
+					$where = substr( $where, 0, $start ) .
+						 ( current_user_can( 'activate_plugins' ) ? '' : " AND post_author = {$currentUserObject->ID}" ) .
+						 " ) OR ( ( post_status = 'private' " .
+						 ( $alsoPublished !== false ? " OR post_status = 'publish' " : '' ) .
+						 ") AND advisor_meta.meta_value = {$currentUserObject->ID} " . substr( $where, $start );
 				}
 			}
 		}
@@ -383,8 +407,8 @@ class TNOBIMQuickscan {
 				//The edit and delete links need to be added to the content (if desired), when using this hook
 				if( IS_ADMIN ) {
 					$adminButtons = '<div class=\'gfield_admin_icons\'><div class=\'gfield_admin_header_title\'>' .
-							'Location: Field ID ' . $field[ 'id' ] . '</div>' .
-							$deleteFieldLink . " <a class='field_edit_icon edit_icon_collapsed' title='" . __( 'click to edit this field', 'tno-bim-quickscan' ) . "'>" . __( 'Edit', 'tno-bim-quickscan' ) . '</a></div>';
+						 'Location: Field ID ' . $field[ 'id' ] . '</div>' .
+						 $deleteFieldLink . " <a class='field_edit_icon edit_icon_collapsed' title='" . __( 'click to edit this field', 'tno-bim-quickscan' ) . "'>" . __( 'Edit', 'tno-bim-quickscan' ) . '</a></div>';
 				} else {
 					$adminButtons = '';
 				}
@@ -421,9 +445,9 @@ class TNOBIMQuickscan {
 					$content .= '<div class=\'user-selection-container\' id=\'user-selection-container-' . $formId . '-' . $field[ 'id' ] . '\'>';
 					$content .= '<input type=\'hidden\' class=\''. $field[ 'type' ] . ' ' . ( isset( $field[ 'cssClass' ] ) ? esc_attr( $field[ 'cssClass' ] ) : '' ) . ' ' . $field[ 'size' ] . '\' ' . ' name=\'input_' . $field[ 'id' ] . '\' value=\'' . ( !isset( $currentUser ) ? 'new' : $value ) . '\' />';
 					$content .= '<div class=\'selected-user\'><span class=\'key\'>' .
-						__( 'Selected company', 'tno-bim-quickscan' ) . '</span><span class=\'value\'>' .
-						( isset( $currentUser ) ? ( $currentUser->display_name . '  (<a href=\'javascript:void( null );\' onclick=\'TNOBIMQuickscan.addNewUser( this );\'>' . __( 'Add new company', 'tno-bim-quickscan' ) . '</a>)' )
-								: __( 'none, fill in company information or select one', 'tno-bim-quickscan' ) ) . '</span></div>';
+						 __( 'Selected company', 'tno-bim-quickscan' ) . '</span><span class=\'value\'>' .
+						 ( isset( $currentUser ) ? ( $currentUser->display_name . '  (<a href=\'javascript:void( null );\' onclick=\'TNOBIMQuickscan.addNewUser( this );\'>' . __( 'Add new company', 'tno-bim-quickscan' ) . '</a>)' )
+							  : __( 'none, fill in company information or select one', 'tno-bim-quickscan' ) ) . '</span></div>';
 					$content .= '<div class=\'search-container\'><label for=\'search-user-' . $formId . '-' . $field[ 'id' ] . '\'>' . __( 'Search company', 'tno-bim-quickscan' ) . '</label> <input type=\'text\' autocomplete=\'off\' id=\'search-user-' . $formId . '-' . $field[ 'id' ] . '\' /> <img src=\'' . get_bloginfo( 'wpurl' ) . '/wp-admin/images/wpspin_light.gif\' alt=\'loading...\' class=\'loading-image\' style=\'display: none\' /></div>';
 					$content .= '<div class=\'address-information\'>';
 					$content .= '<label for=\'name-' . $formId . '-' . $field[ 'id' ] . '\'>' . __( 'Name', 'tno-bim-quickscan' ) . '</label> <input type=\'text\' class=\'name\' id=\'name-' . $formId . '-' . $field[ 'id' ] . '\' name=\'name_' . $formId . '_' . $field[ 'id' ] . '\' value=\'' . ( isset( $_POST[ 'name_' . $formId . '_' . $field[ 'id' ] ] ) ? $_POST[ 'name_' . $formId . '_' . $field[ 'id' ] ] : ( isset( $currentUser ) ? $currentUser->display_name : '' ) ) . '\' /><br />';
@@ -469,117 +493,117 @@ class TNOBIMQuickscan {
 	}
 
 	public function gformEditorJs() {
-?>
-<script type='text/javascript'>
-    jQuery( document ).ready( function( $ ) {
-        fieldSettings[ "tno_bim_bedrijf" ] = ".rules_setting, .label_setting, .description_setting, .admin_label_setting, .size_setting, .error_message_setting, .css_class_setting, .visibility_setting, .ll_choice_select_setting .rules_setting, .prepopulate_field_setting, .conditional_logic_field_setting";
-        fieldSettings[ "multiselect" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta, .bim_max_value, .bim_max_select";
-        fieldSettings[ "select" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta";
-        fieldSettings[ "checkbox" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta, .bim_max_value, .bim_max_select";
-        fieldSettings[ "radio" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta";
-	} );
-    jQuery( document ).bind( "gform_load_field_settings", function( event, field, form ) {
-    	if( field[ "type" ] == "multiselect" || field[ "type" ] == "select" || field[ "type" ] == "checkbox" || field[ "type" ] == "radio" ) {
-        	if( field[ "bim_value" ] ) {
-            	jQuery( "#bim-value-setting" ).val( field[ "bim_value" ] );
-        	} else {
-        		jQuery( "#bim-value-setting" ).val( "" );
-        	}
-        	if( field[ "bim_topic_setting" ] ) {
-            	jQuery( "#bim-topic-setting" ).val( field[ "bim_topic_setting" ] );
-        	} else {
-        		jQuery( "#bim-topic-setting" ).val( "" );
-        	}
-        	if( field[ "bim_max_value" ] ) {
-            	jQuery( "#bim-max-value-setting" ).val( field[ "bim_max_value" ] );
-        	} else {
-        		jQuery( "#bim-max-value-setting" ).val( "" );
-        	}
-        	if( field[ "bim_max_select" ] ) {
-            	jQuery( "#bim-max-select-setting" ).val( field[ "bim_max_select" ] );
-        	} else {
-        		jQuery( "#bim-max-select-setting" ).val( "" );
-        	}
-        	TNOBIMQuickscanAdmin.initializeGravityFormFields( event, field, form );
-    	}
-	} );
-</script>
-<script type="text/javascript" src="<?php print( plugins_url( '/tno-bim-quickscan-admin.js', __FILE__ ) ); ?>"></script>
-<?php
+		?>
+		<script type='text/javascript'>
+			jQuery( document ).ready( function( $ ) {
+				fieldSettings[ "tno_bim_bedrijf" ] = ".rules_setting, .label_setting, .description_setting, .admin_label_setting, .size_setting, .error_message_setting, .css_class_setting, .visibility_setting, .ll_choice_select_setting .rules_setting, .prepopulate_field_setting, .conditional_logic_field_setting";
+				fieldSettings[ "multiselect" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta, .bim_max_value, .bim_max_select";
+				fieldSettings[ "select" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta";
+				fieldSettings[ "checkbox" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta, .bim_max_value, .bim_max_select";
+				fieldSettings[ "radio" ] += ", .bim_points, .bim_categories, .bim_topic, .bim_value, .bim_post_meta";
+			} );
+			jQuery( document ).bind( "gform_load_field_settings", function( event, field, form ) {
+				if( field[ "type" ] == "multiselect" || field[ "type" ] == "select" || field[ "type" ] == "checkbox" || field[ "type" ] == "radio" ) {
+					if( field[ "bim_value" ] ) {
+						jQuery( "#bim-value-setting" ).val( field[ "bim_value" ] );
+					} else {
+						jQuery( "#bim-value-setting" ).val( "" );
+					}
+					if( field[ "bim_topic_setting" ] ) {
+						jQuery( "#bim-topic-setting" ).val( field[ "bim_topic_setting" ] );
+					} else {
+						jQuery( "#bim-topic-setting" ).val( "" );
+					}
+					if( field[ "bim_max_value" ] ) {
+						jQuery( "#bim-max-value-setting" ).val( field[ "bim_max_value" ] );
+					} else {
+						jQuery( "#bim-max-value-setting" ).val( "" );
+					}
+					if( field[ "bim_max_select" ] ) {
+						jQuery( "#bim-max-select-setting" ).val( field[ "bim_max_select" ] );
+					} else {
+						jQuery( "#bim-max-select-setting" ).val( "" );
+					}
+					TNOBIMQuickscanAdmin.initializeGravityFormFields( event, field, form );
+				}
+			} );
+		</script>
+		<script type="text/javascript" src="<?php print( plugins_url( '/tno-bim-quickscan-admin.js', __FILE__ ) ); ?>"></script>
+		<?php
 	}
 
 	public function gformFieldStandardSettings( $position, $formId ) {
 		// bim_points, .bim_categories, .bim_topic, .bim_value
 		if( $position == 1550 ) {
-?>
-                <li class="bim_points field_setting" style="display:list-item;">
-                    <label for="bim-points-setting" class="inline">
-                        <?php _e( 'Set BIM Quickscan weight for each answer', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_points' ); ?><br />
-                    <div id="bim-points-per-answer"></div>
-                </li>
-                <li class="bim_categories field_setting" style="display:list-item;">
-                    <label for="bim-categories-setting" class="inline">
-                        <?php _e( 'Select BIM Quickscan aspects for this question', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_categories' ); ?><br />
-<?php
-			$categories = get_terms( $this->options[ 'taxonomy_category' ], Array( 'hide_empty' => false ) );
-			foreach( $categories as $category ) {
-?>
-						<input onclick="TNOBIMQuickscanAdmin.saveBimCategories();" type="checkbox" class="bim-category-setting-checkbox" id="bim-category-<?php print( $category->term_id ); ?>" value="<?php print( $category->term_id ); ?>" />
-						<input type="text" size="3" onkeyup="TNOBIMQuickscanAdmin.saveBimCategories();" id="bim-category-weight-<?php print( $category->term_id ); ?>" class="bim-category-setting-weight" value="" />
-						<label for="bim-category-<?php print( $category->term_id ); ?>" class="inline"><?php print( $category->name ); ?></label><br />
-<?php
-			}
-?>
-                </li>
-                <li class="bim_topic field_setting" style="display:list-item;">
-                    <label for="bim-topic-setting" class="inline">
-                        <?php _e( 'Select the BIM Quickscan topic', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_topic' ); ?><br />
-                    <select id="bim-topic-setting" onchange="SetFieldProperty( 'bim_topic_setting', this.value )">
-<?php
-			$topics = get_terms( $this->options[ 'taxonomy_topic' ], Array( 'hide_empty' => false ) );
-			foreach( $topics as $topic ) {
-?>
+			?>
+			<li class="bim_points field_setting" style="display:list-item;">
+				<label for="bim-points-setting" class="inline">
+					<?php _e( 'Set BIM Quickscan weight for each answer', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_points' ); ?><br />
+				<div id="bim-points-per-answer"></div>
+			</li>
+			<li class="bim_categories field_setting" style="display:list-item;">
+				<label for="bim-categories-setting" class="inline">
+					<?php _e( 'Select BIM Quickscan aspects for this question', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_categories' ); ?><br />
+				<?php
+				$categories = get_terms( $this->options[ 'taxonomy_category' ], Array( 'hide_empty' => false ) );
+				foreach( $categories as $category ) {
+					?>
+					<input onclick="TNOBIMQuickscanAdmin.saveBimCategories();" type="checkbox" class="bim-category-setting-checkbox" id="bim-category-<?php print( $category->term_id ); ?>" value="<?php print( $category->term_id ); ?>" />
+					<input type="text" size="3" onkeyup="TNOBIMQuickscanAdmin.saveBimCategories();" id="bim-category-weight-<?php print( $category->term_id ); ?>" class="bim-category-setting-weight" value="" />
+					<label for="bim-category-<?php print( $category->term_id ); ?>" class="inline"><?php print( $category->name ); ?></label><br />
+					<?php
+				}
+				?>
+			</li>
+			<li class="bim_topic field_setting" style="display:list-item;">
+				<label for="bim-topic-setting" class="inline">
+					<?php _e( 'Select the BIM Quickscan topic', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_topic' ); ?><br />
+				<select id="bim-topic-setting" onchange="SetFieldProperty( 'bim_topic_setting', this.value )">
+					<?php
+					$topics = get_terms( $this->options[ 'taxonomy_topic' ], Array( 'hide_empty' => false ) );
+					foreach( $topics as $topic ) {
+						?>
 						<option value="<?php print( $topic->term_id ); ?>"><?php print( $topic->name ); ?></option>
-<?php
-			}
-?>
-                    </select>
-                </li>
-                <li class="bim_value field_setting" style="display:list-item;">
-                    <label for="bim-value-setting" class="inline">
-                        <?php _e( 'BIM Quickscan weight for this question', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_value' ); ?><br />
-                    <input type="text" size="3" id="bim-value-setting" value="" onkeyup="SetFieldProperty( 'bim_value', this.value );" />
-                </li>
-                <li class="bim_max_value field_setting" style="display:list-item;">
-                    <label for="bim-max-value-setting" class="inline">
-                        <?php _e( 'BIM Quickscan maximum weight for this question', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_max_value' ); ?><br />
-                    <input type="text" size="3" id="bim-max-value-setting" value="" onkeyup="SetFieldProperty( 'bim_max_value', this.value );" />
-                </li>
-                <li class="bim_max_select field_setting" style="display:list-item;">
-                    <label for="bim-max-select-setting" class="inline">
-                        <?php _e( 'BIM Quickscan maximum number of answers', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_max_select' ); ?><br />
-                    <input type="text" size="3" id="bim-max-select-setting" value="" onkeyup="SetFieldProperty( 'bim_max_select', this.value );" />
-                </li>
-                <li class="bim_post_meta field_setting" style="display:list-item;">
-                    <label for="bim-post-meta" class="inline">
-                        <?php _e( 'Store value in post meta for BIM Quickscan report', 'tno-bim-quickscan' ); ?>
-                    </label>
-                    <?php gform_tooltip( 'form_field_bim_post_meta' ); ?><br />
-                    <input type="text" size="" id="bim-post-meta" value="" onkeyup="SetFieldProperty( 'bim_post_meta', this.value );" />
-                </li>
-<?php
+						<?php
+					}
+					?>
+				</select>
+			</li>
+			<li class="bim_value field_setting" style="display:list-item;">
+				<label for="bim-value-setting" class="inline">
+					<?php _e( 'BIM Quickscan weight for this question', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_value' ); ?><br />
+				<input type="text" size="3" id="bim-value-setting" value="" onkeyup="SetFieldProperty( 'bim_value', this.value );" />
+			</li>
+			<li class="bim_max_value field_setting" style="display:list-item;">
+				<label for="bim-max-value-setting" class="inline">
+					<?php _e( 'BIM Quickscan maximum weight for this question', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_max_value' ); ?><br />
+				<input type="text" size="3" id="bim-max-value-setting" value="" onkeyup="SetFieldProperty( 'bim_max_value', this.value );" />
+			</li>
+			<li class="bim_max_select field_setting" style="display:list-item;">
+				<label for="bim-max-select-setting" class="inline">
+					<?php _e( 'BIM Quickscan maximum number of answers', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_max_select' ); ?><br />
+				<input type="text" size="3" id="bim-max-select-setting" value="" onkeyup="SetFieldProperty( 'bim_max_select', this.value );" />
+			</li>
+			<li class="bim_post_meta field_setting" style="display:list-item;">
+				<label for="bim-post-meta" class="inline">
+					<?php _e( 'Store value in post meta for BIM Quickscan report', 'tno-bim-quickscan' ); ?>
+				</label>
+				<?php gform_tooltip( 'form_field_bim_post_meta' ); ?><br />
+				<input type="text" size="" id="bim-post-meta" value="" onkeyup="SetFieldProperty( 'bim_post_meta', this.value );" />
+			</li>
+			<?php
 		}
 	}
 
@@ -607,15 +631,15 @@ class TNOBIMQuickscan {
 	}
 
 	public function wpFooter() {
-?>
-			<script type="text/javascript">
-				TNOBIMQuickscan.settings = {
-							baseUri: "<?php bloginfo( 'wpurl' ); ?>",
-							addNewAddressText: "<?php _e( 'add new company', 'tno-bim-quickscan' ); ?>",
-							noneAddNewCompanyText: "<?php _e( 'none, enter company details or select a company', 'tno-bim-quickscan' ); ?>"
-						};
-			</script>
-<?php
+		?>
+		<script type="text/javascript">
+			TNOBIMQuickscan.settings = {
+				baseUri: "<?php bloginfo( 'wpurl' ); ?>",
+				addNewAddressText: "<?php _e( 'add new company', 'tno-bim-quickscan' ); ?>",
+				noneAddNewCompanyText: "<?php _e( 'none, enter company details or select a company', 'tno-bim-quickscan' ); ?>"
+			};
+		</script>
+		<?php
 	}
 
 	public function gFormSaveFieldValue( $value, $lead, $field, $form ) {
@@ -671,13 +695,13 @@ class TNOBIMQuickscan {
 	}
 
 	public function adminFooter() {
-?>
-			<script type="text/javascript">
-				var TNOBIMQuickscanAdminSettings = {
-							baseUri:	"<?php bloginfo( 'wpurl' ); ?>"
-						};
-			</script>
-<?php
+		?>
+		<script type="text/javascript">
+			var TNOBIMQuickscanAdminSettings = {
+				baseUri:	"<?php bloginfo( 'wpurl' ); ?>"
+			};
+		</script>
+		<?php
 	}
 
 	public function gFormAfterSubmission( $entry, $form, $forceAdvisor = -1 ) {
@@ -913,12 +937,12 @@ class TNOBIMQuickscan {
 			}*/
 
 			$postData = Array(
-						'post_title' => 'Quickscan ' . ( isset( $userData ) ? ( $userData->get( 'display_name' ) . ' ' ) : '' ) . date( 'd-m-Y', strtotime( $entry[ 'date_created' ] ) ),
-						'post_content' => $content,
-						'post_type' => $this->options[ 'report_post_type' ],
-						'post_status' => 'private',
-						'post_date' => $entry[ 'date_created' ]
-						);
+				 'post_title' => 'Quickscan ' . ( isset( $userData ) ? ( $userData->get( 'display_name' ) . ' ' ) : '' ) . date( 'd-m-Y', strtotime( $entry[ 'date_created' ] ) ),
+				 'post_content' => $content,
+				 'post_type' => $this->options[ 'report_post_type' ],
+				 'post_status' => 'private',
+				 'post_date' => $entry[ 'date_created' ]
+			);
 
 			if( $userId !== false ) {
 				$postData[ 'post_author' ] = $userId;
@@ -1003,11 +1027,11 @@ class TNOBIMQuickscan {
 				$type = '';
 				$valid = false;
 				if( ( $isAdvisor || current_user_can( 'activate_plugins' ) ) && ( $_POST[ 'input_' . $field[ 'id' ] ] == 'new' || ctype_digit( $_POST[ 'input_' . $field[ 'id' ] ] ) ) &&
-						$_POST[ 'email_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
-						$_POST[ 'name_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
-						$_POST[ 'street_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
-						$_POST[ 'postcode_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
-						$_POST[ 'city_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' ) {
+					 $_POST[ 'email_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
+					 $_POST[ 'name_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
+					 $_POST[ 'street_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
+					 $_POST[ 'postcode_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' &&
+					 $_POST[ 'city_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] != '' ) {
 					$valid = true;
 					if( $_POST[ 'input_' . $field[ 'id' ] ] == 'new' && username_exists( $_POST[ 'email_' . $validationResult[ 'form' ][ 'id' ] . '_' . $field[ 'id' ] ] ) ) {
 						$valid = false;
@@ -1081,12 +1105,12 @@ class TNOBIMQuickscan {
 	public function quickscanDashboardWidget() {
 		if( current_user_can( 'edit_posts' ) ) {
 			$rapporten = get_posts( Array(
-					'post_type' => $this->options[ 'report_post_type' ],
-					'year' => date( 'Y' ),
-					'monthnum' => date( 'm' ),
-					'numberposts' => -1,
-					'post_status' => 'any'
-					) );
+				 'post_type' => $this->options[ 'report_post_type' ],
+				 'year' => date( 'Y' ),
+				 'monthnum' => date( 'm' ),
+				 'numberposts' => -1,
+				 'post_status' => 'any'
+			) );
 			$stats = Array();
 			foreach( $rapporten as $rapport ) {
 				$coreBusiness = get_post_meta( $rapport->ID, 'core_business', true );
@@ -1104,69 +1128,69 @@ class TNOBIMQuickscan {
 					$stats[ 'core_business' ][$coreBusiness] = Array( $rapport->ID );
 				}
 			}
-?>
-<div class="table table_content">
-	<p class="sub"><?php _e( 'This month', 'tno-bim-quickscan' ); ?></p>
-	<table>
-		<tbody>
-			<tr class="first">
-				<td class="first b b-posts"><a href="edit.php?post_type=<?php print( $this->options[ 'report_post_type' ] ); ?>"><?php print( number_format( count( $rapporten ) ) ); ?></a></td>
-				<td class="t posts"><a href="edit.php?post_type=<?php print( $this->options[ 'report_post_type' ] ); ?>"><?php _e( 'Quickscans done', 'tno-bim-quickscan' ); ?></a></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="clear"></div>
-<div class="table table_discussion">
-	<p class="sub"><?php _e( 'By core-business', 'tno-bim-quickscan' ); ?></p>
-	<table>
-		<tbody>
-<?php
-			$first = true;
-			if( count( $stats ) > 0 && is_array( $stats[ 'core_business' ] ) ) {
-				foreach( $stats[ 'core_business' ] as $key => $coreBusiness ) {
-					if( count( $coreBusiness ) > 0 ) {
-						$value = round( count( $coreBusiness ) / count( $rapporten ) * 100 ) . '%';
-					} else {
-						$value = '0%';
-					}
-					$maxScore = 0;
-					$score = 0;
-					foreach( $coreBusiness as $rapportId ) {
-						$resultaten = get_post_meta( $rapportId, '_answers', true );
-						if( is_array( $resultaten ) ) {
-							foreach( $resultaten as $resultaat ) {
-								$score += $resultaat[0];
-								$maxScore += $resultaat[1];
+			?>
+			<div class="table table_content">
+				<p class="sub"><?php _e( 'This month', 'tno-bim-quickscan' ); ?></p>
+				<table>
+					<tbody>
+					<tr class="first">
+						<td class="first b b-posts"><a href="edit.php?post_type=<?php print( $this->options[ 'report_post_type' ] ); ?>"><?php print( number_format( count( $rapporten ) ) ); ?></a></td>
+						<td class="t posts"><a href="edit.php?post_type=<?php print( $this->options[ 'report_post_type' ] ); ?>"><?php _e( 'Quickscans done', 'tno-bim-quickscan' ); ?></a></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clear"></div>
+			<div class="table table_discussion">
+				<p class="sub"><?php _e( 'By core-business', 'tno-bim-quickscan' ); ?></p>
+				<table>
+					<tbody>
+					<?php
+					$first = true;
+					if( count( $stats ) > 0 && is_array( $stats[ 'core_business' ] ) ) {
+						foreach( $stats[ 'core_business' ] as $key => $coreBusiness ) {
+							if( count( $coreBusiness ) > 0 ) {
+								$value = round( count( $coreBusiness ) / count( $rapporten ) * 100 ) . '%';
+							} else {
+								$value = '0%';
 							}
+							$maxScore = 0;
+							$score = 0;
+							foreach( $coreBusiness as $rapportId ) {
+								$resultaten = get_post_meta( $rapportId, '_answers', true );
+								if( is_array( $resultaten ) ) {
+									foreach( $resultaten as $resultaat ) {
+										$score += $resultaat[0];
+										$maxScore += $resultaat[1];
+									}
+								}
+							}
+							$maxScore /= count( $coreBusiness );
+							$score /= count( $coreBusiness );
+							if( $maxScore > 0 ) {
+								$resultText = round( $score / $maxScore * 100 ) . '% / 100%';
+							} else {
+								$resultText =  '0% / 100%';
+							}
+							?>
+							<tr class="<?php print( $first ? 'first' : '' ); ?>">
+								<td class="t comments"><span class="total"><?php print( $key ); ?></span></td>
+								<td class="b b-comments"><span class="total"><?php print( number_format( count( $coreBusiness ) ) ); ?></span></td>
+								<td class="b b-comments"><span class="total">(<?php print( $value ); ?>)</span></td>
+								<td class="last t comments"><span class="total"><?php _e( 'result', 'tno-bim-quickscan' ); ?>: <?php print( $resultText ); ?></span></td>
+							</tr>
+
+							<?php
 						}
 					}
-					$maxScore /= count( $coreBusiness );
-					$score /= count( $coreBusiness );
-					if( $maxScore > 0 ) {
-						$resultText = round( $score / $maxScore * 100 ) . '% / 100%';
-					} else {
-						$resultText =  '0% / 100%';
-					}
-?>
-			<tr class="<?php print( $first ? 'first' : '' ); ?>">
-				<td class="t comments"><span class="total"><?php print( $key ); ?></span></td>
-				<td class="b b-comments"><span class="total"><?php print( number_format( count( $coreBusiness ) ) ); ?></span></td>
-				<td class="b b-comments"><span class="total">(<?php print( $value ); ?>)</span></td>
-				<td class="last t comments"><span class="total"><?php _e( 'result', 'tno-bim-quickscan' ); ?>: <?php print( $resultText ); ?></span></td>
-			</tr>
-
-<?php
-				}
-			}
-?>
-		</tbody>
-	</table>
-</div>
-<div class="versions">
-	<br class="clear">
-</div>
-<?php
+					?>
+					</tbody>
+				</table>
+			</div>
+			<div class="versions">
+				<br class="clear">
+			</div>
+			<?php
 		}
 	}
 
@@ -1193,17 +1217,17 @@ class TNOBIMQuickscan {
 			$currentPage = 1;
 		}
 		$maxPage = ceil( $totalReports / $this->options[ 'reports_per_page' ] );
-?>
-			<div class="report-pagination">
-<?php
-		for( $i = 1; $i <= $maxPage; $i ++ ) {
-?>
+		?>
+		<div class="report-pagination">
+			<?php
+			for( $i = 1; $i <= $maxPage; $i ++ ) {
+				?>
 				<a class="<?php print( $i == $currentPage ? 'current-page' : '' ); ?>" href="<?php print( get_permalink( $currentPageId ) . $i ); ?>"><?php print( $i ); ?></a>
-<?php
-		}
-?>
-			</div>
-<?php
+				<?php
+			}
+			?>
+		</div>
+		<?php
 	}
 
 	public function importSelfscan( $data, $titles ) {
@@ -1223,7 +1247,7 @@ class TNOBIMQuickscan {
 		$wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->prefix}rg_lead
 				( form_id, date_created, ip, source_url, user_agent, currency, created_by, status )
 				VALUES ( %d, %s, %s, '', '', 'USD', '', 'active' )",
-				$this->options[ 'quickscan_form' ], mysql_real_escape_string( $data[3] ), mysql_real_escape_string( $data[5] ) ) );
+			 $this->options[ 'quickscan_form' ], mysql_real_escape_string( $data[3] ), mysql_real_escape_string( $data[5] ) ) );
 		$leadId = $wpdb->insert_id;
 
 		if( $data[5] == '' ) {
@@ -1413,7 +1437,7 @@ class TNOBIMQuickscan {
 		$wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->prefix}rg_lead
 				( form_id, date_created, ip, source_url, user_agent, currency, created_by, status )
 				VALUES ( %d, %s, '', %s, '', 'USD', '', 'active' )",
-				$this->options[ 'quickscan_form' ], mysql_real_escape_string( $data[3] ), mysql_real_escape_string( $data[4] ) ) );
+			 $this->options[ 'quickscan_form' ], mysql_real_escape_string( $data[3] ), mysql_real_escape_string( $data[4] ) ) );
 		$leadId = $wpdb->insert_id;
 
 		$form = $this->importFormEntryData( $leadId, $dataClean, $titlesClean, $authorId );
@@ -1443,10 +1467,10 @@ class TNOBIMQuickscan {
 			if( $field[ 'type' ] == 'tno_bim_bedrijf' ) {
 				// Special field, we should set the author id here, this is not part of the data array
 				$wpdb->query( $wpdb->prepare(
-						"INSERT INTO {$wpdb->prefix}rg_lead_detail
+					 "INSERT INTO {$wpdb->prefix}rg_lead_detail
 						( lead_id, form_id, field_number, value )
 						VALUES( %d, %d, %f, %s )",
-						$leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $authorId ) ) );
+					 $leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $authorId ) ) );
 				//print( "{$field[ 'label' ]}: $authorId<br />" );
 			} elseif( $field[ 'type' ] == 'radio' ) {
 				$answerOther = '';
@@ -1485,10 +1509,10 @@ class TNOBIMQuickscan {
 				}
 
 				$wpdb->query( $wpdb->prepare(
-						"INSERT INTO {$wpdb->prefix}rg_lead_detail
+					 "INSERT INTO {$wpdb->prefix}rg_lead_detail
 						( lead_id, form_id, field_number, value )
 						VALUES( %d, %d, %f, %s )",
-						$leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $answerData ) ) );
+					 $leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $answerData ) ) );
 				//print( "{$field[ 'label' ]} ({$titles[$oldIndex]}): $answerData (=" . trim( $data[$oldIndex], "\x2E" ) . ")<br />" );
 			} elseif( $field[ 'type' ] == 'checkbox' ) {
 				// Add checkboxes too
@@ -1502,11 +1526,11 @@ class TNOBIMQuickscan {
 				//print( "{$field[ 'label' ]} ({$titles[$index]}):" );
 				foreach( $field[ 'inputs' ] as $key => $input ) {
 					//if( strstr( $titles[$index + $skip], $baseString ) !== false ) {
-						if( strtolower( $data[$index + $key] ) == 'ja' ) {
-							$answers[] = $key;
-							//print( $input[ 'label' ] . ', ' );
-						}
-						$skip = $key + 1;
+					if( strtolower( $data[$index + $key] ) == 'ja' ) {
+						$answers[] = $key;
+						//print( $input[ 'label' ] . ', ' );
+					}
+					$skip = $key + 1;
 					//}
 				}
 
@@ -1514,19 +1538,19 @@ class TNOBIMQuickscan {
 
 				foreach( $answers as $answer ) {
 					$wpdb->query( $wpdb->prepare(
-						"INSERT INTO {$wpdb->prefix}rg_lead_detail
+						 "INSERT INTO {$wpdb->prefix}rg_lead_detail
 						( lead_id, form_id, field_number, value )
 						VALUES( %d, %d, %f, %s )",
-						$leadId, $this->options[ 'quickscan_form' ], $field[ 'inputs' ][$answer][ 'id' ], mysql_real_escape_string( $field[ 'choices' ][$answer][ 'value' ] ) ) );
+						 $leadId, $this->options[ 'quickscan_form' ], $field[ 'inputs' ][$answer][ 'id' ], mysql_real_escape_string( $field[ 'choices' ][$answer][ 'value' ] ) ) );
 				}
 				$index += $skip;
 			} elseif( $field[ 'type' ] == 'text' ) {
 				// Are there any other fields? What do we do with them
 				$wpdb->query( $wpdb->prepare(
-						"INSERT INTO {$wpdb->prefix}rg_lead_detail
+					 "INSERT INTO {$wpdb->prefix}rg_lead_detail
 						( lead_id, form_id, field_number, value )
 						VALUES( %d, %d, %f, %s )",
-						$leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $data[$index] ) ) );
+					 $leadId, $this->options[ 'quickscan_form' ], $field[ 'id' ], mysql_real_escape_string( $data[$index] ) ) );
 				//print( "{$field[ 'label' ]}: {$data[$index]}<br />" );
 				$index ++;
 			}
@@ -1552,11 +1576,11 @@ class TNOBIMQuickscan {
 		if( is_user_logged_in() ) {
 			return true;
 		} else {
-?>
-				<p><?php _e( 'You have to be logged in to view this page.', 'tno-bim-quickscan' ); ?></p>
-				<p><?php _e( 'To log in now, click', 'tno-bim-quickscan' ); ?> <a href="<?php bloginfo( 'wpurl' ); ?>/wp-login.php"><?php _e( 'here', 'tno-bim-quickscan' ); ?></a></p>
-				<p><?php _e( 'No user account yet?', 'tno-bim-quickscan' ); ?> <a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $this->options[ 'register_page' ], 'page', true ) : $this->options[ 'register_page' ] ) ); ?>"><?php _e( 'Register here', 'tno-bim-quickscan' ); ?></a></p>
-<?php
+			?>
+			<p><?php _e( 'You have to be logged in to view this page.', 'tno-bim-quickscan' ); ?></p>
+			<p><?php _e( 'To log in now, click', 'tno-bim-quickscan' ); ?> <a href="<?php bloginfo( 'wpurl' ); ?>/wp-login.php"><?php _e( 'here', 'tno-bim-quickscan' ); ?></a></p>
+			<p><?php _e( 'No user account yet?', 'tno-bim-quickscan' ); ?> <a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $this->options[ 'register_page' ], 'page', true ) : $this->options[ 'register_page' ] ) ); ?>"><?php _e( 'Register here', 'tno-bim-quickscan' ); ?></a></p>
+			<?php
 			return false;
 		}
 	}
@@ -1583,72 +1607,72 @@ class TNOBIMQuickscan {
 			} else {
 				$availableLanguages = Array();
 			}
-?>
-		<div class="graph-container">
-			<canvas id="interactive-radar-plot" data-type="Radar" width="625" height="600" style="width: 625px; height: 600px;"></canvas>
-			<canvas id="interactive-bar-chart" width="625" height="600"></canvas>
-		</div>
-		<div class="graph-control">
-			<div class="slider-container">
-				<h4><?php _e( 'Show data between', 'tno-bim-quickscan' ); ?> <span id="slider-result"></span></h4>
-				<div id="slider"></div><br />
-				<h4><?php _e( 'Quickscan types', 'tno-bim-quickscan' ); ?></h4>
-				<input type="radio" checked name="scan_types" class="scan-types" id="scan-type-all-radio" value="all" /> <label for="scan-type-all-radio"><?php _e( 'All', 'tno-bim-quickscan' ); ?></label><br />
-				<input type="radio" name="scan_types" class="scan-types" id="scan-type-quickscan-radio" value="quickscan" /> <label for="scan-type-quickscan-radio"><?php _e( 'Quickscans with adviser', 'tno-bim-quickscan' ); ?></label><br />
-				<input type="radio" name="scan_types" class="scan-types" id="scan-type-selfscan-radio" value="selfscan" /> <label for="scan-type-selfscan-radio"><?php _e( 'Quickscans without adviser', 'tno-bim-quickscan' ); ?></label><br />
-				<h4><?php _e( 'Quickscan languages', 'tno-bim-quickscan' ); ?></h4>
-				<input type="radio" checked name="languages" class="languages" id="languages-all-radio" value="_all_" /> <label for="languages-all-radio"><?php _e( 'All', 'tno-bim-quickscan' ); ?></label><br />
-<?php 
-		foreach( $availableLanguages as $language => $object ) {
-?>
-				<input type="radio" name="languages" class="languages" id="languages-<?php print( $language ); ?>-radio" value="<?php print( $language ); ?>" /> <label for="languages-<?php print( $language ); ?>-radio"><?php print( $language ); ?><label><br />
-<?php 
-		}
-?>				
+			?>
+			<div class="graph-container">
+				<canvas id="interactive-radar-plot" data-type="Radar" width="625" height="600" style="width: 625px; height: 600px;"></canvas>
+				<canvas id="interactive-bar-chart" width="625" height="600"></canvas>
 			</div>
-			<div class="core-business-container">
-				<h4><?php _e( 'Show Quickscans', 'tno-bim-quickscan' ); ?></h4>
-				<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][0] ); ?>">&nbsp;</span> <?php _e( 'Maximum', 'tno-bim-quickscan' ); ?><br />
-				<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][1] ); ?>">&nbsp;</span> <input type="checkbox" id="all-scans" class="core-business" checked /> <label for="all-scans"><?php _e( 'All Quickscans', 'tno-bim-quickscan' ); ?></label><br />
-				<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][2] ); ?>">&nbsp;</span> <input type="checkbox" id="own-scans" class="core-business" checked /> <label for="own-scans"><?php _e( 'My Quickscans', 'tno-bim-quickscan' ); ?></label><br />
-				<h4><?php _e( 'Quickscans with specific core-businesses', 'tno-bim-quickscan' ); ?></h4>
-<?php
-			$coreBusinesses = $wpdb->get_results( "SELECT meta_value
+			<div class="graph-control">
+				<div class="slider-container">
+					<h4><?php _e( 'Show data between', 'tno-bim-quickscan' ); ?> <span id="slider-result"></span></h4>
+					<div id="slider"></div><br />
+					<h4><?php _e( 'Quickscan types', 'tno-bim-quickscan' ); ?></h4>
+					<input type="radio" checked name="scan_types" class="scan-types" id="scan-type-all-radio" value="all" /> <label for="scan-type-all-radio"><?php _e( 'All', 'tno-bim-quickscan' ); ?></label><br />
+					<input type="radio" name="scan_types" class="scan-types" id="scan-type-quickscan-radio" value="quickscan" /> <label for="scan-type-quickscan-radio"><?php _e( 'Quickscans with adviser', 'tno-bim-quickscan' ); ?></label><br />
+					<input type="radio" name="scan_types" class="scan-types" id="scan-type-selfscan-radio" value="selfscan" /> <label for="scan-type-selfscan-radio"><?php _e( 'Quickscans without adviser', 'tno-bim-quickscan' ); ?></label><br />
+					<h4><?php _e( 'Quickscan languages', 'tno-bim-quickscan' ); ?></h4>
+					<input type="radio" checked name="languages" class="languages" id="languages-all-radio" value="_all_" /> <label for="languages-all-radio"><?php _e( 'All', 'tno-bim-quickscan' ); ?></label><br />
+					<?php
+					foreach( $availableLanguages as $language => $object ) {
+					?>
+					<input type="radio" name="languages" class="languages" id="languages-<?php print( $language ); ?>-radio" value="<?php print( $language ); ?>" /> <label for="languages-<?php print( $language ); ?>-radio"><?php print( $language ); ?><label><br />
+							<?php
+							}
+							?>
+				</div>
+				<div class="core-business-container">
+					<h4><?php _e( 'Show Quickscans', 'tno-bim-quickscan' ); ?></h4>
+					<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][0] ); ?>">&nbsp;</span> <?php _e( 'Maximum', 'tno-bim-quickscan' ); ?><br />
+					<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][1] ); ?>">&nbsp;</span> <input type="checkbox" id="all-scans" class="core-business" checked /> <label for="all-scans"><?php _e( 'All Quickscans', 'tno-bim-quickscan' ); ?></label><br />
+					<span class="legend" style="background-color: <?php print( $tnoBIMQuickscan->colors[ 'strokeColor' ][2] ); ?>">&nbsp;</span> <input type="checkbox" id="own-scans" class="core-business" checked /> <label for="own-scans"><?php _e( 'My Quickscans', 'tno-bim-quickscan' ); ?></label><br />
+					<h4><?php _e( 'Quickscans with specific core-businesses', 'tno-bim-quickscan' ); ?></h4>
+					<?php
+					$coreBusinesses = $wpdb->get_results( "SELECT meta_value
 					FROM $wpdb->postmeta
 					WHERE meta_key = 'core_business'
 					GROUP BY meta_value
 					ORDER BY meta_value" );
-			$colorIndex = 3;
-			foreach( $coreBusinesses as $coreBusiness ) {
-				if( $coreBusiness->meta_value != 'anders' && $coreBusiness->meta_value != 'other' ) {
-?>
-				<span class="legend" style="background-color: <?php 
-					print( $tnoBIMQuickscan->colors[ 'strokeColor' ][$colorIndex] ); 
-?>">&nbsp;</span> <input type="checkbox" id="scans-<?php print( $coreBusiness->meta_value ); ?>" class="core-business" /> <label for="scans-<?php 
-					print( $coreBusiness->meta_value ); 
-?>"><?php print( ( defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE == 'en' ) ? TNOBIMQuickscan::$coreBusinessesEnglish[$coreBusiness->meta_value] : $coreBusiness->meta_value ); ?></label><br />
-<?php
-					$colorIndex ++;
-				}
-			}
-			foreach( $coreBusinesses as $coreBusiness ) {
-				if( $coreBusiness->meta_value == 'anders' ) {
-?>
-				<span class="legend" style="background-color: <?php 
-					print( $tnoBIMQuickscan->colors[ 'strokeColor' ][$colorIndex] ); 
-?>">&nbsp;</span> <input type="checkbox" id="scans-<?php print( $coreBusiness->meta_value ); ?>" class="core-business" /> <label for="scans-<?php 
-					print( $coreBusiness->meta_value ); 
-?>"><?php print( ( defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE == 'en' ) ? TNOBIMQuickscan::$coreBusinessesEnglish[$coreBusiness->meta_value] : $coreBusiness->meta_value ); ?></label><br />
-<?php
-					$colorIndex ++;
-				}
-			}
-?>
+					$colorIndex = 3;
+					foreach( $coreBusinesses as $coreBusiness ) {
+						if( $coreBusiness->meta_value != 'anders' && $coreBusiness->meta_value != 'other' ) {
+							?>
+							<span class="legend" style="background-color: <?php
+							print( $tnoBIMQuickscan->colors[ 'strokeColor' ][$colorIndex] );
+							?>">&nbsp;</span> <input type="checkbox" id="scans-<?php print( $coreBusiness->meta_value ); ?>" class="core-business" /> <label for="scans-<?php
+							print( $coreBusiness->meta_value );
+							?>"><?php print( ( defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE == 'en' ) ? TNOBIMQuickscan::$coreBusinessesEnglish[$coreBusiness->meta_value] : $coreBusiness->meta_value ); ?></label><br />
+							<?php
+							$colorIndex ++;
+						}
+					}
+					foreach( $coreBusinesses as $coreBusiness ) {
+						if( $coreBusiness->meta_value == 'anders' ) {
+							?>
+							<span class="legend" style="background-color: <?php
+							print( $tnoBIMQuickscan->colors[ 'strokeColor' ][$colorIndex] );
+							?>">&nbsp;</span> <input type="checkbox" id="scans-<?php print( $coreBusiness->meta_value ); ?>" class="core-business" /> <label for="scans-<?php
+							print( $coreBusiness->meta_value );
+							?>"><?php print( ( defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE == 'en' ) ? TNOBIMQuickscan::$coreBusinessesEnglish[$coreBusiness->meta_value] : $coreBusiness->meta_value ); ?></label><br />
+							<?php
+							$colorIndex ++;
+						}
+					}
+					?>
+				</div>
+				<div class="clear"></div>
 			</div>
-			<div class="clear"></div>
-		</div>
-		<script type="text/javascript">
-			var customizableChartSettings = {
+			<script type="text/javascript">
+				var customizableChartSettings = {
 					max: <?php print( $max ); ?>,
 					min: <?php print( $min ); ?>,
 					startYear: <?php print( $startDate[0] ); ?>,
@@ -1656,9 +1680,9 @@ class TNOBIMQuickscan {
 					endDate: <?php print( $endDate[1] . '-' . $endDate[0] ); ?>,
 					language: "<?php print( ICL_LANGUAGE_CODE ); ?>",
 					ajaxUri: "<?php print( plugins_url( 'get_chart_data.php', __FILE__ ) ); ?>"
-			};
-		</script>
-<?php
+				};
+			</script>
+			<?php
 		}
 	}
 
@@ -1682,51 +1706,51 @@ class TNOBIMQuickscan {
 		}
 
 		if( count( $companiesWithPublicReport ) == 0 ) {
-?>
+			?>
 			<p><?php _e( 'There are no companies with public reports', 'tno-bim-quickscan' ); ?></p>
-<?php
-			} else {
-?>
+			<?php
+		} else {
+			?>
 			<table class="list">
 				<tr class="odd">
 					<th><?php _e( 'Company', 'tno-bim-quickscan' ); ?></th>
 					<th><?php _e( 'Published reports', 'tno-bim-quickscan' ); ?></th>
 				</tr>
-<?php
+				<?php
 				$count = 0;
 				foreach( $companiesWithPublicReport as $company ) {
-?>
-				<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
-					<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'company_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'company_page' ] ) ); ?>?id=<?php print( $company->ID ); ?>"><?php print( $company->display_name ); ?></a></td>
-					<td><?php print( $company->amount_public ); ?></td>
-				</tr>
-<?php
+					?>
+					<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
+						<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'company_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'company_page' ] ) ); ?>?id=<?php print( $company->ID ); ?>"><?php print( $company->display_name ); ?></a></td>
+						<td><?php print( $company->amount_public ); ?></td>
+					</tr>
+					<?php
 					$count ++;
 				}
-?>
+				?>
 			</table>
-<?php
-			}
+			<?php
+		}
 	}
 
 	public static function showPublicReportList() {
 		global $tnoBIMQuickscan, $page, $pageId;
 
 		$query = new WP_Query( Array(
-				'post_type' => isset( $tnoBIMQuickscan->options[ 'report_post_type' ] ) ? $tnoBIMQuickscan->options[ 'report_post_type' ] : '',
-				'post_status' => Array( 'publish' ),
-				'posts_per_page' => isset( $tnoBIMQuickscan->options[ 'reports_per_page' ] ) ? $tnoBIMQuickscan->options[ 'reports_per_page' ] : 10,
-				'paged' => $page
+			 'post_type' => isset( $tnoBIMQuickscan->options[ 'report_post_type' ] ) ? $tnoBIMQuickscan->options[ 'report_post_type' ] : '',
+			 'post_status' => Array( 'publish' ),
+			 'posts_per_page' => isset( $tnoBIMQuickscan->options[ 'reports_per_page' ] ) ? $tnoBIMQuickscan->options[ 'reports_per_page' ] : 10,
+			 'paged' => $page
 		) );
 		$publicReports = $query->posts;
 		$totalReports = $query->found_posts;
 
 		if( count( $publicReports ) == 0 ) {
-?>
+			?>
 			<p><?php _e( 'There are no public reports available', 'tno-bim-quickscan' ); ?></p>
-<?php
-			} else {
-?>
+			<?php
+		} else {
+			?>
 			<table class="list">
 				<tr class="odd">
 					<th><?php _e( 'Date', 'tno-bim-quickscan' ); ?></th>
@@ -1735,7 +1759,7 @@ class TNOBIMQuickscan {
 					<th class="number"><?php _e( 'Result', 'tno-bim-quickscan' ); ?> %</th>
 					<th><?php _e( 'Language', 'tno-bim-quickscan' ); ?></th>
 				</tr>
-<?php
+				<?php
 				$count = 0;
 				foreach( $publicReports as $report ) {
 					$results = get_post_meta( $report->ID,  '_results', true );
@@ -1747,23 +1771,23 @@ class TNOBIMQuickscan {
 					if( !isset( $language ) || $language == '' ) {
 						$language = 'nl';
 					}
-?>
-				<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
-					<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a></td>
-<?php
-					$authorData = get_user_by( 'id', $report->post_author );
-?>
-					<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'company_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'company_page' ] ) ); ?>?id=<?php print( $report->post_author ); ?>"><?php print( $authorData->display_name ); ?></a></td>
-					<td><?php print( $coreBusiness ); ?></td>
-					<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '%' ); ?></td>
-					<td><?php print( $language ); ?></td>
-				</tr>
-<?php
+					?>
+					<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
+						<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a></td>
+						<?php
+						$authorData = get_user_by( 'id', $report->post_author );
+						?>
+						<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'company_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'company_page' ] ) ); ?>?id=<?php print( $report->post_author ); ?>"><?php print( $authorData->display_name ); ?></a></td>
+						<td><?php print( $coreBusiness ); ?></td>
+						<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '%' ); ?></td>
+						<td><?php print( $language ); ?></td>
+					</tr>
+					<?php
 					$count ++;
 				}
-?>
+				?>
 			</table>
-<?php
+			<?php
 			$tnoBIMQuickscan->printPageLinks( $pageId, $page, $totalReports );
 		}
 	}
@@ -1774,261 +1798,375 @@ class TNOBIMQuickscan {
 			$currentUserId = get_current_user_id();
 			if( $tnoBIMQuickscan->isAdvisor( $currentUserId ) ) {
 				$query = new WP_Query( Array(
-							'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
-							'post_status' => Array( 'publish', 'private' ),
-							'posts_per_page' => $tnoBIMQuickscan->options[ 'reports_per_page' ]
-						) );
+					 'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
+					 'post_status' => Array( 'publish', 'private' ),
+					 'posts_per_page' => $tnoBIMQuickscan->options[ 'reports_per_page' ]
+				) );
 			} else {
 				$query = new WP_Query( Array(
-						'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
-						'post_status' => Array( 'publish', 'private' ),
-						'posts_per_page' => $tnoBIMQuickscan->options[ 'reports_per_page' ],
-						'post_author' => $currentUserId
+					 'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
+					 'post_status' => Array( 'publish', 'private' ),
+					 'posts_per_page' => $tnoBIMQuickscan->options[ 'reports_per_page' ],
+					 'post_author' => $currentUserId
 				) );
-			}	
+			}
 
 			$myReports = $query->posts;
 			if( count( $myReports ) == 0 ) {
-?>
-			<p><?php _e( 'You do not have any reports, do the <a href="/quickscan-2">BIM Quickscan</a> now', 'tno-bim-quickscan' ); ?></p>
-<?php
+				?>
+				<p><?php _e( 'You do not have any reports, do the <a href="/quickscan-2">BIM Quickscan</a> now', 'tno-bim-quickscan' ); ?></p>
+				<?php
 			} else {
-?>
-			<table class="list">
-				<tr>
-					<th><?php _e( 'Date', 'tno-bim-quickscan' ); ?></th>
-<?php
-				if( $tnoBIMQuickscan->isAdvisor( $currentUserId ) ) {
-?>
-					<th><?php _e( 'Company', 'tno-bim-quickscan' ); ?></th>
-<?php
-				}
-?>
-					<th><?php _e( 'Status', 'tno-bim-quickscan' ); ?></th>
-					<th class="number"><?php _e( 'Result', 'tno-bim-quickscan' ); ?> %</th>
-				</tr>
-<?php
-				$count = 0;
-				foreach( $myReports as $report ) {
-					$results = get_post_meta( $report->ID,  '_results', true );
-					if( !$results ) {
-						$results = Array( 'score' => 1, 'max_score' => 1 );
+				?>
+				<table class="list">
+					<tr>
+						<th><?php _e( 'Date', 'tno-bim-quickscan' ); ?></th>
+						<?php
+						if( $tnoBIMQuickscan->isAdvisor( $currentUserId ) ) {
+							?>
+							<th><?php _e( 'Company', 'tno-bim-quickscan' ); ?></th>
+							<?php
+						}
+						?>
+						<th><?php _e( 'Status', 'tno-bim-quickscan' ); ?></th>
+						<th class="number"><?php _e( 'Result', 'tno-bim-quickscan' ); ?> %</th>
+					</tr>
+					<?php
+					$count = 0;
+					foreach( $myReports as $report ) {
+						$results = get_post_meta( $report->ID,  '_results', true );
+						if( !$results ) {
+							$results = Array( 'score' => 1, 'max_score' => 1 );
+						}
+						$statusText = __( 'private', 'tno-bim-quickscan' );
+						if( $report->post_status == 'publish' ) {
+							$statusText = __( 'published', 'tno-bim-quickscan' );
+						} elseif( get_post_meta( $report->ID, '_advisor_status', true ) == 'validated' ) {
+							$statusText = __( 'validated', 'tno-bim-quickscan' );
+						}
+						?>
+						<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
+							<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a></td>
+							<?php
+							if( $tnoBIMQuickscan->isAdvisor( $currentUserId ) ) {
+								$authorData = get_user_by( 'id', $report->post_author );
+								?>
+								<td><?php print( $authorData->display_name ); ?></td>
+								<?php
+							}
+							?>
+							<td><?php print( $statusText ); ?></td>
+							<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '%' ); ?></td>
+						</tr>
+						<?php
+						$count ++;
 					}
-?>
-				<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
-					<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a></td>
-<?php
-					if( $tnoBIMQuickscan->isAdvisor( $currentUserId ) ) {
-						$authorData = get_user_by( 'id', $report->post_author );
-?>
-					<td><?php print( $authorData->display_name ); ?></td>
-<?php
-					}
-?>
-					<td><?php print( $report->post_status == 'publish' ? __( 'public', 'tno-bim-quickscan' ) : __( 'private', 'tno-bim-quickscan' ) ); ?></td>
-					<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '%' ); ?></td>
-				</tr>
-<?php
-					$count ++;
-				}
-?>
-			</table>
-<?php
+					?>
+				</table>
+				<?php
 			}
 		}
 	}
 
 	public static function showSingleReport() {
-		global $tnoBIMQuickscan, $post, $wpdb, $sitepress;
-		$advisorId = -1;
-		
-		if( isset( $_GET[ 'id' ] ) ) {
-			$id = intval( $_GET[ 'id' ] );
+		global $tnoBIMQuickscan, $sitepress;
+		$advisorId = - 1;
+		$validKey = false;
+
+		if( isset( $_GET['id'] ) ) {
+			$id = intval( $_GET['id'] );
 			$report = get_post( $id );
 			if( isset( $report ) ) {
 				$advisorId = get_post_meta( $report->ID, '_advisor', true );
 				if( $advisorId == '' ) {
-					$advisorId = -1;
+					$advisorId = - 1;
+				}
+				if( isset( $_GET['key'] ) && $_GET['key'] != '' && $_GET['key'] != false ) {
+					if( $_GET['key'] == get_post_meta( $report->ID, '_advisor_key', true ) ) {
+						$validKey = true;
+					}
 				}
 			}
 		}
-		
-		if( isset( $report ) && $report->post_type == $tnoBIMQuickscan->options[ 'report_post_type' ] &&
-			( 'publish' == $report->post_status || 
-			( $report->post_author == get_current_user_id() || $advisorId == get_current_user_id() || current_user_can( 'activate_plugins' ) ) ) ) {
+
+		if( isset( $report ) && $report->post_type == $tnoBIMQuickscan->options['report_post_type'] &&
+			 ( 'publish' == $report->post_status ||
+				  ( $report->post_author == get_current_user_id() || $advisorId == get_current_user_id() || current_user_can( 'activate_plugins' ) ) ) ) {
+
 			$currentUserId = get_current_user_id();
-			
-			$selfscan = $advisorId == '';
-			if( current_user_can( 'activate_plugins' ) ) {
-				$selfscan = false;
-			}
-			if( !$selfscan && $advisorId != '' ) {
-				$advisor = get_user_by( 'id', $advisorId );
-				if( isset( $advisor ) && $advisor !== false ) {
-?>
-				<span class="advisor-info"><?php _e( 'Quickscan adviser', 'tno-bim-quickscan' ); ?> <?php print( $advisor->display_name ); ?></span><br />
-<?php
-				}
-			}
+			// TODO: check if owner and setting advisor status
+			/*if( $currentUserId == $report->post_author ) {
+				$reportStatus
+			}*/
+
 			$language = get_post_meta( $report->ID, '_language', true );
 			if( !isset( $language ) || $language == '' ) {
 				$language = 'nl';
 			}
-			if( isset( $sitepress) ) {
+			if( isset( $sitepress ) ) {
 				$defaultLanguage = $sitepress->get_default_language();
 				$sitepress->switch_lang( 'en', true );
 				remove_filter( 'get_term', Array( $sitepress, 'get_term_adjust_id' ), 1, 1 );
 			}
-?>
-				<span class="language-info"><?php _e( 'Language', 'tno-bim-quickscan' ); ?>: <?php print( $language ); ?></span><br />
-				<br />
-<?php
+			?>
+			<span class="language-info"><?php _e( 'Language', 'tno-bim-quickscan' ); ?>
+				: <?php print( $language ); ?></span><br/>
+			<br/>
+			<?php
 			$labelLength = 25;
 
 			$topics = get_post_meta( $report->ID, '_topics', true );
-			$topicInformation = get_terms( $tnoBIMQuickscan->options[ 'taxonomy_topic' ], Array( 'hide_empty' => false, 'exclude' => Array( $tnoBIMQuickscan->options[ 'exclude_topic' ] ) ) );
-			if( !$selfscan ) {
-				$categories = get_post_meta( $report->ID, '_categories', true );
-				$categoryInformation = get_terms( $tnoBIMQuickscan->options[ 'taxonomy_category' ], Array( 'hide_empty' => false ) );
+			$topicInformation = get_terms( $tnoBIMQuickscan->options['taxonomy_topic'], Array( 'hide_empty' => false, 'exclude' => Array( $tnoBIMQuickscan->options['exclude_topic'] ) ) );
+			$categories = get_post_meta( $report->ID, '_categories', true );
+			$categoryInformation = get_terms( $tnoBIMQuickscan->options['taxonomy_category'], Array( 'hide_empty' => false ) );
 
-				$radarLabels = '';
-				$radarData = Array();
-				foreach( $categoryInformation as $category ) {
-					if( $radarLabels != '' ) {
-						$radarLabels .= ', ';
-					}
-					if( $defaultLanguage == '' || 'en' == $language ) {
-						if( !isset( $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id ] ) ) {
-							$radarLabels .= '"' . substr( $category->name, 0, $labelLength ) . '"';
-						} else {
-							$radarLabels .= '"' . $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id ] . '"';
-						}
-					} else {
-						$languageId = icl_object_id( $category->term_id, $tnoBIMQuickscan->options[ 'taxonomy_category' ], true, $language );
-						if( !isset( $tnoBIMQuickscan->options[ 'aspect_short_name_' . $languageId . '_' . $language ] ) ) {
-							$categoryLanguage = get_term( $languageId, $tnoBIMQuickscan->options[ 'taxonomy_category' ] );
-							$radarLabels .= '"' . substr( $categoryLanguage->name, 0, $labelLength ) . '"';
-						} else {
-							$radarLabels .= '"' . $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id . '_' . $language ] . '"';
-						}
-					}
-
-					if( isset( $categories[$category->term_id] ) ) {
-						$radarData[] = Array( 'data' => $categories[$category->term_id][0] / $categories[$category->term_id][1] * 100, 'max' => 100 );
-					} else {
-						$radarData[] = Array( 'data' => 0, 'max' => 100 );
-					}
-				}
-				$radarDataString = '{ fillColor : "' . $tnoBIMQuickscan->colors[ 'fillColor' ][1] . '", ' .
-						'strokeColor : "' . $tnoBIMQuickscan->colors[ 'strokeColor' ][1] . '",' .
-						'pointColor : "' . $tnoBIMQuickscan->colors[ 'pointColor' ][1] . '",' .
-						'pointStrokeColor : "' . $tnoBIMQuickscan->colors[ 'pointStrokeColor' ][1] . '",' .
-						'data: [';
-				$first = true;
-				foreach( $radarData as $data ) {
-					if( !$first ) {
-						$radarDataString .= ',';
-					}
-					$radarDataString .= $data[ 'data' ];
-					$first = false;
-				}
-				$radarDataString .= '] }, { fillColor : "' . $tnoBIMQuickscan->colors[ 'fillColor' ][0] . '",' .
-							'strokeColor : "' . $tnoBIMQuickscan->colors[ 'strokeColor' ][0] . '",' .
-							'pointColor : "' . $tnoBIMQuickscan->colors[ 'pointColor' ][0] . '",' .
-							'pointStrokeColor : "' . $tnoBIMQuickscan->colors[ 'pointStrokeColor' ][0] . '",' .
-							'data: [';
-				$first = true;
-				foreach( $radarData as $data ) {
-					if( !$first ) {
-						$radarDataString .= ',';
-					}
-					$radarDataString .= $data[ 'max' ];
-					$first = false;
-				}
-				$radarDataString .= '] }';
-			}
-
-			$barLabels = '';
-			$barData = Array();
-			foreach( $topicInformation as $topic ) {
-				if( $barLabels != '' ) {
-					$barLabels .= ', ';
+			$radarLabels = '';
+			$radarData = Array();
+			foreach( $categoryInformation as $category ) {
+				if( $radarLabels != '' ) {
+					$radarLabels .= ', ';
 				}
 				if( $defaultLanguage == '' || 'en' == $language ) {
-					$labelParts = explode( ': ', $topic->name );
-					$barLabels .= '"' . ( count( $labelParts ) == 2 ? substr( $labelParts[0], 0, $labelLength ) : substr( $topic->name, 0, $labelLength ) ) . '"';
+					if( !isset( $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id ] ) ) {
+						$radarLabels .= '"' . substr( $category->name, 0, $labelLength ) . '"';
+					} else {
+						$radarLabels .= '"' . $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id ] . '"';
+					}
 				} else {
-					$languageId = icl_object_id( $topic->term_id, $tnoBIMQuickscan->options[ 'taxonomy_topic' ], true, $language );
-					$topicLanguage = get_term( $languageId, $tnoBIMQuickscan->options[ 'taxonomy_topic' ] );
-					$labelParts = explode( ': ', $topicLanguage->name );
-					$barLabels .= '"' . ( count( $labelParts ) == 2 ? substr( $labelParts[0], 0, $labelLength ) : substr( $topicLanguage->name, 0, $labelLength ) ) . '"';
+					$languageId = icl_object_id( $category->term_id, $tnoBIMQuickscan->options['taxonomy_category'], true, $language );
+					if( !isset( $tnoBIMQuickscan->options[ 'aspect_short_name_' . $languageId . '_' . $language ] ) ) {
+						$categoryLanguage = get_term( $languageId, $tnoBIMQuickscan->options['taxonomy_category'] );
+						$radarLabels .= '"' . substr( $categoryLanguage->name, 0, $labelLength ) . '"';
+					} else {
+						$radarLabels .= '"' . $tnoBIMQuickscan->options[ 'aspect_short_name_' . $category->term_id . '_' . $language ] . '"';
+					}
 				}
-				if( isset( $topics[$topic->term_id] ) ) {
-					$barData[] = Array( 'data' => $topics[$topic->term_id][0], 'max' => $topics[$topic->term_id][1] );
-				} else {
-					$barData[] = Array( 'data' => 0, 'max' => 0 );
-				}
-			}
 
-			$barDataString = '{ fillColor: "' . $tnoBIMQuickscan->colors[ 'fillColor' ][1] . '", strokeColor: "' . $tnoBIMQuickscan->colors[ 'strokeColor' ][1] . '", data: [';
-			$first = true;
-			foreach( $barData as $data ) {
-				if( !$first ) {
-					$barDataString .= ',';
+				if( isset( $categories[ $category->term_id ] ) ) {
+					$radarData[] = Array( 'data' => ( 1 - $categories[ $category->term_id ][0] / $categories[ $category->term_id ][1] ) * 100, 'max' => 100 );
+				} else {
+					$radarData[] = Array( 'data' => 0, 'max' => 100 );
 				}
-				$barDataString .= $data[ 'data' ];
+			}
+			$radarDataString = '{ fillColor : "' . $tnoBIMQuickscan->colors['fillColor'][1] . '", ' .
+				 'strokeColor : "' . $tnoBIMQuickscan->colors['strokeColor'][1] . '",' .
+				 'pointColor : "' . $tnoBIMQuickscan->colors['pointColor'][1] . '",' .
+				 'pointStrokeColor : "' . $tnoBIMQuickscan->colors['pointStrokeColor'][1] . '",' .
+				 'data: [';
+			$first = true;
+			foreach( $radarData as $data ) {
+				if( !$first ) {
+					$radarDataString .= ',';
+				}
+				$radarDataString .= $data['data'];
 				$first = false;
 			}
-			$barDataString .= '] }, { fillColor : "' . $tnoBIMQuickscan->colors[ 'fillColor' ][0] . '", strokeColor : "' . $tnoBIMQuickscan->colors[ 'strokeColor' ][0] . '", data: [';
+			$radarDataString .= '] }, { fillColor : "' . $tnoBIMQuickscan->colors['fillColor'][0] . '",' .
+				 'strokeColor : "' . $tnoBIMQuickscan->colors['strokeColor'][0] . '",' .
+				 'pointColor : "' . $tnoBIMQuickscan->colors['pointColor'][0] . '",' .
+				 'pointStrokeColor : "' . $tnoBIMQuickscan->colors['pointStrokeColor'][0] . '",' .
+				 'data: [';
 			$first = true;
-			foreach( $barData as $data ) {
+			foreach( $radarData as $data ) {
 				if( !$first ) {
-					$barDataString .= ',';
+					$radarDataString .= ',';
 				}
-				$barDataString .= $data[ 'max' ];
+				$radarDataString .= $data['max'];
 				$first = false;
 			}
-			$barDataString .= '] }';
-?>
-					<canvas id="bar-chart" width="625" height="600"></canvas>
-<?php
-			if( !$selfscan ) {
-?>
-					<canvas id="radar-plot" data-type="Radar" width="625" height="600" style="width: 625px; height: 600px;"></canvas>
-<?php
+			$radarDataString .= '] }';
+
+		$barLabels = '';
+		$barData = Array();
+			$pieData = Array();
+			$index = 1;
+		foreach( $topicInformation as $topic ) {
+			if( $barLabels != '' ) {
+				$barLabels .= ', ';
 			}
-?>
-					<script type="text/javascript">
-<?php
-			if( !$selfscan ) {
-?>
-		var	bimRadarData = {
-			labels: [ <?php print( $radarLabels ); ?> ],
-			datasets: [ <?php print( $radarDataString ); ?> ]
-		};
-<?php
+			if( $defaultLanguage == '' || 'en' == $language ) {
+				$labelParts = explode( ': ', $topic->name );
+				$barLabels .= '"' . ( count( $labelParts ) == 2 ? substr( $labelParts[0], 0, $labelLength ) : substr( $topic->name, 0, $labelLength ) ) . '"';
+			} else {
+				$languageId = icl_object_id( $topic->term_id, $tnoBIMQuickscan->options['taxonomy_topic'], true, $language );
+				$topicLanguage = get_term( $languageId, $tnoBIMQuickscan->options['taxonomy_topic'] );
+				$labelParts = explode( ': ', $topicLanguage->name );
+				$barLabels .= '"' . ( count( $labelParts ) == 2 ? substr( $labelParts[0], 0, $labelLength ) : substr( $topicLanguage->name, 0, $labelLength ) ) . '"';
 			}
-?>
-		var bimBarData = {
-				labels: [ <?php print( $barLabels ); ?> ],
-				datasets: [ <?php print( $barDataString ); ?> ]
-		};
-					</script>
-<?php
+			$pieValue = 0;
+			if( isset( $topics[ $topic->term_id ] ) ) {
+				$barData[] = Array( 'data' => $topics[ $topic->term_id ][0], 'max' => $topics[ $topic->term_id ][1] );
+				$pieValue = $topics[ $topic->term_id ][1] - $topics[ $topic->term_id ][0];
+			} else {
+				$barData[] = Array( 'data' => 0, 'max' => 0 );
+			}
+			$pieData[] = Array(
+				 'value' => $pieValue,
+				 'label' => ( count( $labelParts ) == 2 ? substr( $labelParts[0], 0, $labelLength ) : substr( $topic->name, 0, $labelLength ) ) . '"',
+				 'color' => $tnoBIMQuickscan->colors['fillColor'][ $index ],
+				 'highlight' => $tnoBIMQuickscan->colors['fillColor'][ $index ]
+			);
+			$index ++;
+		}
+
+		$barDataString = '{ fillColor: "' . $tnoBIMQuickscan->colors['fillColor'][1] . '", strokeColor: "' . $tnoBIMQuickscan->colors['strokeColor'][1] . '", data: [';
+		$first = true;
+		foreach( $barData as $data ) {
+			if( !$first ) {
+				$barDataString .= ',';
+			}
+			$barDataString .= $data['data'];
+			$first = false;
+		}
+		$barDataString .= '] }, { fillColor : "' . $tnoBIMQuickscan->colors['fillColor'][0] . '", strokeColor : "' . $tnoBIMQuickscan->colors['strokeColor'][0] . '", data: [';
+		$first = true;
+		foreach( $barData as $data ) {
+			if( !$first ) {
+				$barDataString .= ',';
+			}
+			$barDataString .= $data['max'];
+			$first = false;
+		}
+		$barDataString .= '] }';
+		?>
+		<canvas id="bar-chart" width="625" height="600"></canvas>
+		<canvas id="radar-plot" data-type="Radar" width="625" height="600" style="width: 625px; height: 600px;"></canvas>
+		<canvas id="pie-chart" width="625" height="600"></canvas>
+		<script type="text/javascript">
+			var bimRadarData = {
+				labels: [<?php print( $radarLabels ); ?>],
+				datasets: [<?php print( $radarDataString ); ?>]
+			};
+			var bimBarData = {
+				labels: [<?php print( $barLabels ); ?>],
+				datasets: [<?php print( $barDataString ); ?>]
+			};
+			var bimPieData = <?php print( json_encode( $pieData ) ); ?>;
+		</script>
+		<?php
 			print( get_post_meta( $report->ID, '_results_table_topics', true ) );
-			if( !$selfscan ) {
-				print( get_post_meta( $report->ID, '_results_table_aspects', true ) );
-			}
+			print( get_post_meta( $report->ID, '_results_table_aspects', true ) );
 
 			if( is_user_logged_in() && ( $currentUserId == $advisorId || $report->post_author == $currentUserId ) ) {
 				print( apply_filters( 'the_content', $report->post_content ) );
+				if( $report->post_author == $currentUserId && $report->post_status == 'private' ) {
+					// Display the advisor selection here
+					TNOBIMQuickscan::singleReportAdvisorOptions( $report );
+				}
 			}
-			
+
 			if( isset( $sitepress ) ) {
 				$sitepress->switch_lang( $language, true );
 				add_filter( 'get_term', Array( $sitepress, 'get_term_adjust_id' ), 1, 1 );
 			}
+
+			if( $validKey ) {
+				TNOBIMQuickscan::singleReportAdvisorSettings( $report );
+			}
 		}
+	}
+
+	public static function singleReportAdvisorOptions( $report ) {
+		global $tnoBIMQuickscan;
+		$mailSent = false;
+		if( isset( $_POST['advisor_id'] ) && ctype_digit( $_POST['advisor_id'] ) ) {
+			// set this advisor id, generate key and send email
+			$advisor = get_post( intval( $_POST['advisor_id'] ) );
+			if( isset( $advisor ) && $advisor->post_type == $tnoBIMQuickscan->options['advisor_post_type'] ) {
+				$advisorEmail = get_post_meta( $advisor->ID, 'email', true );
+				if( $advisorEmail != '' ) {
+					// Only set this is email is set, else we cannot mail the advisor
+					update_post_meta( $report->ID, '_advisor_status', 'pending' );
+					$key = uniqid();
+					update_post_meta( $report->ID, '_advisor_key', $key );
+					$user = get_user_by( 'id', $report->post_author );
+					$message = __( 'Dear madame/sir,', 'tno-bim-quickscan' ) . "\n\n" .
+						 __( 'You have been asked to validate a BIM Compass report, you can find the report in the link below:', 'tno-bim-quickscan' ) . "\n" .
+						 get_permalink( $tnoBIMQuickscan->options['report_page'] ) . "?id={$report->ID}&key={$key}\n\n" .
+						 __( 'Fill in any recommendations below the report. Once you are done you can publish the report.', 'tno-bim-quickscan' ) . "\n" .
+						 __( 'Report from', 'tno-bim-quickscan' ) . ": {$user->user_email}\n\n" .
+						 __( 'The BIM Compass team', 'tno-bim-quickscan' );
+					wp_mail( $advisorEmail, __( 'BIM Compass: Request for validation', 'tno-bim-quickscan' ), $message );
+					wp_mail( get_option( 'admin_email' ), __( 'BIM Compass: Request for advisor validation', 'tno-bim-quickscan' ), $message );
+					print( '<p>' . __( 'Validation request sent', 'tno-bim-quickscan' ) . '</p>');
+					$mailSent = true;
+				}
+			}
+		}
+		if( !$mailSent ) {
+			$status = get_post_meta( $report->ID, '_advisor_status', true );
+			if( $status == '' || $status == 'start' ) {
+				print( '<h2>' . __( 'Select an advisor to validate your scan', 'tno-bim-quickscan' ) . '</h2>' );
+				$advisors = get_posts( Array(
+					 'post_type' => $tnoBIMQuickscan->options['advisor_post_type'],
+					 'post_status' => 'publish',
+					 'orderby' => 'title',
+					 'posts_per_page' => -1
+				) );
+				foreach( $advisors as $advisor ) {
+					print( '<div class="advisor">' );
+					print( '<h3>' . apply_filters( 'the_title', $advisor->post_title ) . '</h3>' );
+					print( '<p>' . apply_filters( 'the_content', $advisor->post_content ) . '</p>' );
+					print( '<form method="post" action="">' );
+					print( '<input type="hidden" name="advisor_id" value="' . $advisor->ID . '" />' );
+					print( '<input type="submit" class="advisor-request" value="' . __( 'Select this advisor', 'tno-bim-quickscan'  ) . '" />' );
+					print( '</form>' );
+					print( '</div>' );
+				}
+			} elseif( $status == 'pending' ) {
+				if( $report->post_author == get_current_user_id() ) {
+					print( '<p>' . __( 'An advisor is reviewing this report, once the review is done it will be visible for you here.', 'tno-bim-quickscan' ) . '</p>');
+				}
+			} else {
+				if( $status == 'published' ) {
+					print( '<h3>' . __( 'Advisor status', 'tno-bim-quickscan' ) . ': ' . __( 'Validated and published', 'tno-bim-quickscan' ) . '</h3>' );
+				} elseif( $status == 'validated' ) {
+					print( '<h3>' . __( 'Advisor status', 'tno-bim-quickscan' ) . ': ' . __( 'Validated', 'tno-bim-quickscan' ) . '</h3>' );
+				}
+				print( '<h3>' . __( 'Advisor report', 'tno-bim-quickscan' ) . '</h3>' );
+				print( '<p>' . get_post_meta( $report->ID, '_advisor_report', true ) . '</p>' );
+				print( '<h3>' . __( 'Advice', 'tno-bim-quickscan' ) . '</h3>' );
+				print( '<p>' . get_post_meta( $report->ID, '_advice', true ) . '</p>' );
+			}
+		}
+	}
+
+	public static function singleReportAdvisorSettings( $report ) {
+		if( isset( $_POST['save'] ) || isset( $_POST['validate'] ) || isset( $_POST['publish'] ) ) {
+			if( isset( $_POST['advice'] ) ) {
+				update_post_meta( $report->ID, '_advice', filter_input( INPUT_POST, 'advice', FILTER_SANITIZE_SPECIAL_CHARS ) );
+			}
+			if( isset( $_POST['advisor_report'] ) ) {
+				update_post_meta( $report->ID, '_advisor_report', filter_input( INPUT_POST, 'advisor_report', FILTER_SANITIZE_SPECIAL_CHARS ) );
+			}
+			if( isset( $_POST['publish'] ) ) {
+				$postData =Array(
+					 'ID' => $report->ID,
+					 'post_status' => 'publish'
+				);
+				wp_update_post( $postData );
+				update_post_meta( $report->ID, '_advisor_status', 'published' );
+			}
+			if( isset( $_POST['validate'] ) ) {
+				update_post_meta( $report->ID, '_advisor_status', 'validated' );
+			}
+		}
+
+		$status = get_post_meta( $report->ID, '_advisor_status', true );
+		$advice = get_post_meta( $report->ID, '_advice', true );
+		$advisorReport = get_post_meta( $report->ID, '_advisor_report', true );
+		print( '<form method="post" action="">' );
+		print( '<label for="advisor-report">' . __( 'Report', 'tno-bim-quickscan' ) . '</label><br />' );
+		print( '<textarea id="advisor-report" name="advisor_report">' . $advisorReport . '</textarea><br />' );
+		print( '<label for="report-advice">' . __( 'Advice', 'tno-bim-quickscan' ) . '</label><br />' );
+		print( '<textarea name="advice" id="report-advice">' . $advice . '</textarea><br /><br />' );
+		print( '<input type="submit" value="' . __( 'Save', 'tno-bim-quickscan' ) . '" name="save" /><br /><br />' );
+		if( $status == 'pending' ) {
+			print( '<input type="submit" value="' . __( 'Validate', 'tno-bim-quickscan' ) . '" name="validate" /><br /><br />' );
+		} elseif( $report->post_status != 'publish' ) {
+			print( '<input type="submit" value="' . __( 'Publish', 'tno-bim-quickscan' ) . '" name="publish" /><br />' );
+		}
+		print( '</form>' );
 	}
 
 	public static function showSingleCompany() {
@@ -2041,47 +2179,47 @@ class TNOBIMQuickscan {
 
 		if( isset( $author ) && user_can( $author, $tnoBIMQuickscan->options[ 'company_role' ] ) ) {
 			$publicReports = get_posts( Array(
-					'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
-					'post_status' => Array( 'publish' ),
-					'author' => $author->get( 'ID' ),
-					'numberposts' => $tnoBIMQuickscan->options[ 'reports_per_page' ]
+				 'post_type' => $tnoBIMQuickscan->options[ 'report_post_type' ],
+				 'post_status' => Array( 'publish' ),
+				 'author' => $author->get( 'ID' ),
+				 'numberposts' => $tnoBIMQuickscan->options[ 'reports_per_page' ]
 			) );
 			if( count( $publicReports ) == 0 ) {
-?>
-			<p><?php _e( 'This company does not have any public BIM Quickscan reports', 'tno-bim-quickscan' ); ?></p>
-<?php
+				?>
+				<p><?php _e( 'This company does not have any public BIM Quickscan reports', 'tno-bim-quickscan' ); ?></p>
+				<?php
 			} else {
-?>
-			<table class="list">
-				<tr class="odd">
-					<th><?php _e( 'Date', 'tno-bim-quickscan' ); ?></th>
-					<th><?php _e( 'Core-business', 'tno-bim-quickscan' ); ?></th>
-					<th class="number"><?php _e( 'Result', 'tno-bim-quickscan' ); ?> %</th>
-				</tr>
-<?php
-				$count = 0;
-				foreach( $publicReports as $report ) {
-					$results = get_post_meta( $report->ID,  '_results', true );
-					$coreBusiness = get_post_meta( $report->ID, 'core_business', true );
-					
-					if( !$results ) {
-						$results = Array( 'score' => 1, 'max_score' => 1 );
+				?>
+				<table class="list">
+					<tr class="odd">
+						<th><?php _e( 'Date', 'tno-bim-quickscan' ); ?></th>
+						<th><?php _e( 'Core-business', 'tno-bim-quickscan' ); ?></th>
+						<th class="number"><?php _e( 'Result', 'tno-bim-quickscan' ); ?> %</th>
+					</tr>
+					<?php
+					$count = 0;
+					foreach( $publicReports as $report ) {
+						$results = get_post_meta( $report->ID,  '_results', true );
+						$coreBusiness = get_post_meta( $report->ID, 'core_business', true );
+
+						if( !$results ) {
+							$results = Array( 'score' => 1, 'max_score' => 1 );
+						}
+						?>
+						<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
+							<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a><?php print( $report->post_status == 'private' ? ' (privé)' : '' ); ?></td>
+							<?php
+							$authorData = get_user_by( 'id', $report->post_author );
+							?>
+							<td><?php print( $coreBusiness ); ?></td>
+							<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '% / 100%' ); ?></td>
+						</tr>
+						<?php
+						$count ++;
 					}
-?>
-				<tr class="<?php print( $count % 2 == 0 ? 'even' : 'odd' ); ?>">
-					<td><a href="<?php print( get_permalink( function_exists( 'icl_object_id' ) ? icl_object_id( $tnoBIMQuickscan->options[ 'report_page' ], 'page', true ) : $tnoBIMQuickscan->options[ 'report_page' ] ) ); ?>?id=<?php print( $report->ID ); ?>"><?php print( date( 'd-m-Y', strtotime( $report->post_date ) ) ); ?></a><?php print( $report->post_status == 'private' ? ' (privé)' : '' ); ?></td>
-<?php
-					$authorData = get_user_by( 'id', $report->post_author );
-?>
-					<td><?php print( $coreBusiness ); ?></td>
-					<td class="number"><?php print( round( $results[ 'score' ] / $results[ 'max_score' ] * 100, 2 ) . '% / 100%' ); ?></td>
-				</tr>
-<?php
-					$count ++;
-				}
-?>
-			</table>
-<?php
+					?>
+				</table>
+				<?php
 			}
 		}
 	}

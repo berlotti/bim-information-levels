@@ -195,6 +195,29 @@ if( is_array( $postTypes ) ) {
 				</td>
 			</tr>
 			<tr>
+				<td><label for="advisor-post-type"><?php _e( 'Advisor post type', 'tno-bim-quickscan' ); ?></label></td>
+				<td>
+					<?php
+					if( is_array( $postTypes ) ) {
+						?>
+						<select name="tno_bim_quickscan_options[advisor_post_type]" id="advisor-post-type">
+							<?php
+							foreach( $postTypes AS $key => $postType ) {
+								?>
+								<option value="<?php print( $key ); ?>" <?php print( ( ( isset( $tnoBIMQuickscanOptions[ 'advisor_post_type' ] ) && $key == $tnoBIMQuickscanOptions[ 'advisor_post_type' ] ) ? ' selected="selected"' : '' ) ); ?>>
+									<?php print( $postType->labels->name ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
+						<?php
+					}
+					?>
+					<p class="description"><?php _e( 'The post type from which a list of advisors is read', 'tno-bim-quickscan' ); ?></p>
+				</td>
+			</tr>
+			<tr>
 				<td><label for="topic-taxonomy"><?php _e( 'The taxonomy for topics', 'tno-bim-quickscan' ); ?></label></td>
 				<td>
 <?php

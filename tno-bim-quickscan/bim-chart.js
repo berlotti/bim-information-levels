@@ -18,6 +18,11 @@ BimQuickscan.radarOptions = {
 BimQuickscan.chartTimeout = -1;
 
 jQuery( document ).ready( function() {
+	if( document.getElementById( "pie-chart" ) ) {
+		var contextPieChart = document.getElementById( "pie-chart" ).getContext( "2d" );
+		new Chart( contextPieChart ).Pie( bimPieData ); // BimQuickscan.pieOptions
+	}
+
 	if( document.getElementById( "radar-plot" ) ) {
 		var contextRadarPlot = document.getElementById( "radar-plot" ).getContext( "2d" );
 		new Chart( contextRadarPlot ).Radar( bimRadarData, BimQuickscan.radarOptions );
@@ -27,14 +32,14 @@ jQuery( document ).ready( function() {
 		var contextBarChart = document.getElementById( "bar-chart" ).getContext( "2d" );
 		new Chart( contextBarChart ).Bar( bimBarData, BimQuickscan.barOptions );
 	}
-	
+
 	if( document.getElementById( "slider" ) ) {
 		jQuery( "#slider" ).slider( {
 			min: customizableChartSettings.min,
 			max: customizableChartSettings.max,
 			range: true,
 			values: [ customizableChartSettings.min, customizableChartSettings.max ],
-			slide: BimQuickscan.sliderUpdate,
+			slide: BimQuickscan.sliderUpdate
 		} );
 		
 		BimQuickscan.radarContext = document.getElementById( "interactive-radar-plot" ).getContext( "2d" );
