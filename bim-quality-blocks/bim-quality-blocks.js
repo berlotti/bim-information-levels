@@ -8,6 +8,7 @@ jQuery( document ).ready( function() {
 	var container = jQuery( "#bim-quality-block-layers" );
 	var navigationContainer = container.find( ".navigation-container" );
 	var titleInput = jQuery( "#report-title" );
+	var privateBlocks = jQuery( "#private-blocks" );
 	navigationContainer.find( ".previous" ).click( function( event ) {
 		event.preventDefault();
 		BIMQualityBlocks.activatePreviousLayer( container.find( ".layer.active" ) );
@@ -20,8 +21,16 @@ jQuery( document ).ready( function() {
 				titleInput.addClass( "invalid" );
 				jQuery( "html, body" ).animate( { scrollTop: 0 }, "fast" );
 			} else {
-				jQuery( "#bim-quality-block-layers" ).addClass( "hidden" );
-				jQuery( "#private-blocks" ).removeClass( "hidden" );
+				if( privateBlocks.length == 0 ) {
+					var report = BIMQualityBlocks.createReport();
+					report.title = titleInput.val();
+					var reportContent = jQuery( "#report-content" );
+					reportContent.val( JSON.stringify( report ) );
+					reportContent.parent().submit();
+				} else {
+					jQuery( "#bim-quality-block-layers" ).addClass( "hidden" );
+					privateBlocks.removeClass( "hidden" );
+				}
 			}
 		} else {
 			BIMQualityBlocks.enableNextLayer( container.find( ".layer.active" ) );
@@ -81,14 +90,16 @@ jQuery( document ).ready( function() {
 		editor.find( "#private-block-text" ).val( "" );
 		editor.find( "#private-block-xml" ).val( "" );
 	} );
-	jQuery( "#private-blocks" ).find( ".submit" ).click( function( event ) {
-		event.preventDefault();
-		var report = BIMQualityBlocks.createReport();
-		report.title = titleInput.val();
-		var reportContent = jQuery( "#report-content" );
-		reportContent.val( JSON.stringify( report ) );
-		reportContent.parent().submit();
-	} );
+	if( privateBlocks.length > 0 ) {
+		privateBlocks.find( ".submit" ).click( function( event ) {
+			event.preventDefault();
+			var report = BIMQualityBlocks.createReport();
+			report.title = titleInput.val();
+			var reportContent = jQuery( "#report-content" );
+			reportContent.val( JSON.stringify( report ) );
+			reportContent.parent().submit();
+		} );
+	}
 	BIMQualityBlocks.buildingTypeChanged();
 } );
 

@@ -227,7 +227,8 @@ class BIMQualityBlocks {
             $blocks = BIMQualityBlocks::getQualityBlocks();
             $number = 0;
             $mergedLayers = false;
-            $mergedLayerKeys = Array( 'basic_model', 'properties', 'applications' );
+            $mergedLayerKeys = Array( 'basic_model', 'properties', 'applications', 'bim_usage' );
+            $isPremium = BIMQualityBlocks::isCurrentUserPremium();
             foreach( BIMQualityBlocks::$layers as $key => $label ) {
                if( $key == 'building_type' ) {
                   print( '<div id="building-select-container">' );
@@ -259,10 +260,11 @@ class BIMQualityBlocks {
                      print( '<div class="layer" id="layer_' . $key . '">' );
                      print( '<div class="overlay"></div>' );
                      print( '<h3>' . $label . '</h3>' );
-                     if( $number >= 2 ) {
+                     if( $number >= 1 ) {
                         print( '<div class="navigation-container">
                                     <a href="" class="previous">' . __( 'Previous', 'bim-quality-blocks' ) . '</a>
-                                    <a href="" class="next' . ( $key == 'attachments' ? ' end-page' : '' ) . '">' . ( $key == 'attachments' ? __( 'Next page', 'bim-quality-blocks' ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
+                                    <a href="" class="next' . ( $key == 'attachments' ? ' end-page' : '' ) . '">' .
+                                       ( $key == 'attachments' ? ( $isPremium ? __( 'Next page', 'bim-quality-blocks' ) : __( 'Finish', 'bim-quality-blocks' ) ) : __( 'Next', 'bim-quality-blocks' ) ) . '</a>
                                     <div class="clear"></div>
                               </div>' );
                      }
@@ -282,7 +284,7 @@ class BIMQualityBlocks {
                            print( '<img src="' . $image . '" alt="' . $block->post->post_title . '" />' );
                         }
                         print( '</div>' );
-                        print( '<div class="tooltip hidden">' . apply_filters( 'the_content', $block->post->post_content ) . '</div>' );
+                        print( '<div class="tooltip hidden">' . apply_filters( 'the_content', htmlspecialchars( $block->post->post_content, ENT_COMPAT, 'utf-8' ) ) . '</div>' );
                         print( '<div class="disabled-tooltip hidden">' . __( 'This block is disabled because', 'bim-quality-blocks' ) . ' <span class="reason-list"></span><span class="start-text hidden">' . __( 'has been selected', 'bim-quality-blocks' ) . '</span></div>' );
                         print( '<div class="exclude hidden">' . implode( ',', $block->relations ) . '</div>' );
                         print( '<div class="deselect hidden">' . implode( ',', $block->deselects ) . '</div>' );
@@ -301,38 +303,40 @@ class BIMQualityBlocks {
             print( '<div class="hidden" id="quality-block-tooltip"><div class="content"></div></div>' );
             print( '</div>' );
 
-            $options = BIMQualityBlocks::getOptions();
-            $privateBlocks = get_posts( Array(
-               'post_type' => $options['private_bqblocks_post_type'],
-               'post_status' => 'private',
-               'posts_per_page' => -1
-            ) );
+            if( $isPremium ) {
+               $options = BIMQualityBlocks::getOptions();
+               $privateBlocks = get_posts( Array(
+                   'post_type'      => $options['private_bqblocks_post_type'],
+                   'post_status'    => 'private',
+                   'posts_per_page' => - 1
+               ) );
 
-            print( '<div id="private-blocks" class="hidden">' );
-            print( '<h3>' . __( 'Private blocks', 'bim-quality-blocks' ) . '</h3>' );
-            print( '<div id="private-block-editor">' );
-            print( '<h4 class="hidden edit-title">' . __( 'Edit private block', 'bim-quality-blocks' ) . '</h4>' );
-            print( '<h4 class="new-title">' . __( 'Add new private block', 'bim-quality-blocks' ) . '</h4>' );
-            print( '<input type="hidden" id="private-block-id" value="" />' );
-            print( '<label for="private-block-title">' . __( 'Title', 'bim-quality-blocks' ) . '</label><br />' );
-            print( '<input type="text" id="private-block-title" placeholder="' . __( 'Private block title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in a title for this private block', 'bim-quality-report' ) . '" /><br /><br />' );
-            print( '<label for="private-block-text">' . __( 'Report text', 'bim-quality-blocks' ) . '</label><br />' );
-            print( '<textarea id="private-block-text" placeholder="' . __( 'Report title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the report text when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
-            print( '<label for="private-block-xml">' . __( 'Report XML', 'bim-quality-blocks' ) . '</label><br />' );
-            print( '<textarea id="private-block-xml" placeholder="' . __( 'Report XML', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the xml snippet used when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
-            print( '<br />' );
-            print( '<a href="" class="button" id="save-private-block">' . __( 'Save', 'bim-quality-blocks' ) . '</a>' );
-            print( '<a href="" class="button hidden" id="cancel-edit-private-block">' . __( 'Cancel', 'bim-quality-blocks' ) . '</a>' );
+               print( '<div id="private-blocks" class="hidden">' );
+               print( '<h3>' . __( 'Private blocks', 'bim-quality-blocks' ) . '</h3>' );
+               print( '<div id="private-block-editor">' );
+               print( '<h4 class="hidden edit-title">' . __( 'Edit private block', 'bim-quality-blocks' ) . '</h4>' );
+               print( '<h4 class="new-title">' . __( 'Add new private block', 'bim-quality-blocks' ) . '</h4>' );
+               print( '<input type="hidden" id="private-block-id" value="" />' );
+               print( '<label for="private-block-title">' . __( 'Title', 'bim-quality-blocks' ) . '</label><br />' );
+               print( '<input type="text" id="private-block-title" placeholder="' . __( 'Private block title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in a title for this private block', 'bim-quality-report' ) . '" /><br /><br />' );
+               print( '<label for="private-block-text">' . __( 'Report text', 'bim-quality-blocks' ) . '</label><br />' );
+               print( '<textarea id="private-block-text" placeholder="' . __( 'Report title', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the report text when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
+               print( '<label for="private-block-xml">' . __( 'Report XML', 'bim-quality-blocks' ) . '</label><br />' );
+               print( '<textarea id="private-block-xml" placeholder="' . __( 'Report XML', 'bim-quality-blocks' ) . '" title="' . __( 'Fill in the xml snippet used when this block is included in a report', 'bim-quality-report' ) . '"></textarea><br />' );
+               print( '<br />' );
+               print( '<a href="" class="button" id="save-private-block">' . __( 'Save', 'bim-quality-blocks' ) . '</a>' );
+               print( '<a href="" class="button hidden" id="cancel-edit-private-block">' . __( 'Cancel', 'bim-quality-blocks' ) . '</a>' );
 
-            print( '</div>' );
-            print( '<div id="private-block-list">' );
-            foreach( $privateBlocks as $privateBlock ) {
-               print( BIMQualityBlocks::getPrivateBlockHtml( $privateBlock ) );
+               print( '</div>' );
+               print( '<div id="private-block-list">' );
+               foreach( $privateBlocks as $privateBlock ) {
+                  print( BIMQualityBlocks::getPrivateBlockHtml( $privateBlock ) );
+               }
+               print( '<div class="clear"></div>' );
+               print( '</div>' );
+               print( '<a href="" class="button submit">' . __( 'Finish', 'bim-quality-blocks' ) . '</a>' );
+               print( '</div>' );
             }
-            print( '<div class="clear"></div>' );
-            print( '</div>' );
-            print( '<a href="" class="button submit">' . __( 'Finish', 'bim-quality-blocks' ) . '</a>' );
-            print( '</div>' );
 
             print( '<form method="post" action="">' );
             print( '<input type="hidden" id="report-content" name="report" value="" />' );
@@ -729,6 +733,7 @@ class BIMQualityBlocks {
       $options = BIMQualityBlocks::getOptions();
       foreach( $csv->data as $line ) {
          $layer = $line['layer'];
+         // Corrections for incorrect layer terms
          if( $layer == 'basis' ) {
             $layer = 'basic_model';
          } elseif( $layer == 'toepassing' ) {
@@ -744,7 +749,6 @@ class BIMQualityBlocks {
              'name' => $postData['post_title'],
              'behaviour' => $line['behaviour'],
              'layer' => $layer,
-             'categories' => explode( ',', $line['categories'] ),
              'postId' => wp_insert_post( $postData ),
              'report_text' => $line['report_text'],
              'image_url' => $line['image_url'],
@@ -763,8 +767,8 @@ class BIMQualityBlocks {
          $excludes = Array();
          foreach( $block['excludes'] as $exclude ) {
             foreach( $blocks as $block2 ) {
-               if( $block['name'] == $exclude ) {
-                  $excludes[] = $block['postId'];
+               if( $block2['name'] == $exclude ) {
+                  $excludes[] = $block2['postId'];
                }
             }
          }
@@ -773,8 +777,8 @@ class BIMQualityBlocks {
          $deselects = Array();
          foreach( $block['deselects'] as $deselect ) {
             foreach( $blocks as $block2 ) {
-               if( $block['name'] == $deselect ) {
-                  $deselects[] = $block['postId'];
+               if( $block2['name'] == $deselect ) {
+                  $deselects[] = $block2['postId'];
                }
             }
          }
@@ -782,6 +786,17 @@ class BIMQualityBlocks {
       }
       $status['blocks'] = count( $blocks );
       return $status;
+   }
+
+
+   public static function isCurrentUserPremium() {
+      if( is_user_logged_in() && class_exists( '\\MS_Model_Member' ) ) {
+         $options = BIMQualityBlocks::getOptions();
+         $member = \MS_Model_Member::get_current_member();
+         return $member->has_membership( $options['premium_membership'] );
+      } else {
+         return false;
+      }
    }
 }
 

@@ -5,13 +5,13 @@ use BIMQualityBlocks\BIMQualityBlocks;
 
 $message = '';
 
-if( isset( $_POST['action'] ) && $_POST[ 'update' ] == 'update' ) {
+if( isset( $_POST['update'] ) ) {
 	$options = BIMQualityBlocks::getOptions();
 
 	foreach( $_POST[ 'bim_quality_blocks_options' ] AS $key => $newOption ) {
 		$options[$key] = $newOption;
 	}
-	 
+
 	update_option( 'bim_quality_blocks_options', $options );
 }
 if( isset( $_POST['delete_confirm'], $_POST['delete'] ) && $_POST['delete_confirm'] == 'confirmed' ) {
@@ -32,6 +32,12 @@ $pages = get_posts( Array(
 		'post_type' => 'page',
 		'posts_per_page' => -1
 ) );
+if( class_exists( 'MS_Model_Membership' ) ) {
+   $memberships = MS_Model_Membership::get_memberships( Array( 'include_base' => 1 ) );
+} else {
+   $memberships = Array();
+}
+
 ?>
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
@@ -113,6 +119,29 @@ if( is_array( $postTypes ) ) {
                }
                ?>
                <p class="description"><?php _e( 'The post type in which BIM Quality Blocks are stored', 'bim-quality-blocks' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="premium-membership"><?php _e( 'Premium membership', 'bim-quality-blocks' ); ?></label></td>
+            <td>
+               <?php
+               if( is_array( $memberships ) ) {
+                  ?>
+                  <select name="bim_quality_blocks_options[premium_membership]" id="premium-membership">
+                     <?php
+                     foreach( $memberships AS $key => $membership ) {
+                        ?>
+                        <option value="<?php print( $membership->__get( 'id' ) ); ?>" <?php print( ( ( isset( $bimQualityBlocksOptions[ 'premium_membership' ] ) && $membership->__get( 'id' ) == $bimQualityBlocksOptions[ 'premium_membership' ] ) ? ' selected="selected"' : '' ) ); ?>>
+                           <?php print( $membership->__get( 'name' ) ); ?>
+                        </option>
+                        <?php
+                     }
+                     ?>
+                  </select>
+                  <?php
+               }
+               ?>
+               <p class="description"><?php _e( 'Premium membership', 'bim-protocol-generator' ); ?></p>
             </td>
          </tr>
          <tr valign="top">

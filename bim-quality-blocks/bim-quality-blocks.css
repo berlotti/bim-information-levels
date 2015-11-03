@@ -89,10 +89,15 @@ input.invalid {
    overflow: hidden;
 }
 
-#layer_bim_usage .quality-block {
+#bim-quality-block-layers .quality-block h3 {
+   font-size: 12px;
+   line-height: 14px;
+}
+
+/*#layer_bim_usage .quality-block {
    width: 253px;
    height: 60px;
-}
+}*/
 
 .quality-block.basic_model {
    border: 1px solid red;
