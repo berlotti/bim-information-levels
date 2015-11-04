@@ -1320,10 +1320,51 @@ class BIMProtocolGenerator {
          $isPremiumUser = BIMProtocolGenerator::isCurrentUserPremium();
          $defaults = Array(
             'goals' => Array(
-               __( 'Samenwerken', ' bim-protocol-generator' ),
-               __( 'Winstmaken', ' bim-protocol-generator' ),
-               __( 'Succes', ' bim-protocol-generator' ),
-            )
+               __( 'Simulations', 'bim-protocol-generator' ),
+               __( 'Design reviews', 'bim-protocol-generator' ),
+               __( 'Coordination', 'bim-protocol-generator' ),
+					__( 'Handover', 'bim-protocol-generator' ),
+					__( 'Site management', 'bim-protocol-generator' ),
+					__( 'Scheduling', 'bim-protocol-generator' ),
+					__( 'Cost estimation', 'bim-protocol-generator' ),
+            ),
+				'origin' => Array(
+					Array(
+						__( 'Dutch guidelines', 'bim-protocol-generator' ),
+						__( 'http://nationalbimguidelines.nl/origintemplates/block/', 'bim-protocol-generator' )
+					),
+					Array(
+						 __( 'COBIM', 'bim-protocol-generator' ),
+						 __( 'https://asiakas.kotisivukone.com/files/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_2_inventory_bim_v1.pdf', 'bim-protocol-generator' )
+					)
+				),
+				'modeling' => Array(
+					 Array(
+						  __( 'COBIM', 'bim-protocol-generator' ),
+						  __( 'https://asiakas.kotisivukone.com/files/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf', 'bim-protocol-generator' )
+					 ),
+					 Array(
+						  __( 'Nat. BIM Handboek geboden', 'bim-protocol-generator' ),
+						  __( 'http://nationaalbimhandboek.nl/onderwerpen/bim-geboden/', 'bim-protocol-generator' )
+					 ),
+					 Array(
+						  __( 'GSA', 'bim-protocol-generator' ),
+						  __( 'http://www.gsa.gov/portal/category/100000', 'bim-protocol-generator' )
+					 )
+				),
+				'requested' => Array(
+					 __( 'Architecture', 'bim-protocol-generator' ),
+					 __( 'MEP', 'bim-protocol-generator' ),
+					 __( 'Construction', 'bim-protocol-generator' ),
+					 __( 'Foundation', 'bim-protocol-generator' ),
+					 __( 'Ground floor', 'bim-protocol-generator' ),
+				),
+				'statuses' => Array(
+					 __( 'concept', 'bim-protocol-generator' ),
+					 __( 'tentative', 'bim-protocol-generator' ),
+					 __( 'proposal', 'bim-protocol-generator' ),
+					 __( 'final', 'bim-protocol-generator' )
+				)
          );
 
 			if( isset( $_POST[ 'submit' ] ) ) {
@@ -1352,22 +1393,30 @@ class BIMProtocolGenerator {
             } else {
                $goals = $defaults['goals'];
             }
-            $zeroPoints = Array();
-            $index = 1;
-            while( isset( $_POST[ '0point_template_' . $index ] ) ) {
-               if( $_POST[ '0point_template_' . $index ] != '' && $_POST[ '0point_uri_' . $index ] != '' ) {
-                  $zeroPoints[] = Array( filter_input( INPUT_POST, '0point_template_' . $index, FILTER_SANITIZE_STRING ), filter_input( INPUT_POST, '0point_uri_' . $index, FILTER_SANITIZE_STRING ) );
-               }
-               $index ++;
-            }
-            $modelingTemplates = Array();
-            $index = 1;
-            while( isset( $_POST[ 'modeling_template_' . $index ] ) ) {
-               if( $_POST[ 'modeling_template_' . $index ] != '' && $_POST[ 'modeling_uri_' . $index ] != '' ) {
-                  $modelingTemplates[] = Array( filter_input( INPUT_POST, 'modeling_template_' . $index, FILTER_SANITIZE_STRING ), filter_input( INPUT_POST, 'modeling_uri_' . $index, FILTER_SANITIZE_STRING ) );
-               }
-               $index ++;
-            }
+				if( $isPremiumUser ) {
+					$zeroPoints = Array();
+					$index = 1;
+					while( isset( $_POST[ '0point_template_' . $index ] ) ) {
+						if( $_POST[ '0point_template_' . $index ] != '' && $_POST[ '0point_uri_' . $index ] != '' ) {
+							$zeroPoints[] = Array( filter_input( INPUT_POST, '0point_template_' . $index, FILTER_SANITIZE_STRING ), filter_input( INPUT_POST, '0point_uri_' . $index, FILTER_SANITIZE_STRING ) );
+						}
+						$index ++;
+					}
+				} else {
+					$zeroPoints = $defaults['origin'];
+				}
+				if( $isPremiumUser ) {
+					$modelingTemplates = Array();
+					$index = 1;
+					while( isset( $_POST[ 'modeling_template_' . $index ] ) ) {
+						if( $_POST[ 'modeling_template_' . $index ] != '' && $_POST[ 'modeling_uri_' . $index ] != '' ) {
+							$modelingTemplates[] = Array( filter_input( INPUT_POST, 'modeling_template_' . $index, FILTER_SANITIZE_STRING ), filter_input( INPUT_POST, 'modeling_uri_' . $index, FILTER_SANITIZE_STRING ) );
+						}
+						$index ++;
+					}
+				} else {
+					$modelingTemplates = $defaults['modeling'];
+				}
             $index = 1;
             $information = Array();
             while( isset( $_POST[ 'information_' . $index ] ) ) {
@@ -1376,14 +1425,18 @@ class BIMProtocolGenerator {
                }
                $index ++;
             }
-            $index = 1;
-            $statuses = Array();
-            while( isset( $_POST[ 'status_' . $index ] ) ) {
-               if( $_POST[ 'status_' . $index ] != '' ) {
-                  $statuses[] = filter_input( INPUT_POST, 'status_' . $index, FILTER_SANITIZE_STRING );
-               }
-               $index ++;
-            }
+				if( $isPremiumUser ) {
+					$index = 1;
+					$statuses = Array();
+					while( isset( $_POST[ 'status_' . $index ] ) ) {
+						if( $_POST[ 'status_' . $index ] != '' ) {
+							$statuses[] = filter_input( INPUT_POST, 'status_' . $index, FILTER_SANITIZE_STRING );
+						}
+						$index ++;
+					}
+				} else {
+					$statuses = $defaults['statuses'];
+				}
 
             $valid = true;
             if( !isset( $projectName ) || $projectName === false || $projectName == '' ) {
@@ -1542,14 +1595,26 @@ class BIMProtocolGenerator {
                $goals = isset( $goals ) ? $goals : Array();
                $goals[] = '';
             }
-            $zeroPoints = isset( $zeroPoints ) ? $zeroPoints : Array();
-            $zeroPoints[] = Array( '', '' );
-            $modelingTemplates = isset( $modelingTemplates ) ? $modelingTemplates : Array();
-            $modelingTemplates[] = Array( '', '' );
-            $information = isset( $information ) ? $information : Array();
-            $information[] = '';
-            $statuses = isset( $statuses ) ? $statuses : Array();
-            $statuses[] = '';
+				$zeroPoints = $defaults['origin'];
+				if( $isPremiumUser ) {
+					$zeroPoints = isset( $zeroPoints ) ? $zeroPoints : Array();
+					$zeroPoints[] = Array( '', '' );
+				}
+				$modelingTemplates = $defaults['modeling'];
+				if( $isPremiumUser ) {
+					$modelingTemplates = isset( $modelingTemplates ) ? $modelingTemplates : Array();
+					$modelingTemplates[] = Array( '', '' );
+				}
+				$information = $defaults['requested'];
+				if( $isPremiumUser ) {
+					$information = isset( $information ) ? $information : Array();
+					$information[] = '';
+				}
+				$statuses = $defaults['statuses'];
+				if( $isPremiumUser ) {
+					$statuses = isset( $statuses ) ? $statuses : Array();
+					$statuses[] = '';
+				}
 ?>
 			<form method="post" action="" id="bim-initiator-form">
 				<h3>1. <?php _e( 'Project information', 'bim-protocol-generator' ); ?></h3>
@@ -1644,16 +1709,20 @@ class BIMProtocolGenerator {
                   ?>
 					<tr class="0point-row">
 						<td class="row-number"><span class="row-number"><?php print( $number ); ?>) </span></td>
-						<td><input type="text" name="0point_template_<?php print( $number ); ?>" placeholder="<?php _e( 'Name', 'bim-protocol-generator' ); ?>" value="<?php print( $zeroPoint[0] ); ?>" /></td>
-						<td><input type="url" name="0point_uri_<?php print( $number ); ?>" placeholder="<?php _e( 'URL', 'bim-protocol-generator' ); ?>" value="<?php print( $zeroPoint[1] ); ?>" /></td>
+						<td><input type="text" name="0point_template_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'Name', 'bim-protocol-generator' ); ?>" value="<?php print( $zeroPoint[0] ); ?>" /></td>
+						<td><input type="url" name="0point_uri_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'URL', 'bim-protocol-generator' ); ?>" value="<?php print( $zeroPoint[1] ); ?>" /></td>
 					</tr>
             <?php
             $number ++;
          }
-         ?>
+				if( $isPremiumUser ) {
+					?>
 					<tr>
 						<td colspan="3"><a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( '0point', [ '<?php _e( 'Name', 'bim-protocol-generator' ); ?>', '<?php _e( 'URL', 'bim-protocol-generator' ); ?>' ] );"><?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?></a></td>
 					</tr>
+					<?php
+				}
+					?>
 				</table>
 				<h3>5. <?php _e( 'Modelling templates/guidelines', 'bim-protocol-generator' ); ?></h3>
 				<p><?php _e( 'There are several guidelines and agreements about the way a BIM model should be constructed. The participants are being asked which template/guideline/agreement has their preference. The participants will only have the options you fill out here to answer the question. You have to provide the name of the agreement template and an URL with more information about it. Examples can be ‘GSA guidelines’ at <a href="http://www.gsa.gov/portal/content/102281" target="_blank">http://www.gsa.gov/portal/content/102281</a> or ‘CoBIM architectural’ from ‘<a href="http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf" target="_blank">http://files.kotisivukone.com/en.buildingsmart.kotisivukone.com/COBIM2012/cobim_3_architectural_design_v1.pdf</a>’. If you don’t know what to fill out, please find inspiration on <a href="http://bimexecutionplangenerator.com/initiate/modelguidelines/" target="_blank">http://bimexecutionplangenerator.com/initiate/modelguidelines/</a>', 'bim-protocol-generator' ); ?></p>
@@ -1669,16 +1738,20 @@ class BIMProtocolGenerator {
                ?>
 					<tr class="modelingtemplate-row">
 						<td class="row-number"><span class="row-number"><?php print( $number ); ?>) </td>
-						<td><input type="text" name="modeling_template_<?php print( $number ); ?>" placeholder="<?php _e( 'Modeling template', 'bim-protocol-generator' ); ?>" value="<?php print( $modelingTemplate[0] ); ?>" /></td>
-						<td><input type="url" name="modeling_uri_<?php print( $number ); ?>" placeholder="<?php _e( 'URL', 'bim-protocol-generator' ); ?>" value="<?php print( $modelingTemplate[1] ); ?>" /></td>
+						<td><input type="text" name="modeling_template_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'Modeling template', 'bim-protocol-generator' ); ?>" value="<?php print( $modelingTemplate[0] ); ?>" /></td>
+						<td><input type="url" name="modeling_uri_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'URL', 'bim-protocol-generator' ); ?>" value="<?php print( $modelingTemplate[1] ); ?>" /></td>
 					</tr>
                <?php
                $number ++;
             }
+				if( $isPremiumUser ) {
             ?>
 					<tr>
 						<td colspan="3"><a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( 'modelingtemplate', [ '<?php _e( 'Modeling template', 'bim-protocol-generator' ); ?>', '<?php _e( 'URL', 'bim-protocol-generator' ); ?>' ] );"><?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?></a></td>
 					</tr>
+					<?php
+				}
+				?>
 				</table>
 				<h3>6. <?php _e( 'Requested information', 'bim-protocol-generator' ); ?></h3>
 				<p><?php _e( 'In question 8 the participants will be asked what information they need from other project participants. This will be asked as a matrix/list what information they need, from who, in what format and on what level and what the status of the information should be. The participants are free to add the information they need, but as an initiator you can provide mandatory information blocks that have to be answered. For example if you fill out ‘building part A’ in this list, every participant has to define how they want to receive information from ‘building part A’, from who, in what format, etc. See how this question could look to users in ‘<a href="http://bimexecutionplangenerator.com/initiate/informationmatrix" target="_blank">this example</a>’.', 'bim-protocol-generator' ); ?></p>
@@ -1716,15 +1789,19 @@ class BIMProtocolGenerator {
                      ?>
 					<tr class="status-row">
 						<td class="row-number"><span class="row-number"><?php print( $number ); ?>) </span></td>
-						<td><input type="text" name="status_<?php print( $number ); ?>" placeholder="<?php _e( 'Information status', 'bim-protocol-generator' ); ?>" value="<?php print( $status ); ?>" /></td>
+						<td><input type="text" name="status_<?php print( $number ); ?>" <?php print( $isPremiumUser ? '' : 'disabled ' );?>placeholder="<?php _e( 'Information status', 'bim-protocol-generator' ); ?>" value="<?php print( $status ); ?>" /></td>
 					</tr>
                      <?php
                      $number ++;
                   }
+						if( $isPremiumUser ) {
                   ?>
 					<tr>
 						<td colspan="2"><a href="javascript:void( null );" onclick="BIMProtocolGenerator.addRow( 'status', [ '<?php _e( 'Information status', 'bim-protocol-generator' ); ?>' ] );"><?php _e( 'Click here to add more possible answers', 'bim-protocol-generator' ); ?></a></td>
 					</tr>
+							<?php
+						}
+						?>
 				</table>
 				<div class="button-container">
 					<input type="submit" value="<?php _e( 'Send invitations', 'bim-protocol-generator' ); ?>" name="submit" />
