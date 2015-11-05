@@ -20,6 +20,9 @@ jQuery( document ).ready( function() {
 
 WordPressBimserver.updateProgressBar = function() {
 	jQuery.get( WordPressBimserver.settings.ajaxUrl, { type: "progress" }, function( progress ) {
+		if( progress < 0 ) {
+			progress = 0;
+		}
 		var progressBar = jQuery( "#bimserver-progress-bar" );
 		if( progressBar.length > 0 ) {
 			var totalWidth = progressBar.width();
@@ -29,7 +32,7 @@ WordPressBimserver.updateProgressBar = function() {
 				setTimeout( WordPressBimserver.updateProgressBar, 1000 );
 			} else {
 				setTimeout( function() {
-					// TODO: show the results page here
+					progressBar.parent().html( WordPressBimserver.settings.completeContent );
 				}, 1000 );
 			}
 		}

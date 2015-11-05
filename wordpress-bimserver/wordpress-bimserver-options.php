@@ -15,35 +15,8 @@ if( isset( $_POST['action'] ) && $_POST[ 'action' ] == 'update' ) {
 	update_option( 'wordpress_bimserver_options', $options );
    delete_option( '_wordpress_bimserver_service' );
 }
-if( isset( $_POST['delete_confirm'], $_POST['delete'] ) && $_POST['delete_confirm'] == 'confirmed' ) {
-   print( '<div class="status">' . __( 'All blocks deleted', 'wordpress-bimserver' ) . '</div>' );
-}
-if( isset( $_POST['import'] ) ) {
-   $importStats = Array();
-   $file = fopen( $_FILES['csv'], 'r' );
-   while( ( $data = fgetcsv( $file ) ) !== false ) {
-      // TODO: import stuff from CSV
-   }
-   fclose( $handle );
-}
 
 $wordPressBimserverOptions = WordPressBimserver::getOptions( true );
-
-/* ServiceInterface.getAllLocalServiceDescriptors
-// TODO: create an admin user and gather all service descriptors
-
-if( isset( $wordPressBimserverOptions['url'] ) && $wordPressBimserverOptions['url'] != '' ) {
-   try {
-      $bimserver = new \WordPressBimserver\BimServerApi( $wordPressBimserverOptions['url'] );
-      $bimserverServices = $bimserver->apiCall( 'ServiceInterface', 'getAllLocalServiceDescriptors' );
-   } catch( \Exception $e ) {
-      print( '<div class="error">' . __( 'Could not retrieve services from Bimserver, check the configured URL. Message', 'wordpress-bimserver' ) . ': ' . $e->getMessage() . '</div>' );
-      $bimserverServices = Array();
-   }
-} else {
-   $bimserverServices = Array();
-}*/
-
 $postTypes = get_post_types( Array(), 'objects' );
 $taxonomies = get_taxonomies();
 $pages = get_posts( Array(
@@ -54,25 +27,20 @@ $pages = get_posts( Array(
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
 	<h2><?php _e( 'WordPress and Bimserver Options', 'wordpress-bimserver' ); ?></h2>
-   <?php
-   if( isset( $importStats ) ) {
-      // TODO: show
-   }
-   ?>
 	<form method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<!--tr valign="top">
-				<td><label for="wordpress-bimserver-post-type"><?php _e( 'BIM Quality Blocks post type', 'wordpress-bimserver' ); ?></label></td>
+				<td><label for="wordpress-bimserver-post-type"><?php _e( 'Service usage post type', 'wordpress-bimserver' ); ?></label></td>
 				<td>
 <?php
 if( is_array( $postTypes ) ) {
 ?>
-                  <select name="wordpress_bimserver_options[bim_quality_blocks_post_type]" id="wordpress-bimserver-post-type">
+                  <select name="wordpress_bimserver_options[post_type]" id="wordpress-bimserver-post-type">
 <?php
    foreach( $postTypes AS $key => $postType ) {
 ?>
                      <option value="<?php print( $key ); ?>" <?php print(
-                     ( ( isset( $wordPressBimserverOptions[ 'bim_quality_blocks_post_type' ] ) && $key == $wordPressBimserverOptions[ 'bim_quality_blocks_post_type' ] ) ? ' selected="selected"' : '' ) ); ?>>
+                     ( ( isset( $wordPressBimserverOptions['post_type'] ) && $key == $wordPressBimserverOptions['post_type'] ) ? ' selected="selected"' : '' ) ); ?>>
 						      <?php print( $postType->labels->name ); ?>
                      </option>
 <?php
@@ -107,6 +75,60 @@ if( is_array( $postTypes ) ) {
             </td>
          </tr>
          <tr valign="top">
+            <td><label for="reports-page"><?php _e( 'Reports page', 'wordpress-bimserver' ); ?></label>
+            </td>
+            <td>
+               <select name="wordpress_bimserver_options[reports_page]" id="reports-page">
+                  <?php
+                  foreach( $pages as $page ) {
+                     ?>
+                     <option value="<?php print( $page->ID ); ?>"<?php print( ( isset( $wordPressBimserverOptions['reports_page'] ) && $wordPressBimserverOptions['reports_page'] == $page->ID ? ' selected' : '' ) ); ?>>
+                        <?php print( $page->post_title ); ?>
+                     </option>
+                     <?php
+                  }
+                  ?>
+               </select>
+               <p class="description"><?php _e( 'The page where the user can see his service usage history, it must contain the shortcode [showBimserverReports]', 'wordpress-bimserver' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="settings-page"><?php _e( 'Settings page', 'wordpress-bimserver' ); ?></label>
+            </td>
+            <td>
+               <select name="wordpress_bimserver_options[settings_page]" id="settings-page">
+                  <?php
+                  foreach( $pages as $page ) {
+                     ?>
+                     <option value="<?php print( $page->ID ); ?>"<?php print( ( isset( $wordPressBimserverOptions['settings_page'] ) && $wordPressBimserverOptions['settings_page'] == $page->ID ? ' selected' : '' ) ); ?>>
+                        <?php print( $page->post_title ); ?>
+                     </option>
+                     <?php
+                  }
+                  ?>
+               </select>
+               <p class="description"><?php _e( 'The page where the user can set the services settings, it must contain the shortcode [showBimserverSettings]', 'wordpress-bimserver' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
+            <td><label for="upload-page"><?php _e( 'Upload page', 'wordpress-bimserver' ); ?></label>
+            </td>
+            <td>
+               <select name="wordpress_bimserver_options[upload_page]" id="upload-page">
+                  <?php
+                  foreach( $pages as $page ) {
+                     ?>
+                     <option value="<?php print( $page->ID ); ?>"<?php print( ( isset( $wordPressBimserverOptions['upload_page'] ) && $wordPressBimserverOptions['upload_page'] == $page->ID ? ' selected' : '' ) ); ?>>
+                        <?php print( $page->post_title ); ?>
+                     </option>
+                     <?php
+                  }
+                  ?>
+               </select>
+               <p class="description"><?php _e( 'The page where the user can use the service, it must contain the shortcode [showIfcForm]', 'wordpress-bimserver' ); ?></p>
+            </td>
+         </tr>
+         <!--tr valign="top">
             <td><label for="wordpress-bimserver-new-project"><?php _e( 'Each upload is a new project', 'wordpress-bimserver' ); ?></label></td>
             <td>
                <select name="wordpress_bimserver_options[new_project]" id="wordpress-bimserver-new-project">
@@ -125,7 +147,7 @@ if( is_array( $postTypes ) ) {
                </select>
                <p class="description"><?php _e( 'If set to yes, for each upload a new revision is return, if set to no the result data will be added as extended data', 'wordpress-bimserver' ); ?></p>
             </td>
-         </tr>
+         </tr-->
 			<tr valign="top">
 				<td colspan="2">
 					<p class="submit">
@@ -133,15 +155,6 @@ if( is_array( $postTypes ) ) {
 					</p>
 				</td>
 			</tr>
-         <!--tr valign="top">
-            <td colspan="2">
-               <p class="submit">
-                  <input type="checkbox" id="delete-confirm" name="delete_confirm" value="confirmed" /> <label for="delete-confirm"><?php _e( 'Confirm deleting all blocks and their related data from the database', 'wordpress-bimserver' ); ?></label><br />
-                  <em><?php _e( 'Note: Can not be undone!', 'wordpress-bimserver' ); ?></em><br />
-                  <input class="button-primary" type="submit" name="delete" value="<?php _e( 'Delete data', 'wordpress-bimserver' ); ?>" />
-               </p>
-            </td>
-         </tr-->
 		</table>
 	</form>
 </div>

@@ -35,3 +35,7 @@
    border-radius: 3px;
    z-index: 1;
 }
+
+tr.bold td {
+   font-weight: bold;
+}

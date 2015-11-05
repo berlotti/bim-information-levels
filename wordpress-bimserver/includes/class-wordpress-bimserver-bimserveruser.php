@@ -32,8 +32,7 @@ class BimserverUser {
             if( $settings != '' ) {
                $this->bimserverUserSettings = $settings;
             } else {
-               // TODO: retrieve the settings and store them
-
+               $this->bimserverUserSettings = false;
             }
          } else {
             $this->isBimserverUser = false;
@@ -115,6 +114,37 @@ class BimserverUser {
    }
 
    /**
+    *
+    */
+   public function retrieveBimserverUserSettings() {
+      // Get the first public profile if available
+      $options = WordPressBimserver::getOptions();
+      try {
+         $result = $this->apiCall( 'ServiceInterface', 'getAllPublicProfiles', Array(
+             'notificationsUrl' => $options['url'],
+             'serviceIdentifier' => $options['service_id']
+         ) );
+         if( isset( $result['response'], $result['response']['result'] ) ) {
+            if( count( $result['response']['result'] ) > 0 ) {
+               $profile = $result['response']['result'];
+            } else {
+               $profile = false;
+            }
+            $this->bimserverUserSettings = Array(
+                'profile' => $profile
+            );
+            update_user_meta( $this->user->ID, '_bimserver_settings', $this->bimserverUserSettings );
+            return $this->bimserverUserSettings;
+         } else {
+            return false;
+         }
+      } catch( \Exception $e ) {
+         var_dump( $e );
+         return false;
+      }
+   }
+
+   /**
     * @param bool|mixed $bimserverUserSettings
     */
    public function setBimserverUserSettings( $bimserverUserSettings ) {
@@ -125,45 +155,49 @@ class BimserverUser {
       if( $this->isBimserverUser() ) {
          $options = WordPressBimserver::getOptions();
          $sanitizedName = sanitize_title( $name );
-         try {
-            $existingProjects = $this->apiCall( 'Bimsie1ServiceInterface', 'getAllProjects', Array( 'onlyTopLevel' => true, 'onlyActive' => true ) );
-            $number = 1;
-            $numberText = '';
-            $unique = false;
-            while( !$unique ) {
-               if( $number > 1 ) {
-                  $numberText = '-' . $number;
-               }
-               $unique = true;
-               foreach( $existingProjects['response']['result'] as $project ) {
-                  if( $sanitizedName . $numberText == $project['name'] ) {
-                     $unique = false;
-                     break 1;
+         if( $sanitizedName != '' ) {
+            try {
+               $existingProjects = $this->apiCall( 'Bimsie1ServiceInterface', 'getAllProjects', Array( 'onlyTopLevel' => true, 'onlyActive' => true ) );
+               $number = 1;
+               $numberText = '';
+               $unique = false;
+               while( !$unique ) {
+                  if( $number > 1 ) {
+                     $numberText = '-' . $number;
                   }
+                  $unique = true;
+                  foreach( $existingProjects['response']['result'] as $project ) {
+                     if( $sanitizedName . $numberText == $project['name'] ) {
+                        $unique = false;
+                        break 1;
+                     }
+                  }
+                  $number ++;
                }
-               $number ++;
-            }
-            $poid = $this->apiCall( 'Bimsie1ServiceInterface', 'addProject', Array(
-                'projectName' => $sanitizedName . $numberText,
-                'schema' => $options['project_scheme']
-            ) );
-            if( isset( $poid['response'], $poid['response']['result'], $poid['response']['result']['oid'] ) ) {
-               $poid = $poid['response']['result']['oid'];
-               // Add the configured service to this project
-               $sService = $this->getSServiceObject( $poid );
-               $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
-                   'poid' => $poid,
-                   'internalServiceOid' => $options['service_id'],
-                   'sService' => $sService
+               $poid = $this->apiCall( 'Bimsie1ServiceInterface', 'addProject', Array(
+                   'projectName' => $sanitizedName . $numberText,
+                   'schema' => $options['project_scheme']
                ) );
-            } else {
-               return false;
+               if( isset( $poid['response'], $poid['response']['result'], $poid['response']['result']['oid'] ) ) {
+                  $poid = $poid['response']['result']['oid'];
+                  // Add the configured service to this project
+                  $sService = $this->getSServiceObject( $poid );
+                  $this->apiCall( 'ServiceInterface', 'addLocalServiceToProject', Array(
+                      'poid' => $poid,
+                      'internalServiceOid' => $options['service_id'],
+                      'sService' => $sService
+                  ) );
+               } else {
+                  return false;
+               }
+            } catch( \Exception $e ) {
+               var_dump( $e );
+               $poid = false;
             }
-         } catch( \Exception $e ) {
-            var_dump( $e );
-            $poid = false;
+            return $poid;
+         } else {
+            return false;
          }
-         return $poid;
       } else {
          return false;
       }
@@ -173,6 +207,7 @@ class BimserverUser {
       $service = $this->getServiceInformation();
       if( $service !== false ) {
          $options = WordPressBimserver::getOptions();
+         // TODO: add preferences based on user settings to this object... I guess?
          $sService = Array(
             '__type' => 'SService',
             'name' => $service['name'],
@@ -237,5 +272,9 @@ class BimserverUser {
       } else {
          return 1;
       }
+   }
+
+   public function hasConfiguredService() {
+      return $this->bimserverUserSettings !== false;
    }
 }
