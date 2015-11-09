@@ -68,6 +68,13 @@ if( is_array( $postTypes ) ) {
             </td>
          </tr>
          <tr valign="top">
+            <td><label for="wordpress-bimserver-download-mime-type"><?php _e( 'Service download mime-type', 'wordpress-bimserver' ); ?></label></td>
+            <td>
+               <input type="text" name="wordpress_bimserver_options[mime_type]" id="wordpress-bimserver-download-mime-type" value="<?php print( isset( $wordPressBimserverOptions['mime_type'] ) ? $wordPressBimserverOptions['mime_type'] : 'application/zip, application/octet-stream' ); ?>" />
+               <p class="description"><?php _e( 'The services download mime-type of the download after using the service', 'wordpress-bimserver' ); ?></p>
+            </td>
+         </tr>
+         <tr valign="top">
             <td><label for="wordpress-bimserver-project-scheme"><?php _e( 'Bimserver project scheme', 'wordpress-bimserver' ); ?></label></td>
             <td>
                <input type="text" name="wordpress_bimserver_options[project_scheme]" id="wordpress-bimserver-project-scheme" value="<?php print( isset( $wordPressBimserverOptions['project_scheme'] ) ? $wordPressBimserverOptions['project_scheme'] : 'ifc2x3tc1' ); ?>" />

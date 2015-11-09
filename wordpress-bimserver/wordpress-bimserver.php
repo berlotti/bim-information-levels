@@ -263,6 +263,7 @@ class WordPressBimserver {
                         } else {
                            $checkinId = $result['response']['result'];
                            update_user_meta( get_current_user_id(), '_bimserver_checkin_id', $checkinId );
+                           update_user_meta( get_current_user_id(), '_bimserver_checkin_poid', $poid );
                            WordPressBimserver::showCheckinProgress( $checkinId );
                         }
                      } catch ( \Exception $e ) {
@@ -358,15 +359,13 @@ class WordPressBimserver {
          if( count( $reports ) == 0 ) {
             print( '<p>' . __( 'You have no recorded uses of this service.', 'wordpress-bimserver' ) . '</p>' );
          } else {
-            //$reports = array_reverse( $reports );
-            $options = WordPressBimserver::getOptions();
+            $reports = array_reverse( $reports );
             print( '<table class="wordpress-bimserver-table">' );
             print( '<tr><th>' . __( 'Download', 'wordpress-bimserver' ) . '</th><th>' . __( 'Status', 'wordpress-bimserver' ) . '</th><th>' . __( 'Date', 'wordpress-bimserver' ) . '</th></tr>' );
             foreach( $reports as $key => $report ) {
                $class = $report['status'] == __( 'new', 'wordpress-bimserver' ) ? 'bold ' : '';
                print( '<tr class="' . $class . ( $key % 2 == 0 ? 'even' : 'odd' ) . '">' );
-               // TODO: link to a report download...
-               print( '<td><a href="' . '' . '">' . __( 'Download report', 'wordpress-bimserver' ) . '</a></td>' );
+               print( '<td><a href="' . add_query_arg( Array( 'action' => 'wpbimserver_ajax', 'type' => 'download', 'id' => $key ), admin_url( 'admin-ajax.php' ) ) . '">' . __( 'Download report', 'wordpress-bimserver' ) . '</a></td>' );
                print( '<td>' . $report['status'] . '</td>' );
                print( '<td>' . date( get_option( 'date_format' ), $report['timestamp'] ) . '</td>' );
                print( '</tr>' );
@@ -393,11 +392,26 @@ class WordPressBimserver {
                   $report = Array(
                      'topicId' => $topicId,
                      'timestamp' => time(),
-                     'status' => __( 'new', 'wordpress-bimserver' )
+                     'status' => __( 'new', 'wordpress-bimserver' ),
+                     'poid' => get_user_meta( get_current_user_id(), '_bimserver_checkin_poid', true )
                   );
+                  delete_user_meta( get_current_user_id(), '_bimserver_checkin_poid' );
                   add_user_meta( get_current_user_id(), '_bimserver_report', $report );
                }
                print( $progress );
+            }
+         } elseif( $_GET['type'] == 'download' && isset( $_GET['id'] ) && ctype_digit( $_GET['id'] ) ) {
+            $key = intval( $_GET['id'] );
+            $reports = get_user_meta( get_current_user_id(), '_bimserver_report' );
+            $reports = array_reverse( $reports );
+            if( isset( $reports[ $key ] ) ) {
+               $newReport = $reports[ $key ];
+               $newReport['status'] = __( 'downloaded', 'wordpress-bimserver' );
+               update_user_meta( get_current_user_id(), '_bimserver_report', $newReport, $reports[ $key ] );
+               $bimserverUser = new BimserverUser( get_current_user_id() );
+               $bimserverUser->downloadData( $newReport['poid'] );
+            } else {
+               header( 'HTTP/1.0 404 Not Found' );
             }
          }
       }
