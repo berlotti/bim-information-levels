@@ -181,30 +181,42 @@ class WordPressBimserver {
             if( $userSettings === false ) {
                _e( 'There was a problem retrieving user settings, contact a site administrator',  'wordpress-bimserver' );
             } else {
-               if( $userSettings['profile'] == false ) {
+               if( count( $userSettings['parameters'] ) == 0 ) {
                   $options = WordPressBimserver::getOptions();
                   _e( 'There are no configurable settings for this service',  'wordpress-bimserver' );
                   print( '<br />' );
                   print( '<a href="' . get_permalink( $options['upload_page'] ) . '">' . __( 'Click here to continue', 'wordpress-bimserver' ) . '</a>' );
                } else {
-                  var_dump( $userSettings );
                   if( isset( $_POST['submit'] ) ) {
-                     // TODO: store settings in the bimserverUserSettings object
-
+                     // Store settings in the bimserverUserSettings object
+                     foreach( $userSettings['parameters'] as $key => $parameter ) {
+                        if( isset( $_POST[ 'user_setting_' . $key ] ) ) {
+                           $userSettings['parameters'][ $key ]['value'] = filter_input( INPUT_POST, 'user_setting_' . $key, FILTER_SANITIZE_SPECIAL_CHARS );
+                        }
+                     }
+                     $bimserverUser->setBimserverUserSettings( $userSettings );
                   }
-                  // TODO: generate a form based on the profile for the user and restore previous settings
+                  // Generate a form based on the profile for the user and restore previous settings
                   $bimserverService = $bimserverUser->getServiceInformation();
                   if( $bimserverService === false ) {
                      _e( 'No correct bimserver service configured, contact a website administrator to have this resolved', 'wordpress-bimserver' );
                   } else {
-                     var_dump( $bimserverService );
                      ?>
                      <h3><?php print( $bimserverService['name'] ); ?></h3>
                      <?php _e( 'Description', 'wordpress-bimserver' ); ?>:
                      <p><?php print( $bimserverService['description'] ); ?></p>
                      <form method="post" action="">
                         <?php
-
+                        foreach( $userSettings['parameters'] as $key => $parameter ) {
+                           print( '<label for="user-setting-' . $key . '">' . $parameter['name'] . '</label>' );
+                           if( $parameter['type']['type'] == 'STRING' ) {
+                              print( '<input type="text" name="user_setting_' . $key . '" id="user-setting-' . $key .
+                                  '" value="' . ( isset( $parameter['value'] ) ? $parameter['value'] : '' ) . '" />' );
+                           } else {
+                              // TODO: add support for other parameter types
+                           }
+                           print( '<br />' );
+                        }
                         ?>
                         <input type="submit" name="submit" value="<?php _e( 'Update settings', 'wordpress-bimserver' ); ?>"/>
                      </form>

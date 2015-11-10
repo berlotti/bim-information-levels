@@ -113,6 +113,37 @@ class BimserverUser {
       return $this->bimserverUserSettings;
    }
 
+   public function setBimserverUserSettings( $bimserverUserSettings ) {
+      $this->bimserverUserSettings = $bimserverUserSettings;
+      update_user_meta( $this->user->ID, '_bimserver_settings', $this->bimserverUserSettings );
+      $success = false;
+      $options = WordPressBimserver::getOptions();
+      // Store on Bimserver too
+      try {
+         $parameters = Array();
+         foreach( $this->bimserverUserSettings['parameters'] as $parameter ) {
+            $parameters[] = Array(
+              '__type' => 'SParameter',
+              'name' => $parameter['name'],
+              'value' => Array(
+                  '__type' => 'SStringType',
+                  'value' => $parameter['value']
+              )
+            );
+         }
+         $this->apiCall( 'PluginInterface', 'setPluginSettings', Array(
+            'poid' => $options['service_id'],
+            'settings' => Array(
+               '__type' => 'SObjectType',
+               'parameters' => $parameters
+            )
+         ) );
+      } catch( \Exception $e ) {
+         print( $e->getMessage() );
+      }
+      return $success;
+   }
+
    /**
     *
     */
@@ -133,6 +164,22 @@ class BimserverUser {
             $this->bimserverUserSettings = Array(
                 'profile' => $profile
             );
+            // Get configuration options
+            $pluginDescriptor = $this->apiCall( 'PluginInterface', 'getInternalServiceById', Array(
+               'oid' => $options['service_id']
+            ) );
+            if( isset( $pluginDescriptor['response'], $pluginDescriptor['response']['result'], $pluginDescriptor['response']['result']['pluginDescriptorId'] ) ) {
+               $configurationOptions = $this->apiCall( 'PluginInterface', 'getPluginObjectDefinition', Array(
+                   'oid' => $pluginDescriptor['response']['result']['pluginDescriptorId']
+               ) );
+               if( isset( $configurationOptions['response'], $configurationOptions['response']['result'], $configurationOptions['response']['result']['parameters'] ) ) {
+                  $this->bimserverUserSettings['parameters'] = $configurationOptions['response']['result']['parameters'];
+               } else {
+                  $this->bimserverUserSettings['parameters'] = Array();
+               }
+            } else {
+               $this->bimserverUserSettings['parameters'] = Array();
+            }
             update_user_meta( $this->user->ID, '_bimserver_settings', $this->bimserverUserSettings );
             return $this->bimserverUserSettings;
          } else {
@@ -142,13 +189,6 @@ class BimserverUser {
          var_dump( $e );
          return false;
       }
-   }
-
-   /**
-    * @param bool|mixed $bimserverUserSettings
-    */
-   public function setBimserverUserSettings( $bimserverUserSettings ) {
-      $this->bimserverUserSettings = $bimserverUserSettings;
    }
 
    public function addProject( $name ) {
@@ -259,23 +299,25 @@ class BimserverUser {
          $options = WordPressBimserver::getOptions();
          $services = $this->apiCall( 'ServiceInterface', 'getAllLocalServiceDescriptors' );
          $service = false;
-         foreach( $services['response']['result'] as $checkService ) {
-            if( $checkService['identifier'] == $options['service_id'] ) {
-               $service = $checkService;
-               if( isset( $service['writeExtendedData'] ) && $service['writeExtendedData'] != '' ) {
-                  // get the write extended data information
-                  try {
-                     $result = $this->apiCall( 'Bimsie1ServiceInterface', 'getExtendedDataSchemaByNamespace', Array(
-                         'namespace' => $service['writeExtendedData']
-                     ) );
-                     if( isset( $result['response'], $result['response']['result'], $result['response']['result']['oid'] ) ) {
-                        $service['writeExtendedDataId'] = $result['response']['result']['oid'];
+         if( isset( $services['response'], $services['response']['result'] ) ) {
+            foreach( $services['response']['result'] as $checkService ) {
+               if( $checkService['identifier'] == $options['service_id'] ) {
+                  $service = $checkService;
+                  if( isset( $service['writeExtendedData'] ) && $service['writeExtendedData'] != '' ) {
+                     // get the write extended data information
+                     try {
+                        $result = $this->apiCall( 'Bimsie1ServiceInterface', 'getExtendedDataSchemaByNamespace', Array(
+                            'namespace' => $service['writeExtendedData']
+                        ) );
+                        if( isset( $result['response'], $result['response']['result'], $result['response']['result']['oid'] ) ) {
+                           $service['writeExtendedDataId'] = $result['response']['result']['oid'];
+                        }
+                     } catch( \Exception $e ) {
+                        // Could not find an extended data scheme, so we leave it empty
                      }
-                  } catch( \Exception $e ) {
-                     // Could not find an extended data scheme, so we leave it empty
                   }
+                  break;
                }
-               break;
             }
          }
          if( $service !== false ) {
@@ -339,7 +381,7 @@ class BimserverUser {
                throw new \Exception( __( 'Could not find any extended data for this project, please contact an administrator', 'wordpress-bimserver' ) );
             }
          } else {
-            // There is no extended data, just do a revision download
+            // There is no extended data, just do a zip revision download
 
             // Get default serializer
             $defaultSerializer = $this->apiCall( 'PluginInterface', 'getDefaultSerializer' );
@@ -357,11 +399,11 @@ class BimserverUser {
                ) );
                if( isset( $download['response'], $download['response']['result'] ) ) {
                   $topicId = $download['response']['result'];
-                  $endPointId = -1; // TODO: get this from where?
+                  /*$endPointId = -1; // TODO: get this from where?
                   $this->apiCall( 'Bimsie1NotificationRegistryInterface', 'registerProgressHandler', Array(
                      'topicId' => $topicId,
                      'endPointId' => $endPointId
-                  ) );
+                  ) );*/
                   $tries = 5;
                   $done = false;
                   while( !$done && $tries >= 0 ) {
@@ -380,6 +422,8 @@ class BimserverUser {
                      header( 'Content-Type: ' . $options['mime_type'] );
                      header( 'Content-Disposition: attachment; filename="' . $service['writeExtendedData'] . '"' );
                      print( $data );
+                  } else {
+                     throw new \Exception( __( 'Download took too long to become available', 'wordpress-bimserver' ) );
                   }
                }
             }
