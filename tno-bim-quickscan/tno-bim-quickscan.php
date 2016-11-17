@@ -1216,7 +1216,11 @@ class TNOBIMQuickscan {
 		if( !isset( $currentPage ) || $currentPage == '' ) {
 			$currentPage = 1;
 		}
-		$maxPage = ceil( $totalReports / $this->options[ 'reports_per_page' ] );
+
+		// If no reports don't do anything
+		if( empty($totalReports) || $totalReports > 0 ){
+			return;
+		}
 		?>
 		<div class="report-pagination">
 			<?php
