@@ -1913,10 +1913,14 @@ class TNOBIMQuickscan {
 			if( !isset( $language ) || $language == '' ) {
 				$language = 'nl';
 			}
+
+			// WPML
 			if( isset( $sitepress ) ) {
 				$defaultLanguage = $sitepress->get_default_language();
 				$sitepress->switch_lang( 'en', true );
 				remove_filter( 'get_term', Array( $sitepress, 'get_term_adjust_id' ), 1, 1 );
+			} else {
+				$defaultLanguage = '';
 			}
 			?>
 			<span class="language-info"><?php _e( 'Language', 'tno-bim-quickscan' ); ?>
