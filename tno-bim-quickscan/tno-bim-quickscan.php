@@ -1599,6 +1599,12 @@ class TNOBIMQuickscan {
 			$range = $wpdb->get_row( "SELECT MAX( post_date ), MIN( post_date )
 					FROM $wpdb->posts
 					WHERE post_type = '{$tnoBIMQuickscan->options[ 'report_post_type' ]}'", ARRAY_A );
+
+			// If not results
+			if( empty($range['MIN( post_date )']) || empty($range['MAX( post_date )']) ){
+				return '<p>' . _e( 'There are no Quickscans available', 'tno-bim-quickscan' ) . '</p>';
+			}
+
 			$startDate = explode( ' ', $range[ 'MIN( post_date )' ] );
 			$startDate = explode( '-', $startDate[0] );
 			$endDate = explode( ' ', $range[ 'MAX( post_date )' ] );
