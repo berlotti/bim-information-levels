@@ -1,9 +1,12 @@
-wordpress-importer
-membership
 gravityforms
-wp-cfm
-user-switching
+gravityformsuserregistration
+wp-email-login
 sitepress-multilingual-cms
 wpml-cms-nav
 wpml-string-translation
 wpml-translation-management
+
+wordpress-importer
+membership
+wp-cfm
+user-switching
